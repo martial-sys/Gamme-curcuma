@@ -2398,89 +2398,119 @@ section h2::after {
 }
 
 /* ----------------------------------------------------- */
-/* --- Compte à rebours PREMIUM (Countdown Timer) - HORIZONTAL --- */
+/* --- NOUVEAU Compte à rebours PREMIUM (Countdown Timer) --- */
 /* ----------------------------------------------------- */
-.countdown-timer {
+.countdown-wrapper {
     background: linear-gradient(135deg, var(--color-curcuma-main) 0%, var(--color-curcuma-dark) 100%);
-    border-radius: var(--border-radius-large);
-    box-shadow: var(--shadow-deep);
-    padding: calc(var(--spacing-unit) * 4); /* Padding uniforme */
+    border-radius: var(--border-radius-large); /* Utilise ta variable pour le rayon de bordure */
+    box-shadow: var(--shadow-medium); /* Une ombre élégante */
+    padding: calc(var(--spacing-unit) * 4) calc(var(--spacing-unit) * 3); /* Padding ajusté */
     margin-bottom: calc(var(--spacing-unit) * 7);
     text-align: center;
-    color: var(--color-background-white);
-    max-width: 900px; /* Limite la largeur du timer */
+    color: var(--color-background-white); /* Texte blanc */
+    max-width: 800px; /* Limite la largeur pour un effet plus compact */
     margin-left: auto;
     margin-right: auto;
     position: relative;
     overflow: hidden;
-    animation: pulseGlow 3s infinite ease-in-out;
-    display: flex; /* Utilise Flexbox pour l'agencement */
-    flex-direction: column; /* Par défaut en colonne pour la structure interne */
-    align-items: center; /* Centre le contenu */
+    animation: pulseGlow 3s infinite ease-in-out; /* Conserve ton animation */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
+/* Animation Pulse Glow */
 @keyframes pulseGlow {
     0% {
-        box-shadow: var(--shadow-deep);
+        box-shadow: var(--shadow-medium);
     }
     50% {
-        box-shadow: 0 10px 30px rgba(255, 165, 0, 0.6);
+        box-shadow: 0 10px 30px rgba(255, 165, 0, 0.6); /* Ombre avec une couleur Curcuma */
     }
     100% {
-        box-shadow: var(--shadow-deep);
+        box-shadow: var(--shadow-medium);
     }
 }
 
 .countdown-message {
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-xl); /* Plus petite mais impactante */
     font-weight: var(--font-weight-bold);
-    margin-bottom: calc(var(--spacing-unit) * 2.5);
+    margin-bottom: calc(var(--spacing-unit) * 2); /* Espacement ajusté */
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-.countdown-values {
-    display: flex; /* Utilise Flexbox pour les segments */
-    justify-content: center; /* Centre les segments horizontalement */
-    gap: calc(var(--spacing-unit) * 3); /* Espacement entre Jours, Heures, etc. */
-    margin-bottom: calc(var(--spacing-unit) * 2.5);
-    flex-wrap: wrap; /* Permet aux segments de passer à la ligne sur de très petits écrans */
+.countdown-display {
+    display: flex;
+    justify-content: center;
+    gap: calc(var(--spacing-unit) * 2.5); /* Espacement réduit entre les segments */
+    margin-bottom: calc(var(--spacing-unit) * 2); /* Espacement ajusté */
+    flex-wrap: wrap; /* Permet aux segments de passer à la ligne sur mobile */
 }
 
 .countdown-segment {
     display: flex;
-    flex-direction: column; /* Chiffre au-dessus du label */
-    align-items: center; /* Centre chiffre et label */
-    padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2); /* Padding interne du segment */
-    background-color: rgba(255, 255, 255, 0.15); /* Légère surbrillance pour chaque segment */
-    border-radius: var(--border-radius-small);
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1); /* Ombre interne subtile */
-    min-width: 90px; /* Largeur minimale pour éviter la compression */
+    flex-direction: column;
+    align-items: center;
+    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5); /* Padding interne réduit */
+    background-color: rgba(255, 255, 255, 0.15); /* Fond subtil */
+    border-radius: var(--border-radius-small); /* Utilise ta variable */
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+    min-width: 75px; /* Largeur minimale réduite pour les segments */
 }
 
 .countdown-digit {
-    font-size: 3.8rem; /* Chiffres très grands et impactants */
+    font-size: 3rem; /* Chiffres plus petits mais toujours lisibles */
     font-weight: var(--font-weight-black);
-    color: var(--color-background-white); /* Chiffres blancs, pas de background-clip ici pour la simplicité */
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-    transition: transform 0.2s ease-out; /* Animation au changement */
-    line-height: 1; /* Réduit l'espace vertical du chiffre */
+    color: var(--color-background-white);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    line-height: 1.2; /* Ajusté pour un meilleur espacement vertical */
 }
 
 .countdown-label {
-    font-size: var(--font-size-medium);
+    font-size: var(--font-size-small); /* Labels plus petits pour la discrétion */
     color: rgba(255, 255, 255, 0.9);
     font-weight: var(--font-weight-semi-bold);
     text-transform: uppercase;
-    margin-top: calc(var(--spacing-unit) * 1); /* Espacement entre chiffre et label */
+    margin-top: calc(var(--spacing-unit) * 0.5); /* Espacement réduit */
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .countdown-note {
-    font-size: var(--font-size-large);
+    font-size: var(--font-size-medium); /* Texte de note plus petit */
     color: rgba(255, 255, 255, 0.9);
     font-style: italic;
-    margin-top: calc(var(--spacing-unit) * 1.5);
+    margin-top: calc(var(--spacing-unit) * 1); /* Espacement ajusté */
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Media Queries pour le compte à rebours --- */
+@media (max-width: 767px) { /* Mobile */
+    .countdown-wrapper {
+        padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 2);
+        margin-bottom: calc(var(--spacing-unit) * 5);
+    }
+    .countdown-message {
+        font-size: var(--font-size-large);
+        margin-bottom: calc(var(--spacing-unit) * 1.5);
+    }
+    .countdown-display {
+        gap: calc(var(--spacing-unit) * 1.5);
+    }
+    .countdown-segment {
+        min-width: 60px;
+        padding: calc(var(--spacing-unit) * 0.8) calc(var(--spacing-unit) * 1);
+    }
+    .countdown-digit {
+        font-size: 2.2rem;
+    }
+    .countdown-label {
+        font-size: var(--font-size-xsmall); /* Utilise une variable plus petite si tu en as une */
+        margin-top: calc(var(--spacing-unit) * 0.25);
+    }
+    .countdown-note {
+        font-size: var(--font-size-small);
+        margin-top: calc(var(--spacing-unit) * 0.8);
+    }
 }
 
 

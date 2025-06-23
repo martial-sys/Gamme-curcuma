@@ -231,7 +231,7 @@ src="https://www.facebook.com/tr?id=593994983739023&ev=PageView&noscript=1"
         <p class="call-to-action-solution" data-aos="fade-up" data-aos-delay="900">
             Prêt(e) à révéler la meilleure version de votre peau et à retrouver une confiance inébranlable ?
         </p>
-        <a href="#purchase-section" class="cta-button main-cta animated pulse-subtle" data-aos="fade-up" data-aos-delay="1000">
+        <a href="#offers-section" class="cta-button main-cta animated pulse-subtle" data-aos="fade-up" data-aos-delay="1000">
             DÉCOUVRIR LA GAMME COMPLÈTE
         </a>
     </div>
@@ -297,22 +297,22 @@ src="https://www.facebook.com/tr?id=593994983739023&ev=PageView&noscript=1"
             <div class="b-a-pair" data-aos="fade-up" data-aos-delay="800">
                 <div class="image-wrapper">
                     <img src="https://d1yei2z3i6k35z.cloudfront.net/11365804/68557760d6cbc_1002149237.jpg" alt="Peau avant traitement - Taches">
-                    <span class="label">Avant</span>
+                    <span class="label"></span>
                 </div>
                 <div class="image-wrapper">
                     <img src="https://d1yei2z3i6k35z.cloudfront.net/11365804/68557772d9094_1002149238.jpg" alt="Peau après traitement - Taches corrigées">
-                    <span class="label">Après</span>
+                    <span class="label"></span>
                 </div>
             </div>
 
             <div class="b-a-pair" data-aos="fade-up" data-aos-delay="900">
                 <div class="image-wrapper">
                     <img src="https://d1yei2z3i6k35z.cloudfront.net/3924021/67b334112964e_1661006090059convert.io.webp" alt="Peau avant traitement - Imperfections">
-                    <span class="label">Avant</span>
+                    <span class="label"></span>
                 </div>
                 <div class="image-wrapper">
                     <img src="https://d1yei2z3i6k35z.cloudfront.net/3924021/67b3339f8312c_fb54053a4b95e4bff94a63605614876cconvert.io.webp" alt="Peau après traitement - Peau nette">
-                    <span class="label">Après</span>
+                    <span class="label"></span>
                 </div>
             </div>
             
@@ -322,7 +322,7 @@ src="https://www.facebook.com/tr?id=593994983739023&ev=PageView&noscript=1"
             Votre peau mérite elle aussi sa transformation. Prêt(e) à écrire votre propre histoire de succès ?
         </p>
 
-        <a href="#hero-section" class="cta-button main-cta" data-aos="fade-up" data-aos-delay="1200">Je veux ma peau transformée !</a>
+        <a href="#offers-section" class="cta-button main-cta" data-aos="fade-up" data-aos-delay="1200">Je veux ma peau transformée !</a>
     </div>
 </section>
 
@@ -335,23 +335,77 @@ src="https://www.facebook.com/tr?id=593994983739023&ev=PageView&noscript=1"
         <i class="fas fa-hand-holding-usd offers-section-main-icon" data-aos="fade-up"></i>
 
         <h2 class="section-title text-center" data-aos="fade-up">
-            <strong>Choisissez Votre Éclat : <span class="highlight-text-secondary">Nos Offres Exclusives<</strong></span>
+            <strong>Choisissez Votre Éclat : <span class="highlight-text-secondary">Nos Offres Exclusives</strong></span>
         </h2>
 
         <p class="offers-intro-text" data-aos="fade-up" data-aos-delay="200">
             Que vous recherchiez une solution ciblée ou un rituel complet, notre Gamme au Curcuma s'adapte à vos besoins. Découvrez nos packs et produits phares, conçus pour révéler la meilleure version de votre peau.
         </p>
 
-        <div class="countdown-timer" id="offerCountdown" data-aos="fade-up" data-aos-delay="250">
-            <p class="countdown-message">OFFRE EXCLUSIVE SE TERMINE DANS :</p>
-            <div class="countdown-values">
-                <span class="countdown-digit" id="days">00</span><span class="countdown-label">Jours</span>
-                <span class="countdown-digit" id="hours">00</span><span class="countdown-label">Heures</span>
-                <span class="countdown-digit" id="minutes">00</span><span class="countdown-label">Minutes</span>
-                <span class="countdown-digit" id="seconds">00</span><span class="countdown-label">Secondes</span>
-            </div>
-            <p class="countdown-note">Quantités limitées. Ne manquez pas cette opportunité !</p>
+        <div class="countdown-wrapper" data-aos="fade-up" data-aos-delay="250">
+    <p class="countdown-message">OFFRE EXCLUSIVE SE TERMINE DANS :</p>
+    <div class="countdown-display">
+        <div class="countdown-segment">
+            <span class="countdown-digit" id="cd-days">00</span>
+            <span class="countdown-label">Jours</span>
         </div>
+        <div class="countdown-segment">
+            <span class="countdown-digit" id="cd-hours">00</span>
+            <span class="countdown-label">Heures</span>
+        </div>
+        <div class="countdown-segment">
+            <span class="countdown-digit" id="cd-minutes">00</span>
+            <span class="countdown-label">Minutes</span>
+        </div>
+        <div class="countdown-segment">
+            <span class="countdown-digit" id="cd-seconds">00</span>
+            <span class="countdown-label">Secondes</span>
+        </div>
+    </div>
+    <p class="countdown-note">Quantités limitées. Ne manquez pas cette opportunité !</p>
+</div>
+<script>
+    function updateCountdown() {
+        const now = new Date().getTime(); // Temps actuel en millisecondes
+        const cycleDuration = 48 * 60 * 60 * 1000; // Durée du cycle : 48 heures en millisecondes
+
+        // Choisir une date de référence FIXE et PAS DANS LE FUTUR.
+        // C'est le point de départ de TOUS les cycles.
+        // Exemple : le 1er janvier 2024 à minuit UTC.
+        const referencePoint = new Date('2024-01-01T00:00:00Z').getTime();
+
+        // Calculer le temps écoulé depuis le point de référence
+        const timeSinceReference = now - referencePoint;
+
+        // Calculer le temps restant dans le cycle actuel
+        // Le modulo (%) permet de trouver le reste de la division,
+        // ce qui nous donne le temps écoulé DANS LE CYCLE ACTUEL.
+        // On soustrait cela à la durée du cycle pour obtenir le temps restant.
+        let timeLeftInCycle = cycleDuration - (timeSinceReference % cycleDuration);
+
+        // Assurer que le temps restant est positif (important pour la logique d'affichage)
+        if (timeLeftInCycle < 0) {
+            timeLeftInCycle += cycleDuration; // Ajouter un cycle complet si le temps est négatif
+        }
+
+        // Calcul des jours, heures, minutes, secondes
+        const days = Math.floor(timeLeftInCycle / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeLeftInCycle % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeLeftInCycle % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeLeftInCycle % (1000 * 60)) / 1000);
+
+        // Mise à jour de l'affichage avec padding "0" pour les chiffres < 10
+        document.getElementById("cd-days").textContent = String(days).padStart(2, '0');
+        document.getElementById("cd-hours").textContent = String(hours).padStart(2, '0');
+        document.getElementById("cd-minutes").textContent = String(minutes).padStart(2, '0');
+        document.getElementById("cd-seconds").textContent = String(seconds).padStart(2, '0');
+    }
+
+    // Lance la fonction une première fois immédiatement au chargement
+    updateCountdown();
+    // Met à jour le compte à rebours toutes les secondes
+    setInterval(updateCountdown, 1000);
+</script>
 
         <div class="product-offers-grid">
 
@@ -380,7 +434,7 @@ src="https://www.facebook.com/tr?id=593994983739023&ev=PageView&noscript=1"
 
             <div class="offer-card" data-aos="zoom-in" data-aos-delay="400">
                 <div class="product-image-wrapper">
-                    <img src="https://via.placeholder.com/300x250?text=Creme+Tumeric" alt="Image de la Crème Tumeric">
+                    <img src="https://d1yei2z3i6k35z.cloudfront.net/11365804/685971ad42b58_1002157904.png" alt="Image de la Crème Tumeric">
                 </div>
                 <h3>Crème Tumeric™</h3>
                 <ul>
@@ -403,7 +457,7 @@ src="https://www.facebook.com/tr?id=593994983739023&ev=PageView&noscript=1"
 
             <div class="offer-card" data-aos="zoom-in" data-aos-delay="500">
                 <div class="product-image-wrapper">
-                    <img src="https://via.placeholder.com/300x250?text=Serum+Curcuma" alt="Image du Sérum au Curcuma">
+                    <img src="https://d1yei2z3i6k35z.cloudfront.net/11365804/685971c845a81_1002157905.png" alt="Image du Sérum au Curcuma">
                 </div>
                 <h3>Sérum au Curcuma</h3>
                 <ul>
@@ -426,7 +480,7 @@ src="https://www.facebook.com/tr?id=593994983739023&ev=PageView&noscript=1"
 
             <div class="offer-card" data-aos="zoom-in" data-aos-delay="600">
                 <div class="product-image-wrapper">
-                    <img src="https://via.placeholder.com/300x250?text=Savon+Curcuma" alt="Image du Savon au Curcuma">
+                    <img src="https://d1yei2z3i6k35z.cloudfront.net/11365804/685971e8a33f7_1002157992.png" alt="Image du Savon au Curcuma">
                 </div>
                 <h3>Savon au Curcuma</h3>
                 <ul>
@@ -457,72 +511,6 @@ src="https://www.facebook.com/tr?id=593994983739023&ev=PageView&noscript=1"
     </div>
 </section>
 
-<script>
-    // Fonction pour mettre à jour le compte à rebours
-    function updateCountdown() {
-        const now = new Date().getTime();
-
-        // Durée du cycle du compte à rebours en millisecondes (72 heures)
-        const cycleDuration = 72 * 60 * 60 * 1000;
-
-        // Point de départ arbitraire dans le passé pour synchroniser le cycle.
-        // **IMPORTANT:** Choisis une date passée et FIXE. Ne la change plus.
-        const referenceStartTime = new Date('2024-01-01T00:00:00Z').getTime();
-
-        // Temps écoulé depuis le point de référence
-        const elapsedTime = now - referenceStartTime;
-
-        // Temps restant dans le cycle actuel (modulo pour obtenir le reste de la division)
-        let timeLeft = cycleDuration - (elapsedTime % cycleDuration);
-
-        // Assurer que le temps restant est positif (important pour éviter les valeurs négatives)
-        timeLeft = Math.max(0, timeLeft);
-
-        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-
-        const daysSpan = document.getElementById("days");
-        const hoursSpan = document.getElementById("hours");
-        const minutesSpan = document.getElementById("minutes");
-        const secondsSpan = document.getElementById("seconds");
-        const countdownTimerElement = document.getElementById("offerCountdown");
-
-        // Met à jour le texte seulement si la valeur change pour éviter des re-renderings inutiles
-        if (daysSpan.textContent !== String(days).padStart(2, '0')) {
-            daysSpan.textContent = String(days).padStart(2, '0');
-        }
-        if (hoursSpan.textContent !== String(hours).padStart(2, '0')) {
-            hoursSpan.textContent = String(hours).padStart(2, '0');
-        }
-        if (minutesSpan.textContent !== String(minutes).padStart(2, '0')) {
-            minutesSpan.textContent = String(minutes).padStart(2, '0');
-        }
-        if (secondsSpan.textContent !== String(seconds).padStart(2, '0')) {
-            secondsSpan.textContent = String(seconds).padStart(2, '0');
-        }
-
-        // Gestion de la fin du cycle
-        if (timeLeft <= 0) {
-            if (countdownTimerElement) {
-                countdownTimerElement.innerHTML = "<p class='countdown-message'>Une nouvelle offre arrive très bientôt !</p><p class='countdown-note'>Restez connecté pour ne rien manquer !</p>";
-                countdownTimerElement.style.background = "linear-gradient(135deg, var(--color-text-light) 0%, var(--color-text-subtle) 100%)";
-                countdownTimerElement.style.animation = "none";
-            }
-        } else {
-            // Réinitialiser le style du timer (au cas où il aurait été modifié à la fin du cycle précédent)
-            countdownTimerElement.style.background = "linear-gradient(135deg, var(--color-curcuma-main) 0%, var(--color-curcuma-dark) 100%)";
-            countdownTimerElement.style.animation = "pulseGlow 3s infinite ease-in-out";
-        }
-    }
-
-    // Initialise le compte à rebours dès le chargement de la page
-    updateCountdown();
-
-    // Met à jour le compte à rebours toutes les secondes
-    setInterval(updateCountdown, 1000);
-</script>
 
 
 
@@ -586,7 +574,7 @@ src="https://www.facebook.com/tr?id=593994983739023&ev=PageView&noscript=1"
                 </h3>
                 <div class="faq-answer">
                     <p>
-                        Oui, nous sommes convaincus de l'efficacité de nos produits. Si, pour une raison quelconque, vous n'êtes pas entièrement satisfait(e) de votre achat, vous disposez d'un délai de <strong>[INDIQUER LE NOMBRE DE JOURS DE GARANTIE, ex: 30 jours]</strong> pour nous retourner le produit et obtenir un remboursement complet. Veuillez consulter nos Conditions Générales de Vente (CGV) pour plus de détails.
+                        Oui, nous sommes convaincus de l'efficacité de nos produits. Si, pour une raison quelconque, vous n'êtes pas entièrement satisfait(e) de votre achat, vous disposez d'un délai de <strong>30 jours</strong> pour nous retourner le produit et obtenir un remboursement complet. Veuillez consulter nos Conditions Générales de Vente (CGV) pour plus de détails.
                     </p>
                 </div>
             </div>
@@ -613,7 +601,9 @@ src="https://www.facebook.com/tr?id=593994983739023&ev=PageView&noscript=1"
             D'autres questions ? N'hésitez pas à nous contacter directement, notre équipe est là pour vous accompagner !
         </p>
 
-        <a href="#hero-section" class="cta-button main-cta" data-aos="fade-up" data-aos-delay="900">Contactez-nous</a>
+        <a href="https://wa.me/22896652559" class="cta-button main-cta" data-aos="fade-up" data-aos-delay="900" target="_blank" rel="noopener noreferrer">
+  Contactez-nous
+</a>
     </div>
 </section>
 
@@ -662,7 +652,7 @@ src="https://www.facebook.com/tr?id=593994983739023&ev=PageView&noscript=1"
             N'attendez plus ! Votre peau idéale n'a jamais été aussi proche.
         </p>
 
-        <a href="#hero-section" class="cta-button main-cta animated" data-aos="fade-up" data-aos-delay="700">Je profite de l'offre maintenant !</a>
+        <a href="#offers-section" class="cta-button main-cta animated" data-aos="fade-up" data-aos-delay="700">Je profite de l'offre maintenant !</a>
 
     </div>
 </section>
@@ -689,7 +679,7 @@ src="https://www.facebook.com/tr?id=593994983739023&ev=PageView&noscript=1"
             <p>Offre limitée : Bénéficiez de <strong>-70% sur la Gamme Complète</strong> !</p>
         </div>
 
-        <a href="#hero-section" class="cta-button main-cta oversized-cta animated" data-aos="fade-up" data-aos-delay="300">
+        <a href="#offers-section" class="cta-button main-cta oversized-cta animated" data-aos="fade-up" data-aos-delay="300">
             Je Commande Ma Gamme Curcuma MAINTENANT !
         </a>
 
@@ -740,6 +730,7 @@ src="https://www.facebook.com/tr?id=593994983739023&ev=PageView&noscript=1"
                 <ul>
                     <li><a href="#problem-section">Pourquoi le Curcuma ?</a></li>
                     <li><a href="#how-it-works-section">Comment ça marche ?</a></li>
+                    <li><a href="#proof-section">Témoignages</a></li>
                     <li><a href="#offers-section">Nos Offres</a></li>
                     <li><a href="#faq-section">FAQ</a></li>
                     <li><a href="#politique-confidentialite">Politique de Confidentialité</a></li>
