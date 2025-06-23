@@ -1,0 +1,3716 @@
+/* ========================================= */
+/* 0. ÉVITE LES DÉBORDEMENTS LATÉRAUX INDÉSIRABLES*/
+/* ========================================= */
+/* 0: Réinitialisation et verrouillage horizontal – Évite les débordements latéraux indésirables */
+html, body {
+    overflow-x: hidden;       /* Supprime les scrolls horizontaux causés par des débordements */
+    width: 100%;              /* Force le corps à occuper toute la largeur de l’écran */
+    margin: 0;                /* Supprime les marges par défaut du navigateur */
+    padding: 0;               /* Supprime les paddings par défaut du navigateur */
+}
+
+/* Uniformise le calcul des dimensions pour tous les éléments */
+*, *::before, *::after {
+    box-sizing: border-box;   /* Évite les bugs de layout liés aux padding et borders */
+}
+
+
+/* ========================================= */
+/* 1. RÉINITIALISATION & VARIABLES GLOBALES TARGETMAX (Mise à jour pour un look moderne) */
+/* ========================================= */
+
+/* Définitions des animations spécifiques aux boutons (inchangées car déjà bonnes) */
+@keyframes breathingGlow {
+    0%, 100% {
+        /* Mise à jour de la couleur pour le Curcuma */
+        box-shadow: 0 0 0 rgba(255, 165, 0, 0.4); /* Utilisant --color-curcuma-main */
+        filter: brightness(100%);
+        transform: scale(1);
+    }
+    50% {
+        /* Mise à jour de la couleur pour le Curcuma */
+        box-shadow: 0 0 35px rgba(255, 165, 0, 1), 0 0 70px rgba(255, 165, 0, 0.7);
+        filter: brightness(140%);
+        transform: scale(1.03);
+    }
+}
+
+@keyframes subtlePulseGlow {
+    0%, 100% {
+        /* Mise à jour de la couleur pour le Curcuma */
+        box-shadow: 0 0 0 rgba(255, 165, 0, 0.4); /* Utilisant --color-curcuma-main */
+        filter: brightness(100%);
+        transform: scale(1);
+    }
+    50% {
+        /* Mise à jour de la couleur pour le Curcuma */
+        box-shadow: 0 0 20px rgba(255, 165, 0, 0.8);
+        filter: brightness(115%);
+        transform: scale(1.005);
+    }
+}
+
+/* Reset CSS de base (optimisé pour la modernité et la performance) */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    /* AJOUT : Transition globale douce pour tous les éléments interactifs. */
+    /* Ceci est CRUCIAL pour des animations fluides au survol/clic */
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: var(--base-font-size);
+    /* AJOUT : Lissage des polices pour un rendu plus net et moderne sur tous les écrans */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility; /* Améliore le rendu du texte pour la lisibilité */
+}
+
+body {
+    font-family: var(--font-family-primary);
+    line-height: 1.6;
+    color: var(--color-text-dark);
+    background-color: var(--color-background-primary);
+    /* DÉPLACEMENT depuis HTML : Ceux-ci sont mieux sur body pour la portée */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden; /* Maintient le contrôle des débordements horizontaux */
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    /* AJOUT : Assure que les liens ont une transition douce aussi */
+    transition: color 0.3s ease, opacity 0.3s ease;
+}
+
+ul {
+    list-style: none;
+}
+
+/* --- VARIABLES GLOBALES TARGETMAX (Mises à jour et ajouts pour Curcuma) --- */
+:root {
+    /* Couleurs Primaires (revues pour la Gamme Curcuma) */
+    --color-curcuma-main: #FFA500; /* Jaune Curcuma Principal (Orange vif) */
+    --color-curcuma-dark: #E69500; /* Jaune Curcuma Foncé pour dégradés/contrastes */
+    
+    --color-botanical-green: #4CAF50; /* Vert Botanique pour l'aspect naturel/bien-être */
+    --color-botanical-green-dark: #388E3C; /* Vert Botanique Foncé pour dégradés/contrastes */
+
+    --color-heading: #2C3E50; /* Bleu nuit profond pour les titres (élégant) */
+    --color-text-dark: #333333; /* Texte principal sombre */
+    --color-text-light: #666666; /* Texte secondaire/paragraphe plus doux */
+    --color-text-subtle: #999999; /* Pour les petits textes ou disclaimers */
+
+    /* Suppression des couleurs canadiennes et anciens primaires */
+    /* --color-primary-orange: #FF8C00; */
+    /* --color-primary-orange-dark: #CC7000; */
+    /* --color-primary-blue: #32A8DB; */
+    /* --color-primary-blue-dark: #0056b3; */
+    /* --color-primary-blue-light: #C0E0F0; */
+    /* --color-primary-canadian-red: #CC0000; */
+    /* --color-primary-canadian-red-hover: #FF3333; */
+    /* --color-primary-canadian-red-active: #B30000; */
+    /* --color-primary-canadian-blue: #004678; */
+    /* --color-secondary-canadian-blue-light: #F2F9FC; */
+
+    /* Couleurs de Statut et d'Accent (maintenues ou ajustées) */
+    --color-success-green: #28A745;
+    --color-success-green-dark: #1F8936;
+    --color-warning-yellow: #FFC107;
+    --color-error-red: #DC3545;
+    
+    /* Arrière-plans (mis à jour pour des tons plus chauds/naturels) */
+    --color-background-white: #FFFFFF;
+    --color-background-soft: #FDF9F3; /* Tons crème/chauds (maintenu) */
+    --color-background-primary: #FCF8F5; /* Nouveau : Blanc cassé très légèrement chaud */
+    --color-background-light: #F8F4F0; /* Nouveau : Plus prononcé, toujours chaud */
+    --color-background-secondary: #EFEBE7; /* Nouveau : Gris encore plus soutenu si besoin */
+    --color-background-warning: #FEF3C7; /* Fond jaune pour avertissements (maintenu) */
+
+    --color-border-light: #DDDDDD;
+    --color-border-medium: #CCCCCC;
+    --color-border-dark: #AAAAAA;
+
+    /* Ombres (maintenues) */
+    --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.08);
+    --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.12);
+    --shadow-strong: 0 15px 45px rgba(0, 0, 0, 0.18);
+    --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+
+
+    /* Typographie (maintenue) */
+    --font-family-primary: 'Poppins', sans-serif;
+    --font-family-secondary: 'Roboto', sans-serif;
+    --base-font-size: 16px;
+
+    /* Espacements (maintenus) */
+    --spacing-unit: 8px;
+    --padding-section: 80px 0;
+    --padding-section-mobile: 40px 0;
+
+    /* Tailles de police variables pour la scalabilité (maintenues) */
+    --font-size-small: 0.875em;
+    --font-size-medium: 1em;
+    --font-size-large: 1.125em;
+    --font-size-xl: 1.5em;
+    --font-size-xxl: 2em;
+    --font-size-h1: 3.5em;
+    --font-size-h2: 2.8em;
+    --font-size-h3: 2.2em;
+    --font-size-h4: 1.8em;
+}
+:root {
+    /* ... tes variables existantes ... */
+
+    /* NOUVELLES COULEURS AJOUTÉES (pour cohérence avec problem-section) */
+    --color-light-cream: #FDF7EC; /* Une crème très claire, utilisée dans le dégradé du problème */
+    --color-curcuma-accent: #FFBB33; /* Un jaune orangé plus clair pour les accents */
+    --color-botanical-green-light: #8BC34A; /* Un vert plus clair pour les accents */
+    --color-gold: #FFD700; /* Un or pour les accents brillants (utilisé dans Final CTA) */
+
+    /* NOUVEAUX BACKGROUNDS SPÉCIFIQUES */
+    --color-background-elevated: #FFFFFF; /* Pour les cartes qui "s'élèvent" (utilisé dans problem-section) */
+    --color-background-hover: #FFFCEF; /* Léger changement de couleur au survol des cartes */
+
+    /* NOUVELLES OMBRES SPÉCIFIQUES */
+    --shadow-small-subtle: 0 1px 5px rgba(0, 0, 0, 0.05); /* Ombre très légère */
+    --shadow-medium-elevated: 0 10px 30px rgba(0, 0, 0, 0.15); /* Ombre prononcée pour l'élévation */
+    
+    /* NOUVELLE TAILLE DE POLICE SI BESOIN (si tu veux un niveau de titre entre h2 et h1, ou pour de très gros textes) */
+    --font-size-xxxl: 3em; /* Environ 48px si la base est 16px. Utilisé pour de très gros textes hors titres h1/h2 */
+
+    /* MAX-WIDTH DU CONTENEUR POUR COHÉRENCE */
+    --container-max-width: 1100px; /* Largeur max pour le contenu central de toutes les sections */
+
+    /* GRADIENTS SPÉCIFIQUES POUR LES CTA */
+    --color-cta-gradient: linear-gradient(90deg, #FFBB33 0%, #FFA500 100%); /* Dégradé Bouton CTA */
+    --color-cta-gradient-hover: linear-gradient(90deg, #FFA500 0%, #E69500 100%); /* Dégradé Bouton CTA au survol */
+
+    /* ... le reste de tes variables existantes ... */
+}
+
+/* ========================================= */
+/* 2. STYLES DES COMPOSANTS GLOBALS (Mise à jour pour un look plus moderne) */
+/* ========================================= */
+
+/* Socle global pour TOUS les CTA génériques (maintenant couleur Curcuma) */
+.cta-button.main-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: var(--font-size-medium);
+    font-weight: 800;
+    color: #FFF;
+    background: var(--color-curcuma-main); /* Couleur Curcuma principale */
+    box-shadow: var(--shadow-medium);
+    transition: all 0.3s ease-in-out;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    text-shadow: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+}
+
+/* Effet de survol pour TOUS les boutons CTA génériques (Curcuma) */
+.cta-button.main-cta:hover {
+    background: var(--color-curcuma-dark); /* Couleur Curcuma foncée au survol */
+    box-shadow: var(--shadow-strong);
+    transform: translateY(-3px);
+    animation: none;
+}
+
+/* Effet au clic (active) pour TOUS les boutons CTA génériques (Curcuma) */
+.cta-button.main-cta:active {
+    transform: scale(0.95);
+    box-shadow: var(--shadow-light);
+}
+
+/* S'assurer que les pseudo-éléments ne sont pas actifs par défaut */
+.cta-button.main-cta::before,
+.cta-button.main-cta::after {
+    content: none !important;
+}
+
+/* Applique l'animation 'Subtle Pulse Glow' UNIQUEMENT aux boutons .cta-button.main-cta.animated */
+.cta-button.main-cta.animated {
+    animation: subtlePulseGlow 3.5s ease-in-out infinite;
+}
+
+
+/* --- Bouton CTA Exclusif pour la Section Pricing (Vert Botanique, Pilule, Breathing Glow) --- */
+.pricing-card .cta-button.main-cta {
+    background: linear-gradient(135deg, var(--color-botanical-green), var(--color-botanical-green-dark)); /* Dégradé vert botanique */
+    border-radius: 999px;
+    padding: 20px 35px;
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    box-shadow: var(--shadow-medium);
+    animation: breathingGlow 2.5s ease-in-out infinite;
+}
+
+.pricing-card .cta-button.main-cta:hover {
+    background: linear-gradient(135deg, var(--color-botanical-green-dark), var(--color-botanical-green)); /* Inversion pour hover */
+    box-shadow: var(--shadow-strong);
+    transform: translateY(-3px);
+    animation: none;
+}
+
+.pricing-card .cta-button.main-cta:active {
+    transform: scale(0.95);
+    box-shadow: var(--shadow-light);
+}
+
+/* Assurer que le texte et l'icône du bouton sont toujours au-dessus de tout pour le bouton Pricing */
+.pricing-card .cta-button.main-cta span,
+.pricing-card .cta-button.main-cta i {
+    position: relative;
+    z-index: 1;
+}
+
+/* Styles spécifiques de positionnement/taille pour les boutons dans certaines sections (maintenus) */
+.hero-section .cta-button.main-cta {
+    /* padding: 18px 35px; */
+    /* font-size: 1.5em; */
+}
+
+.solution-section .cta-button.main-cta {
+    display: block;
+    margin: 0 auto;
+    max-width: 400px;
+}
+
+.guarantee-section .cta-button.main-cta {
+    margin-top: calc(var(--spacing-unit) * 5);
+    position: relative;
+    z-index: 1;
+}
+
+.complete-pack-section .cta-button.main-cta {
+    margin-top: calc(var(--spacing-unit) * 3.75);
+    padding: 14px 28px;
+    font-size: 1em;
+}
+
+/* --- Bouton CTA Sticky --- */
+#cta-sticky-button {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 1000;
+
+    transition: opacity 0.3s ease-out, visibility 0.3s ease-out, transform 0.3s ease-out;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 30px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: var(--font-size-large);
+    font-weight: 700;
+    color: #FFF;
+    background: var(--color-curcuma-main); /* Couleur Curcuma principale */
+    box-shadow: var(--shadow-medium);
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    border: none;
+}
+
+/* État masqué : appliqué par le JavaScript */
+#cta-sticky-button.sticky-hidden {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(50px);
+}
+
+/* État visible : appliqué lorsque la classe sticky-hidden est retirée par le JavaScript */
+#cta-sticky-button:not(.sticky-hidden) {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Hover/Active states */
+#cta-sticky-button:hover {
+    background: var(--color-curcuma-dark); /* Couleur Curcuma foncée au survol */
+    box-shadow: var(--shadow-strong);
+    transform: translateY(-3px);
+}
+#cta-sticky-button:active {
+    transform: scale(0.95);
+    box-shadow: var(--shadow-light);
+}
+
+/* --- Styles spécifiques pour le bouton sticky sur mobile (en bas, centré) --- */
+@media (max-width: 768px) {
+    #cta-sticky-button {
+        bottom: 15px;
+        left: 10px;
+        right: auto;
+        width: calc(100% - 20px);
+        max-width: none;
+        padding: 12px 15px;
+        font-size: var(--font-size-medium);
+        white-space: normal;
+        text-align: center;
+    }
+}
+
+/* Pour les écrans encore plus petits */
+@media (max-width: 400px) {
+    #cta-sticky-button {
+        padding: 10px;
+        font-size: var(--font-size-small);
+    }
+}
+/* Définition de la variable de couleur (AJOUTER/VÉRIFIER DANS VOS VARIABLES GLOBALES si ce n'est pas déjà fait) */
+:root {
+    /* ... autres variables ... */
+    --color-botanical-green-light: #5cb85c; /* Un vert botanique clair, vous pouvez ajuster la nuance */
+    /* Ou une autre nuance qui vous convient, ex: #66BB6A, #8BC34A */
+}
+
+/* Règle CSS pour colorer les icônes (VÉRIFIER/METTRE À JOUR DANS VOTRE CSS) */
+.trust-icon {
+    font-size: calc(var(--spacing-unit) * 3.5);
+    color: var(--color-botanical-green-light); /* Ceci devrait appliquer la couleur */
+}
+
+
+
+/* ========================================= */
+/* 3.--- STYLES GÉNÉRIQUES POUR SECTIONS --- */
+/* ========================================= */
+section {
+    padding: var(--padding-section);
+    position: relative;
+    overflow: hidden;
+    /* AJOUT : Padding mobile spécifique */
+    @media (max-width: 768px) {
+        padding: var(--padding-section-mobile);
+    }
+}
+
+section h2 {
+    font-size: var(--font-size-h2);
+    color: var(--color-heading); /* Couleur de titre élégante */
+    text-align: center;
+    margin-bottom: calc(var(--spacing-unit) * 3.125);
+    padding-bottom: calc(var(--spacing-unit) * 2.5);
+    position: relative;
+    line-height: 1.3;
+    font-weight: 700;
+}
+
+section h2::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--color-curcuma-main), var(--color-curcuma-dark)); /* Dégradé Curcuma pour les titres */
+    margin: calc(var(--spacing-unit) * 1.25) auto 0 auto;
+    border-radius: 2px;
+}
+
+.icon-section {
+    font-size: 4.5em;
+    color: var(--color-curcuma-main); /* Couleur Curcuma principale pour les icônes */
+    margin-bottom: calc(var(--spacing-unit) * 3.125);
+    display: block;
+    text-align: center;
+}
+
+.section-intro {
+    font-size: var(--font-size-large);
+    color: var(--color-text-light);
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto calc(var(--spacing-unit) * 6.25) auto;
+    line-height: 1.7;
+}
+
+/* ========================================= */
+/* --- MEDIA QUERIES (RESPONSIVE DESIGN) --- */
+/* (Ordre du plus grand au plus petit pour max-width) */
+/* ========================================= */
+
+/* Proposition d'optimisation des Media Queries :
+   - Remplacement des valeurs 'em' brutes par les variables typographiques définies dans :root
+   - Mise à jour des couleurs spécifiques (ex: icon-section) pour le branding Curcuma
+   Cette approche centralise la gestion des tailles de police et des couleurs pour une meilleure scalabilité et cohérence. */
+
+@media (max-width: 992px) {
+    /* Ajustements généraux pour tablettes (992px et moins) */
+    section {
+        padding: calc(var(--spacing-unit) * 7.5) 0;
+    }
+    section h2 {
+        /* Avant: font-size: 2.8em; -> Mappé à var(--font-size-h2) */
+        font-size: var(--font-size-h2);
+        margin-bottom: calc(var(--spacing-unit) * 2.5);
+        padding-bottom: calc(var(--spacing-unit) * 1.875);
+    }
+    section h2::after {
+        width: 60px;
+        height: 3px;
+        margin: calc(var(--spacing-unit) * 1.25) auto 0 auto;
+    }
+    .icon-section {
+        /* Mise à jour de la couleur pour Curcuma */
+        color: var(--color-curcuma-main);
+        margin-bottom: calc(var(--spacing-unit) * 2.5);
+    }
+    .section-intro {
+        /* Avant: font-size: 1.15em; -> Mappé à var(--font-size-large) */
+        font-size: var(--font-size-large);
+        margin-bottom: calc(var(--spacing-unit) * 5);
+    }
+
+    /* Hero Section */
+    .hero-section {
+        padding: calc(var(--spacing-unit) * 10) 0;
+    }
+    .hero-section h1 {
+        /* Avant: font-size: 3.5em; -> Mappé à var(--font-size-h1) */
+        font-size: var(--font-size-h1);
+    }
+    .hero-section .subtitle {
+        /* Avant: font-size: 1.5em; -> Mappé à var(--font-size-xl) */
+        font-size: var(--font-size-xl);
+    }
+    .hero-section .intro-paragraph {
+        /* Avant: font-size: 1.05em; -> Mappé à var(--font-size-medium) */
+        font-size: var(--font-size-medium);
+        margin-bottom: calc(var(--spacing-unit) * 5);
+    }
+    .hero-section .cta-subtext {
+        /* Avant: font-size: 1em; -> Mappé à var(--font-size-medium) */
+        font-size: var(--font-size-medium);
+    }
+
+    /* Problem Section */
+    .problem-section h2 {
+        /* Avant: font-size: 2.5em; -> Mappé à var(--font-size-h3) */
+        font-size: var(--font-size-h3);
+    }
+    .problem-section .intro-problem-text {
+        /* Avant: font-size: 1.1em; -> Mappé à var(--font-size-large) */
+        font-size: var(--font-size-large);
+        margin-bottom: calc(var(--spacing-unit) * 3.75);
+    }
+    .problem-scenarios-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: calc(var(--spacing-unit) * 3.125);
+        margin-bottom: calc(var(--spacing-unit) * 5);
+    }
+    .scenario-item {
+        padding: calc(var(--spacing-unit) * 3.125);
+    }
+    .scenario-item .scenario-icon {
+        /* Avant: font-size: 3em; -> Mappé à var(--font-size-xxl) */
+        font-size: var(--font-size-xxl);
+    }
+    .scenario-item h3 {
+        /* Avant: font-size: 1.4em; -> Mappé à var(--font-size-xl) */
+        font-size: var(--font-size-xl);
+    }
+    .problem-section .call-to-action-problem {
+        /* Avant: font-size: 1.2em; -> Mappé à var(--font-size-large) */
+        font-size: var(--font-size-large);
+        margin-top: calc(var(--spacing-unit) * 5);
+    }
+    
+    /* Content/Themes Section */
+    .themes-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: calc(var(--spacing-unit) * 3.125);
+        margin-bottom: calc(var(--spacing-unit) * 5);
+    }
+    .theme-item {
+        padding: calc(var(--spacing-unit) * 3.125);
+    }
+    .theme-item .theme-icon {
+        /* Avant: font-size: 3em; -> Mappé à var(--font-size-xxl) */
+        font-size: var(--font-size-xxl);
+    }
+    .theme-item h3 {
+        /* Avant: font-size: 1.4em; -> Mappé à var(--font-size-xl) */
+        font-size: var(--font-size-xl);
+    }
+
+    /* Aisha Story Section */
+    .aisha-story-section h2 {
+        /* Avant: font-size: 2.5em; -> Mappé à var(--font-size-h3) */
+        font-size: var(--font-size-h3);
+    }
+    .aisha-story-section .aisha-story-block {
+        padding: calc(var(--spacing-unit) * 3.75);
+    }
+    .aisha-story-section .aisha-story-block p {
+        /* Avant: font-size: 1.1em; -> Mappé à var(--font-size-large) */
+        font-size: var(--font-size-large);
+    }
+    .aisha-story-section .story-lesson-text {
+        /* Avant: font-size: 1.2em; -> Mappé à var(--font-size-large) */
+        font-size: var(--font-size-large);
+    }
+}
+
+@media (max-width: 768px) {
+    /* Ajustements généraux pour mobiles et tablettes plus petites (768px et moins) */
+    section {
+        padding: calc(var(--spacing-unit) * 5) 0;
+    }
+    section h2 {
+        /* Avant: font-size: 2.2em; -> Mappé à var(--font-size-h3) */
+        font-size: var(--font-size-h3);
+        margin-bottom: calc(var(--spacing-unit) * 1.875);
+        padding-bottom: calc(var(--spacing-unit) * 1.25);
+    }
+    section h2::after {
+        width: 50px;
+        height: 2px;
+        margin: calc(var(--spacing-unit) * 0.625) auto 0 auto;
+    }
+    .icon-section {
+        /* Mise à jour de la couleur pour Curcuma */
+        color: var(--color-curcuma-main);
+        margin-bottom: calc(var(--spacing-unit) * 1.875);
+    }
+    .section-intro {
+        /* Avant: font-size: 1em; -> Mappé à var(--font-size-medium) */
+        font-size: var(--font-size-medium);
+        margin-bottom: calc(var(--spacing-unit) * 3.75);
+    }
+
+    .hero-section {
+        padding: calc(var(--spacing-unit) * 7.5) 0;
+    }
+    .hero-section h1 {
+        /* Avant: font-size: 2.8em; -> Mappé à var(--font-size-h2) */
+        font-size: var(--font-size-h2);
+    }
+    .hero-section .subtitle {
+        /* Avant: font-size: 1.3em; -> Mappé à var(--font-size-large) */
+        font-size: var(--font-size-large);
+    }
+    .hero-section .intro-paragraph {
+        /* Avant: font-size: 1em; -> Mappé à var(--font-size-medium) */
+        font-size: var(--font-size-medium);
+        margin-bottom: calc(var(--spacing-unit) * 3.75);
+    }
+    .hero-section .cta-subtext {
+        /* Avant: font-size: 0.95em; -> Mappé à var(--font-size-small) */
+        font-size: var(--font-size-small);
+    }
+
+    .problem-section h2 {
+        /* Avant: font-size: 2.2em; -> Mappé à var(--font-size-h3) */
+        font-size: var(--font-size-h3);
+    }
+    .problem-section .intro-problem-text {
+        /* Avant: font-size: 1em; -> Mappé à var(--font-size-medium) */
+        font-size: var(--font-size-medium);
+        margin-bottom: calc(var(--spacing-unit) * 2.5);
+    }
+    .problem-scenarios-grid {
+        grid-template-columns: 1fr;
+        gap: calc(var(--spacing-unit) * 2.5);
+        margin-bottom: calc(var(--spacing-unit) * 3.75);
+    }
+    .scenario-item {
+        padding: calc(var(--spacing-unit) * 2.5);
+    }
+    .scenario-item .scenario-icon {
+        /* Avant: font-size: 2.5em; -> Mappé à var(--font-size-xl) */
+        font-size: var(--font-size-xl);
+    }
+    .scenario-item h3 {
+        /* Avant: font-size: 1.2em; -> Mappé à var(--font-size-large) */
+        font-size: var(--font-size-large);
+    }
+    .problem-section .call-to-action-problem {
+        /* Avant: font-size: 1.1em; -> Mappé à var(--font-size-large) */
+        font-size: var(--font-size-large);
+        margin-top: calc(var(--spacing-unit) * 3.75);
+    }
+
+    .solution-grid {
+        grid-template-columns: 1fr;
+        gap: calc(var(--spacing-unit) * 2.5);
+    }
+    .solution-item {
+        padding: calc(var(--spacing-unit) * 2.5);
+    }
+    .solution-item h3 {
+        /* Avant: font-size: 1.2em; -> Mappé à var(--font-size-large) */
+        font-size: var(--font-size-large);
+    }
+    .solution-item h3 i {
+        /* Avant: font-size: 1em; -> Mappé à var(--font-size-medium) */
+        font-size: var(--font-size-medium);
+    }
+    .solution-item p {
+        /* Avant: font-size: 0.95em; -> Mappé à var(--font-size-small) */
+        font-size: var(--font-size-small);
+    }
+
+    .themes-grid {
+        grid-template-columns: 1fr;
+        gap: calc(var(--spacing-unit) * 2.5);
+        margin-bottom: calc(var(--spacing-unit) * 3.75);
+    }
+    .theme-item {
+        padding: calc(var(--spacing-unit) * 2.5);
+    }
+    .theme-item .theme-icon {
+        /* Avant: font-size: 2.5em; -> Mappé à var(--font-size-xl) */
+        font-size: var(--font-size-xl);
+    }
+    .theme-item h3 {
+        /* Avant: font-size: 1.2em; -> Mappé à var(--font-size-large) */
+        font-size: var(--font-size-large);
+    }
+
+    /* Aisha Story Section */
+    .aisha-story-section h2 {
+        /* Avant: font-size: 2em; -> Mappé à var(--font-size-xxl) */
+        font-size: var(--font-size-xxl);
+    }
+    .aisha-story-section .aisha-story-block {
+        padding: calc(var(--spacing-unit) * 2.5);
+        margin-bottom: calc(var(--spacing-unit) * 3.125);
+    }
+    .aisha-story-section .aisha-story-block p {
+        /* Avant: font-size: 0.95em; -> Mappé à var(--font-size-small) */
+        font-size: var(--font-size-small);
+    }
+    .aisha-story-section .story-lesson-text {
+        /* Avant: font-size: 1em; -> Mappé à var(--font-size-medium) */
+        font-size: var(--font-size-medium);
+    }
+
+
+    /* Footer adjustments for small screens */
+    .footer-grid-layout {
+        grid-template-columns: 1fr;
+        gap: calc(var(--spacing-unit) * 3.75);
+    }
+    .footer-nav-area,
+    .footer-info-area {
+        text-align: center;
+    }
+    .footer-nav-area h4,
+    .footer-info-area h4 {
+        text-align: center;
+        margin-bottom: calc(var(--spacing-unit) * 1.875);
+    }
+    .footer-social {
+        justify-content: center;
+        margin-top: calc(var(--spacing-unit) * 1.875);
+    }
+    .footer-social a {
+        margin: 0 calc(var(--spacing-unit) * 1.25);
+    }
+}
+
+@media (max-width: 480px) {
+    /* Ajustements généraux pour mobiles étroits (480px et moins) */
+    .container {
+        padding: 0 calc(var(--spacing-unit) * 1.875);
+    }
+    section h2 {
+        /* Avant: font-size: 1.8em; -> Mappé à var(--font-size-h4) */
+        font-size: var(--font-size-h4);
+    }
+    .hero-section h1 {
+        /* Avant: font-size: 2.2em; -> Mappé à var(--font-size-h3) */
+        font-size: var(--font-size-h3);
+    }
+    .hero-section .subtitle {
+        /* Avant: font-size: 1.1em; -> Mappé à var(--font-size-large) */
+        font-size: var(--font-size-large);
+    }
+    .problem-section h2,
+    .solution-section h2,
+    .content-section h2,
+    .aisha-story-section h2 {
+        /* Avant: font-size: 1.8em; -> Mappé à var(--font-size-h4) */
+        font-size: var(--font-size-h4);
+    }
+    .scenario-item .scenario-icon,
+    .theme-item .theme-icon {
+        /* Avant: font-size: 2em; -> Mappé à var(--font-size-xxl) */
+        font-size: var(--font-size-xxl);
+    }
+    .scenario-item h3,
+    .theme-item h3 {
+        /* Avant: font-size: 1.1em; -> Mappé à var(--font-size-large) */
+        font-size: var(--font-size-large);
+    }
+    
+    /* Header & Mockup */
+    .main-header {
+        padding: calc(var(--spacing-unit) * 1.25) 0;
+    }
+    .main-header .logo img {
+        max-height: 35px;
+    }
+    .initial-preview-section {
+        padding: calc(var(--spacing-unit) * 2.5) 0;
+    }
+    .initial-preview-section .product-mockup {
+        max-width: 250px;
+    }
+}
+
+/* ========================================= */
+/* --- NOUVELLE SECTION HÉRO (RECONSTRUCTION) --- */
+/* ========================================= */
+
+.hero-section {
+    position: relative;
+    overflow: hidden; /* Important pour les éléments de fond */
+    min-height: 85vh; /* Plus de hauteur pour un impact visuel fort */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: calc(var(--spacing-unit) * 12) 0; /* Padding généreux */
+    background: linear-gradient(135deg, var(--color-curcuma-light), var(--color-background-light)); /* Dégradé doux */
+    color: var(--color-text-dark); /* Couleur de texte principale foncée */
+    text-align: center; /* Mobile First: centré */
+}
+
+/* Éléments de fond organiques (Biomorphism / Organic UI) */
+.hero-background-elements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0; /* En arrière-plan */
+    pointer-events: none; /* Ne bloque pas les interactions */
+}
+
+.organic-shape {
+    position: absolute;
+    border-radius: 50%; /* Formes douces */
+    opacity: 0.15; /* Très subtil */
+    filter: blur(60px); /* Extrêmement flou pour un effet vaporeux */
+}
+
+.organic-shape-1 {
+    width: 600px;
+    height: 600px;
+    background-color: var(--color-curcuma-accent); /* Couleur curcuma pour la chaleur */
+    top: -150px;
+    left: -150px;
+    animation: moveShape1 15s infinite alternate ease-in-out; /* Animation subtile */
+}
+
+.organic-shape-2 {
+    width: 700px;
+    height: 700px;
+    background-color: var(--color-botanical-green-light); /* Touche de vert végétal */
+    bottom: -200px;
+    right: -200px;
+    animation: moveShape2 18s infinite alternate ease-in-out; /* Animation subtile */
+}
+
+/* Effet de superposition (Soft Gradient / Subtle Glassmorphism) */
+.subtle-gradient-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+    backdrop-filter: blur(2px); /* Très léger flou pour l'effet "verre dépoli" */
+    -webkit-backdrop-filter: blur(2px);
+    z-index: 1; /* Légèrement au-dessus des formes, mais sous le contenu */
+}
+
+/* Conteneur de contenu */
+.hero-content-wrapper {
+    position: relative;
+    z-index: 2; /* S'assure que le contenu est au premier plan */
+    display: flex;
+    flex-direction: column; /* Mobile First: contenu empilé */
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 6); /* Espacement entre image et texte */
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 0 var(--padding-container-horizontal);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Bloc visuel du produit */
+.hero-product-visual {
+    position: relative;
+    display: inline-block; /* Pour le glow effect */
+    order: 0; /* Sur mobile, l'image d'abord */
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+    animation: fadeInUp 1.2s ease-out forwards;
+    animation-delay: 0.2s;
+}
+
+.product-hero-mockup {
+    max-width: 320px; /* Taille sur mobile */
+    height: auto;
+    display: block;
+    border-radius: var(--border-radius-large); /* Bords doux */
+    box-shadow: var(--shadow-deep); /* Ombre premium et chaleureuse */
+    transition: transform 0.4s ease-out, box-shadow 0.4s ease-out;
+}
+
+.product-hero-mockup:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: var(--shadow-hover); /* Effet d'élévation au survol */
+}
+
+.product-glow-effect {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 85%; /* Léger débordement de la lueur */
+    height: 85%;
+    background: radial-gradient(circle, var(--color-curcuma-main) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    filter: blur(70px);
+    z-index: -1;
+    animation: pulseGlow 2.5s ease-in-out infinite alternate;
+}
+
+/* Bloc de contenu textuel */
+.hero-text-content {
+    order: 1; /* Sur mobile, le texte après l'image */
+    max-width: 700px;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 1.2s ease-out forwards;
+    animation-delay: 0.4s;
+}
+
+.hero-title {
+    font-size: var(--font-size-h2); /* Taille adaptée pour mobile */
+    color: var(--color-heading-dark);
+    margin-bottom: calc(var(--spacing-unit) * 3);
+    line-height: 1.2;
+    font-weight: var(--font-weight-bold);
+    letter-spacing: -0.03em;
+}
+
+.hero-title .highlight-text {
+    color: var(--color-curcuma-main); /* Notre orange curcuma principal */
+    text-decoration: underline wavy var(--color-curcuma-main);
+    text-underline-offset: 8px;
+    font-weight: var(--font-weight-extra-bold);
+}
+
+.hero-description {
+    font-size: var(--font-size-large); /* Taille de base pour mobile */
+    color: var(--color-text-base);
+    margin-bottom: calc(var(--spacing-unit) * 5);
+    line-height: 1.6;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* CTA principal */
+.primary-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 5);
+    background-color: var(--color-curcuma-main); /* CTA vibrant */
+    color: var(--color-white);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    border-radius: var(--border-radius-pill); /* Forme pilule/arrondie */
+    text-decoration: none;
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
+    box-shadow: var(--shadow-button-primary); /* Ombre pour donner du relief */
+    animation: pulseCTA 2s infinite ease-in-out; /* Animation subtile d'appel à l'action */
+}
+
+.primary-cta:hover {
+    background-color: var(--color-curcuma-dark); /* Plus foncé au survol */
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: var(--shadow-button-hover);
+}
+
+.primary-cta i {
+    margin-left: calc(var(--spacing-unit) * 1.5);
+}
+
+.cta-sub-text {
+    font-size: var(--font-size-small);
+    color: var(--color-text-light);
+    margin-top: calc(var(--spacing-unit) * 3);
+    font-style: italic;
+    opacity: 0;
+    animation: fadeInUp 1.2s ease-out forwards;
+    animation-delay: 0.8s;
+}
+
+/* Indicateurs de confiance */
+.trust-indicators {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: calc(var(--spacing-unit) * 4);
+    margin-top: calc(var(--spacing-unit) * 6);
+    opacity: 0;
+    animation: fadeInScaleUp 1.2s ease-out forwards;
+    animation-delay: 1s;
+}
+
+.trust-item {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 1);
+    color: var(--color-text-base);
+    font-size: var(--font-size-medium);
+    font-weight: var(--font-weight-medium);
+}
+
+.trust-icon {
+    font-size: calc(var(--spacing-unit) * 3.5); /* Taille icône */
+    color: var(--color-curcuma-accent); /* Couleur secondaire Curcuma pour les icônes */
+}
+
+/* --- Keyframes d'animation --- */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInScaleUp {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulseGlow {
+    from { transform: translate(-50%, -50%) scale(0.95); opacity: 0.7; }
+    to { transform: translate(-50%, -50%) scale(1.05); opacity: 0.9; }
+}
+
+@keyframes pulseCTA {
+    0% { transform: scale(1); box-shadow: var(--shadow-button-primary); }
+    50% { transform: scale(1.01); box-shadow: 0 8px 18px rgba(255, 140, 0, 0.4); } /* Léger battement et ombre accentuée */
+    100% { transform: scale(1); box-shadow: var(--shadow-button-primary); }
+}
+
+@keyframes moveShape1 {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(50px, -30px) rotate(10deg); }
+    50% { transform: translate(0, 0) rotate(0deg); }
+    75% { transform: translate(-40px, 20px) rotate(-8deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+@keyframes moveShape2 {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(-30px, 40px) rotate(-10deg); }
+    50% { transform: translate(0, 0) rotate(0deg); }
+    75% { transform: translate(20px, -50px) rotate(12deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+/* ========================================= */
+/* --- MEDIA QUERIES pour la Section Héro --- */
+/* ========================================= */
+
+@media (min-width: 992px) {
+    .hero-section {
+        padding: calc(var(--spacing-unit) * 15) 0; /* Plus d'espace sur desktop */
+        text-align: left; /* Alignement du texte à gauche */
+    }
+
+    .hero-content-wrapper {
+        flex-direction: row; /* Disposition côte à côte sur desktop */
+        justify-content: space-between;
+        align-items: center;
+        gap: calc(var(--spacing-unit) * 10); /* Grand espace entre les blocs */
+    }
+
+    .hero-product-visual {
+        order: 1; /* L'image à droite sur desktop */
+        flex-basis: 50%; /* Prise de moitié de la largeur */
+        display: flex;
+        justify-content: flex-end; /* Aligne l'image à droite dans son conteneur */
+    }
+
+    .product-hero-mockup {
+        max-width: 550px; /* Taille plus grande pour desktop */
+    }
+
+    .hero-text-content {
+        order: 0; /* Le texte à gauche sur desktop */
+        flex-basis: 50%; /* Prise de moitié de la largeur */
+        text-align: left;
+    }
+
+    .hero-title {
+        font-size: var(--font-size-h1); /* Taille h1 pour desktop */
+        line-height: 1.1;
+    }
+
+    .hero-description {
+        font-size: var(--font-size-xl); /* Taille xl pour desktop */
+        margin-bottom: calc(var(--spacing-unit) * 7);
+    }
+
+    .cta-sub-text,
+    .trust-indicators {
+        text-align: left;
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        min-height: 90vh; /* Garder une bonne hauteur même sur tablette */
+        padding: calc(var(--spacing-unit) * 10) 0;
+    }
+    .hero-content-wrapper {
+        gap: calc(var(--spacing-unit) * 8);
+    }
+    .product-hero-mockup {
+        max-width: 380px;
+    }
+    .hero-title {
+        font-size: var(--font-size-h2);
+    }
+    .hero-description {
+        font-size: var(--font-size-large);
+    }
+    .primary-cta {
+        font-size: var(--font-size-large);
+        padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 4);
+    }
+    .trust-indicators {
+        gap: calc(var(--spacing-unit) * 3);
+    }
+    .trust-icon {
+        font-size: calc(var(--spacing-unit) * 3);
+    }
+    .trust-item {
+        font-size: var(--font-size-medium);
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-section {
+        min-height: 95vh; /* Assurer que tout le contenu est visible sur petit mobile */
+        padding: calc(var(--spacing-unit) * 8) 0;
+    }
+    .hero-content-wrapper {
+        gap: calc(var(--spacing-unit) * 6);
+    }
+    .product-hero-mockup {
+        max-width: 280px; /* Plus petit pour les très petits écrans */
+    }
+    .hero-title {
+        font-size: var(--font-size-h3);
+    }
+    .hero-description {
+        font-size: var(--font-size-medium);
+    }
+    .primary-cta {
+        font-size: var(--font-size-medium);
+        padding: calc(var(--spacing-unit) * 1.8) calc(var(--spacing-unit) * 3.5);
+    }
+    .trust-indicators {
+        flex-direction: column; /* Empilement vertical sur très petits écrans */
+        gap: calc(var(--spacing-unit) * 2);
+        align-items: center;
+    }
+    .trust-item {
+        font-size: var(--font-size-small);
+    }
+    .trust-icon {
+        font-size: calc(var(--spacing-unit) * 2.5);
+    }
+}
+
+
+
+
+/* ========================================= */
+/* --- SECTION PROBLÈME (Version Finale Améliorée) --- */
+/* ========================================= */
+
+.problem-section {
+    position: relative;
+    overflow: hidden;
+    padding: calc(var(--spacing-unit) * 12) 0; /* Padding généreux */
+    background: linear-gradient(180deg, var(--color-background-soft), var(--color-light-cream)); /* Dégradé doux, différent du Hero */
+    color: var(--color-text-dark);
+    text-align: center; /* Centré par défaut */
+}
+
+/* Éléments de fond organiques pour la section problème */
+.problem-background-elements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.organic-blob {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.1; /* Très léger */
+    filter: blur(80px); /* Flou intense */
+    background-color: var(--color-curcuma-accent); /* Teinte curcuma pour le fond */
+}
+
+.organic-blob-1 {
+    width: 550px;
+    height: 550px;
+    top: -100px;
+    right: -100px;
+    background-color: var(--color-botanical-green-light); /* Un peu de vert pour varier */
+    animation: moveBlob1 18s infinite alternate ease-in-out;
+}
+
+.organic-blob-2 {
+    width: 650px;
+    height: 650px;
+    bottom: -150px;
+    left: -150px;
+    animation: moveBlob2 20s infinite alternate ease-in-out;
+}
+
+.gradient-overlay-subtle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.03) 0%, transparent 60%);
+    backdrop-filter: blur(1px); /* Effet verre très léger */
+    -webkit-backdrop-filter: blur(1px);
+    z-index: 1;
+}
+
+/* Conteneur principal de contenu */
+.problem-content-wrapper {
+    position: relative;
+    z-index: 2;
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    /* Amélioration du padding horizontal pour éviter le contenu trop près des bords */
+    padding: 0 calc(var(--spacing-unit) * 4); /* Augmenté pour plus d'espace sur les côtés */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.section-title { /* Utilisé pour h2 ici */
+    font-size: var(--font-size-h2); /* Taille pour mobile */
+    color: var(--color-heading-dark);
+    line-height: 1.2;
+    margin-bottom: calc(var(--spacing-unit) * 3);
+    font-weight: var(--font-weight-extra-bold);
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.section-title .highlight-text-secondary {
+    color: var(--color-curcuma-dark); /* Une nuance plus foncée du curcuma pour ce highlight */
+    text-decoration: underline wavy var(--color-curcuma-accent);
+    text-underline-offset: 6px;
+}
+
+.intro-problem-text {
+    font-size: var(--font-size-large); /* Taille de base pour mobile */
+    color: var(--color-text-base);
+    max-width: 800px;
+    margin: 0 auto calc(var(--spacing-unit) * 6) auto;
+    line-height: 1.7;
+}
+
+/* Grille des scénarios de problème */
+.problem-scenarios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Adaptatif pour petits écrans */
+    gap: calc(var(--spacing-unit) * 5);
+    margin-top: calc(var(--spacing-unit) * 5);
+    margin-bottom: calc(var(--spacing-unit) * 8); /* Plus d'espace avant le CTA final */
+}
+
+.scenario-item {
+    background-color: var(--color-background-elevated); /* Fond légèrement différent pour les cartes */
+    padding: calc(var(--spacing-unit) * 4);
+    border-radius: var(--border-radius-large); /* Bords plus arrondis pour douceur */
+    border: 1px solid var(--color-border-light); /* Bordure subtile */
+    box-shadow: var(--shadow-small-subtle); /* Ombre douce */
+    text-align: center;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background-color 0.3s ease;
+    backdrop-filter: blur(3px); /* Léger glassmorphism sur les cartes */
+    -webkit-backdrop-filter: blur(3px);
+}
+
+.scenario-item:hover {
+    transform: translateY(-8px) scale(1.02); /* Soulève un peu plus */
+    box-shadow: var(--shadow-medium-elevated); /* Ombre plus prononcée au survol */
+    background-color: var(--color-background-hover); /* Changement de couleur subtil */
+    border-color: var(--color-curcuma-accent); /* Bordure accentuée */
+}
+
+.scenario-item .scenario-icon {
+    font-size: calc(var(--spacing-unit) * 5); /* Icônes plus grandes */
+    color: var(--color-botanical-green-dark); /* Un vert plus foncé pour ces icônes de problème */
+    margin-bottom: calc(var(--spacing-unit) * 3);
+}
+
+.scenario-item h3 {
+    font-size: var(--font-size-xl); /* Augmenté pour une meilleure lisibilité par défaut */
+    color: var(--color-heading-dark);
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
+    line-height: 1.4;
+    font-weight: var(--font-weight-bold);
+}
+
+.scenario-item p {
+    /* Ajustement final pour un meilleur confort de lecture sur toutes les tailles */
+    font-size: var(--font-size-xl); /* Augmenté à nouveau pour la clarté */
+    color: var(--color-text-base);
+    line-height: 1.6;
+}
+
+/* Appels à l'action finaux (transition vers la solution) */
+.call-to-action-problem {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-dark);
+    margin-top: calc(var(--spacing-unit) * 7);
+    line-height: 1.6;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.call-to-action-problem-bold {
+    font-size: var(--font-size-xxl); /* Plus grand et plus impactant */
+    font-weight: var(--font-weight-extra-bold);
+    color: var(--color-curcuma-main); /* Couleur principale Curcuma */
+    margin-top: calc(var(--spacing-unit) * 3);
+    line-height: 1.3;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: calc(var(--spacing-unit) * 7); /* Espacement avant le bouton final */
+}
+
+/* Animation des blobs de fond */
+@keyframes moveBlob1 {
+    0% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(50px, -40px) scale(1.02); }
+    66% { transform: translate(-30px, 60px) scale(0.98); }
+    100% { transform: translate(0, 0) scale(1); }
+}
+
+@keyframes moveBlob2 {
+    0% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(-40px, 30px) scale(0.97); }
+    66% { transform: translate(60px, -20px) scale(1.03); }
+    100% { transform: translate(0, 0) scale(1); }
+}
+
+/* --- MEDIA QUERIES : SECTION PROBLÈME (AJUSTEMENTS DÉFINITIFS) --- */
+@media (min-width: 992px) {
+    .problem-section {
+        padding: calc(var(--spacing-unit) * 15) 0;
+    }
+    .problem-content-wrapper {
+        padding: 0 calc(var(--spacing-unit) * 5); /* Plus de padding pour les grands écrans */
+    }
+    .problem-scenarios-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: calc(var(--spacing-unit) * 6);
+    }
+    .section-title {
+        font-size: var(--font-size-h1);
+    }
+    .intro-problem-text {
+        font-size: var(--font-size-xl);
+    }
+    .scenario-item .scenario-icon {
+        font-size: calc(var(--spacing-unit) * 6);
+    }
+    .scenario-item h3 {
+        font-size: var(--font-size-xxl);
+    }
+    .scenario-item p {
+        font-size: var(--font-size-xxl); /* Taille finale sur desktop pour un confort maximal */
+    }
+    .call-to-action-problem {
+        font-size: var(--font-size-xxl);
+    }
+    .call-to-action-problem-bold {
+        font-size: var(--font-size-xxxl);
+    }
+}
+
+@media (max-width: 768px) {
+    .problem-section {
+        padding: calc(var(--spacing-unit) * 10) 0;
+    }
+    .problem-content-wrapper {
+        padding: 0 calc(var(--spacing-unit) * 3); /* Padding ajusté pour tablette */
+    }
+    .section-title {
+        font-size: var(--font-size-h3);
+    }
+    .intro-problem-text {
+        font-size: var(--font-size-medium);
+    }
+    .problem-scenarios-grid {
+        gap: calc(var(--spacing-unit) * 4);
+    }
+    .scenario-item {
+        padding: calc(var(--spacing-unit) * 3);
+    }
+    .scenario-item .scenario-icon {
+        font-size: calc(var(--spacing-unit) * 4.5);
+    }
+    .scenario-item h3 {
+        font-size: var(--font-size-large);
+    }
+    .scenario-item p {
+        font-size: var(--font-size-large); /* Taille finale sur tablette */
+    }
+    .call-to-action-problem {
+        font-size: var(--font-size-large);
+    }
+    .call-to-action-problem-bold {
+        font-size: var(--font-size-xl);
+    }
+}
+
+@media (max-width: 480px) {
+    .problem-section {
+        padding: calc(var(--spacing-unit) * 8) 0;
+    }
+    .problem-content-wrapper {
+        padding: 0 calc(var(--spacing-unit) * 2); /* Padding ajusté pour petit mobile */
+    }
+    .section-title {
+        font-size: var(--font-size-h4);
+    }
+    .intro-problem-text {
+        font-size: var(--font-size-small);
+    }
+    .scenario-item .scenario-icon {
+        font-size: calc(var(--spacing-unit) * 4);
+    }
+    .scenario-item h3 {
+        font-size: var(--font-size-medium);
+    }
+    .scenario-item p {
+        font-size: var(--font-size-base); /* Taille finale sur petit mobile */
+    }
+    .call-to-action-problem {
+        font-size: var(--font-size-medium);
+    }
+    .call-to-action-problem-bold {
+        font-size: var(--font-size-large);
+    }
+}
+/* ========================================= */
+/* --- 6. SOLUTION SECTION - La Gamme Curcuma (OPTIMISÉE CONVERSION - PROMINENCE TITRE) --- */
+/* ========================================= */
+.solution-section {
+    background: linear-gradient(180deg, var(--color-light-cream), var(--color-background-soft));
+    padding: calc(var(--spacing-unit) * 12) 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    color: var(--color-text-dark);
+}
+
+.solution-section .icon-section {
+    font-size: calc(var(--spacing-unit) * 6);
+    color: var(--color-curcuma-main);
+    margin-bottom: calc(var(--spacing-unit) * 4);
+    position: relative;
+    z-index: 1;
+}
+
+.solution-section h2 {
+    /* AJUSTEMENT PROMINENCE : Titre principal plus grand pour la section Solution */
+    font-size: var(--font-size-xxxl); /* Précédemment --font-size-h2 */
+    color: var(--color-heading-dark);
+    line-height: 1.2;
+    margin-bottom: calc(var(--spacing-unit) * 3);
+    font-weight: var(--font-weight-extra-bold);
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.solution-section .intro-solution-text {
+    /* AJUSTEMENT PROMINENCE : Texte d'introduction plus grand et plus impactant */
+    font-size: var(--font-size-xxl); /* Précédemment --font-size-large */
+    text-align: center;
+    max-width: 850px;
+    margin: 0 auto calc(var(--spacing-unit) * 6) auto;
+    color: var(--color-text-base);
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+}
+
+.solution-benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: calc(var(--spacing-unit) * 5);
+    margin-top: calc(var(--spacing-unit) * 5);
+    margin-bottom: calc(var(--spacing-unit) * 7);
+    position: relative;
+    z-index: 1;
+}
+
+.benefit-item {
+    background-color: var(--color-background-elevated);
+    padding: calc(var(--spacing-unit) * 4);
+    border-radius: var(--border-radius-large);
+    border: 1px solid var(--color-border-light);
+    box-shadow: var(--shadow-small-subtle);
+    text-align: center;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background-color 0.3s ease, border-color 0.3s ease;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+.benefit-item:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-medium-elevated);
+    background-color: var(--color-background-hover);
+    border-color: var(--color-curcuma-accent);
+}
+
+.benefit-item .benefit-icon {
+    font-size: calc(var(--spacing-unit) * 5);
+    color: var(--color-curcuma-main);
+    margin-bottom: calc(var(--spacing-unit) * 3);
+}
+
+.benefit-item h3 {
+    font-size: var(--font-size-xl);
+    color: var(--color-heading-dark);
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
+    line-height: 1.4;
+    font-weight: var(--font-weight-bold);
+}
+
+.benefit-item p {
+    font-size: var(--font-size-xl);
+    color: var(--color-text-base);
+    line-height: 1.8;
+    letter-spacing: -0.1px;
+}
+
+.solution-product-showcase {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: calc(var(--spacing-unit) * 8);
+    margin: calc(var(--spacing-unit) * 8) auto;
+    max-width: var(--container-max-width);
+    padding: calc(var(--spacing-unit) * 5);
+    background-color: var(--color-background-elevated);
+    border-radius: var(--border-radius-large);
+    box-shadow: var(--shadow-medium-elevated);
+    position: relative;
+    z-index: 1;
+    border: 1px solid var(--color-border-light);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+.solution-product-showcase .product-image {
+    max-width: 40%;
+    height: auto;
+    border-radius: var(--border-radius-medium);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+    flex-shrink: 0;
+}
+
+.solution-product-showcase .product-description {
+    max-width: 55%;
+    text-align: left;
+    flex-grow: 1;
+}
+
+.solution-product-showcase .product-description h3 {
+    font-size: var(--font-size-xl);
+    color: var(--color-heading-dark);
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
+    line-height: 1.3;
+    font-weight: var(--font-weight-bold);
+}
+
+.solution-product-showcase .product-description p {
+    font-size: var(--font-size-xl);
+    color: var(--color-text-dark);
+    line-height: 1.7;
+    margin-bottom: calc(var(--spacing-unit) * 2.5);
+}
+
+.solution-product-showcase .product-description .results-guarantee {
+    font-size: var(--font-size-large);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-curcuma-dark);
+    margin-top: calc(var(--spacing-unit) * 3);
+    line-height: 1.4;
+}
+
+.solution-product-showcase .product-description .results-guarantee small {
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight-regular);
+    color: var(--color-text-base);
+    display: block;
+    margin-top: calc(var(--spacing-unit) * 0.5);
+}
+
+.solution-section .call-to-action-solution {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-heading-dark);
+    text-shadow: none;
+    margin-top: calc(var(--spacing-unit) * 7);
+    text-align: center;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
+}
+
+.solution-section .cta-button.main-cta {
+    margin-top: calc(var(--spacing-unit) * 5);
+}
+
+/* --- MEDIA QUERIES : SECTION SOLUTION (AJUSTEMENTS PROMINENCE) --- */
+@media (min-width: 992px) {
+    .solution-section {
+        padding: calc(var(--spacing-unit) * 15) 0;
+    }
+    .solution-section .icon-section {
+        font-size: calc(var(--spacing-unit) * 7);
+    }
+    .solution-section h2 {
+        /* AJUSTEMENT PROMINENCE */
+        font-size: var(--font-size-h1); /* Maintenant à la taille la plus grande pour les titres */
+    }
+    .solution-section .intro-solution-text {
+        /* AJUSTEMENT PROMINENCE */
+        font-size: var(--font-size-xxxl); /* Plus grand sur desktop */
+    }
+    .solution-benefits-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: calc(var(--spacing-unit) * 6);
+    }
+    .benefit-item .benefit-icon {
+        font-size: calc(var(--spacing-unit) * 6);
+    }
+    .benefit-item h3 {
+        font-size: var(--font-size-xxl);
+    }
+    .benefit-item p {
+        font-size: var(--font-size-xxl);
+    }
+    .solution-product-showcase .product-image {
+        max-width: 35%;
+    }
+    .solution-product-showcase .product-description h3 {
+        font-size: var(--font-size-xxl);
+    }
+    .solution-product-showcase .product-description p {
+        font-size: var(--font-size-xxl);
+    }
+    .solution-product-showcase .product-description .results-guarantee {
+        font-size: var(--font-size-xl);
+    }
+    .solution-product-showcase .product-description .results-guarantee small {
+        font-size: var(--font-size-base);
+    }
+    .call-to-action-solution {
+        font-size: var(--font-size-xxl);
+    }
+}
+
+@media (max-width: 991px) {
+    .solution-product-showcase {
+        flex-direction: column;
+        text-align: center;
+        gap: calc(var(--spacing-unit) * 4);
+        padding: calc(var(--spacing-unit) * 4);
+    }
+    .solution-product-showcase .product-image {
+        max-width: 85%;
+        margin-bottom: calc(var(--spacing-unit) * 3);
+    }
+    .solution-product-showcase .product-description {
+        max-width: 90%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .solution-section {
+        padding: calc(var(--spacing-unit) * 10) 0;
+    }
+    .solution-section .icon-section {
+        font-size: calc(var(--spacing-unit) * 5);
+        margin-bottom: calc(var(--spacing-unit) * 3);
+    }
+    .solution-section h2 {
+        /* AJUSTEMENT PROMINENCE */
+        font-size: var(--font-size-h3); /* Plus grand sur tablette */
+    }
+    .solution-section .intro-solution-text {
+        /* AJUSTEMENT PROMINENCE */
+        font-size: var(--font-size-xl); /* Plus grand sur tablette */
+    }
+    .benefit-item h3 {
+        font-size: var(--font-size-large);
+    }
+    .benefit-item p {
+        font-size: var(--font-size-large);
+    }
+    .solution-product-showcase .product-description h3 {
+        font-size: var(--font-size-large);
+    }
+    .solution-product-showcase .product-description p {
+        font-size: var(--font-size-large);
+    }
+    .solution-product-showcase .product-description .results-guarantee {
+        font-size: var(--font-size-base);
+    }
+    .solution-product-showcase .product-description .results-guarantee small {
+        font-size: var(--font-size-xsmall);
+    }
+    .call-to-action-solution {
+        font-size: var(--font-size-large);
+    }
+}
+
+@media (max-width: 480px) {
+    .solution-section {
+        padding: calc(var(--spacing-unit) * 8) 0;
+    }
+    .solution-section .icon-section {
+        font-size: calc(var(--spacing-unit) * 4);
+    }
+    .solution-section h2 {
+        /* AJUSTEMENT PROMINENCE */
+        font-size: var(--font-size-xxl); /* Plus grand sur mobile */
+    }
+    .solution-section .intro-solution-text {
+        /* AJUSTEMENT PROMINENCE */
+        font-size: var(--font-size-large); /* Plus grand sur mobile */
+    }
+    .benefit-item h3 {
+        font-size: var(--font-size-medium);
+    }
+    .benefit-item p {
+        font-size: var(--font-size-base);
+    }
+    .solution-product-showcase .product-description h3 {
+        font-size: var(--font-size-medium);
+    }
+    .solution-product-showcase .product-description p {
+        font-size: var(--font-size-base);
+    }
+    .solution-product-showcase .product-description .results-guarantee {
+        font-size: var(--font-size-small);
+    }
+    .call-to-action-solution {
+        font-size: var(--font-size-medium);
+    }
+}
+
+
+
+
+/* ========================================= */
+/* --- 8. SECTION PREUVE SOCIALE (Proof Section) - AMÉLIORÉE ET HARMONISÉE --- */
+/* ========================================= */
+.proof-section {
+    background-color: var(--color-background-soft); /* Fond clair et aéré, cohérent */
+    padding: calc(var(--spacing-unit) * 10) 0; /* Espacement vertical généreux et constant */
+    text-align: center;
+    color: var(--color-text-dark);
+    position: relative;
+    overflow: hidden;
+}
+
+/* ========================================= */
+/* --- ICONES DE SECTION (Proof Section & Autres) --- */
+/* ========================================= */
+.icon-section {
+    font-size: var(--font-size-hero); /* Grande taille, comme les titres de hero/section */
+    color: var(--color-curcuma-main); /* LA COULEUR DE VOTRE CURCUMA ! */
+    margin-bottom: calc(var(--spacing-unit) * 3); /* Espacement sous l'icône */
+    display: block; /* S'assure que l'icône prend toute la largeur pour centrage */
+    text-align: center; /* Centre l'icône */
+}
+
+/* Si tu as une icône spécifique à la preuve qui doit être unique, tu peux la cibler ainsi : */
+.proof-section .icon-section {
+    color: var(--color-curcuma-accent); /* Ou une autre nuance si tu veux un contraste */
+}
+
+/* Pour l'icône de la main dans le hint */
+.enlarge-hint .animated-hand {
+    color: var(--color-curcuma-main); /* Couleur pour l'icône de la main */
+    font-size: var(--font-size-large); /* Taille de l'icône de la main */
+    margin-right: calc(var(--spacing-unit) * 1);
+}
+
+.enlarge-hint .hint-text {
+    color: var(--color-text-light); /* Couleur du texte du hint */
+    font-size: var(--font-size-small); /* Taille du texte du hint */
+}
+
+/* Et si tu veux que la main anime (comme son nom le suggère) */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px); /* Petite animation de rebond */
+    }
+}
+
+.animated-hand {
+    animation: bounce 0.8s infinite alternate ease-in-out; /* Applique l'animation */
+}
+
+
+/* Titre H2 : Grand et percutant, harmonisé avec les autres sections phares */
+.proof-section h2 {
+    font-size: var(--font-size-xxxl); /* Grande taille pour mobile/tablette */
+    color: var(--color-heading-dark); /* Cohérent avec les autres titres */
+    line-height: 1.3;
+    margin-bottom: calc(var(--spacing-unit) * 3);
+    font-weight: var(--font-weight-extra-bold); /* Cohérent */
+    font-family: 'Poppins', sans-serif; /* Assure la cohérence de la police */
+    max-width: 900px; /* Limite la largeur pour une meilleure lisibilité */
+    margin-left: auto;
+    margin-right: auto;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05); /* Légère ombre pour le texte */
+}
+
+/* Paragraphe d'introduction : clair et impactant, harmonisé */
+.proof-section .intro-proof-text {
+    font-size: var(--font-size-xxl); /* Grande taille pour mobile/tablette */
+    text-align: center;
+    max-width: 850px; /* Légèrement plus large pour l'intro */
+    margin: 0 auto calc(var(--spacing-unit) * 6) auto; /* Espacement après le paragraphe */
+    color: var(--color-text-base);
+    line-height: 1.7; /* Améliore la lisibilité */
+}
+
+/* Sous-titres (Vos messages, nos fiertés! / Voyez la transformation !) */
+.proof-section .subsection-title {
+    font-size: var(--font-size-h3); /* Taille de sous-section */
+    color: var(--color-curcuma-orange-primary); /* Couleur principale Curcuma pour les distinguer */
+    margin-top: calc(var(--spacing-unit) * 7); /* Espacement plus grand avant le sous-titre */
+    margin-bottom: calc(var(--spacing-unit) * 4); /* Espacement après le sous-titre */
+    font-weight: var(--font-weight-bold); /* Cohérent */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.03); /* Ombre très subtile */
+}
+
+/* ----------------------------------------------------- */
+/* --- Indicateur d'agrandissement (Doigt animé) --- */
+/* ----------------------------------------------------- */
+.enlarge-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: calc(var(--spacing-unit) * -2); /* Remonte pour être proche du sous-titre */
+    margin-bottom: calc(var(--spacing-unit) * 3); /* Espacement avant la grille */
+    color: var(--color-text-base);
+    font-size: var(--font-size-medium);
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+    cursor: default;
+}
+
+.enlarge-hint .animated-hand {
+    font-size: var(--font-size-xl);
+    color: var(--color-curcuma-orange-primary); /* Orange Curcuma pour attirer l'attention */
+    margin-right: calc(var(--spacing-unit) * 1);
+    animation: bounceUpDown 1.5s infinite ease-in-out;
+}
+
+.enlarge-hint .hint-text {
+    font-weight: var(--font-weight-bold); /* Plus gras pour plus d'impact */
+    color: var(--color-heading-dark); /* Couleur de titre pour mieux ressortir */
+    font-size: var(--font-size-large);
+}
+
+@keyframes bounceUpDown {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+/* ========================================= */
+/* --- Style de la grille des témoignages (images carrées et espacées) --- */
+/* ========================================= */
+.screenshot-testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 450px), 1fr));
+    gap: calc(var(--spacing-unit) * 6); /* Espacement entre les images */
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 calc(var(--spacing-unit) * 2); /* Padding latéral pour les bords */
+    margin-bottom: calc(var(--spacing-unit) * 8); /* Marge sous la grille */
+}
+
+/* Style de chaque élément de la capture d'écran */
+.screenshot-item {
+    position: relative;
+    background-color: var(--color-white); /* Fond blanc de la "carte" */
+    border-radius: var(--border-radius-medium); /* Coins arrondis */
+    box-shadow: var(--shadow-medium); /* Ombre douce pour un effet de profondeur */
+    overflow: hidden; /* S'assure que rien ne déborde */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    cursor: pointer;
+    padding: calc(var(--spacing-unit) * 1.5); /* Espace blanc DÉLIMITANT l'image */
+    aspect-ratio: 1 / 1; /* REND L'ÉLÉMENT CARRÉ - AMÉLIORATION CLÉ */
+    display: flex; /* Pour centrer l'image à l'intérieur */
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgba(0, 0, 0, 0.05); /* Bordure très fine et discrète */
+}
+
+.screenshot-item:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-hover); /* Ombre plus prononcée au survol */
+}
+
+/* Conteneur de l'image (pour le dégradé en arrière-plan) */
+.screenshot-item .screenshot-background {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%; /* S'assure que le conteneur prend toute la place */
+    background: linear-gradient(135deg, var(--color-curcuma-orange-secondary) 0%, var(--color-curcuma-orange-primary) 100%);
+    border-radius: var(--border-radius-small); /* Coins arrondis pour le fond */
+    overflow: hidden; /* Très important pour que l'image ne dépasse pas */
+}
+
+/* L'image elle-même */
+.screenshot-item img {
+    width: 100%; /* L'image remplit la largeur disponible */
+    height: 100%; /* L'image remplit la hauteur disponible */
+    object-fit: contain; /* L'image est contenue et ne se déforme pas - essentiel pour les screenshots */
+    display: block;
+    border-radius: var(--border-radius-xsmall); /* Très légers coins arrondis sur l'image */
+}
+
+
+/* ----------------------------------------------------- */
+/* --- Grille Avant/Après (Améliorée) --- */
+/* ----------------------------------------------------- */
+.before-after-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Min 350px pour chaque paire pour meilleure lisibilité */
+    gap: calc(var(--spacing-unit) * 4); /* Espacement entre les paires */
+    max-width: 1000px; /* Limite la largeur de cette grille */
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: calc(var(--spacing-unit) * 5); /* Espacement après les captures d'écran */
+    padding: 0 calc(var(--spacing-unit) * 2);
+}
+
+.b-a-pair {
+    display: flex;
+    flex-direction: row; /* Les images restent côte à côte par défaut */
+    gap: calc(var(--spacing-unit) * 1); /* Espacement réduit entre les images avant/après */
+    background-color: var(--color-white);
+    border-radius: var(--border-radius-medium);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Ombre douce et uniforme */
+    overflow: hidden;
+    padding: calc(var(--spacing-unit) * 1.5); /* Padding intérieur réduit */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.b-a-pair:hover {
+    transform: translateY(-5px) scale(1.01);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Ombre plus prononcée au survol */
+}
+
+.b-a-pair .image-wrapper {
+    position: relative;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border-radius: var(--border-radius-small);
+}
+
+.b-a-pair .image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* L'image remplit le cadre sans déformer les proportions */
+    display: block;
+    transition: transform 0.3s ease-in-out;
+}
+
+.b-a-pair:hover .image-wrapper img {
+    transform: scale(1.03); /* Léger zoom au survol */
+}
+
+.b-a-pair .image-wrapper .label {
+    position: absolute;
+    bottom: calc(var(--spacing-unit) * 1); /* Plus proche du bas */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--color-curcuma-orange-primary); /* Couleur principale Curcuma pour le label */
+    color: var(--color-white);
+    padding: calc(var(--spacing-unit) * 0.6) calc(var(--spacing-unit) * 1.5); /* Padding réduit */
+    border-radius: var(--border-radius-small);
+    font-size: var(--font-size-xsmall);
+    font-weight: var(--font-weight-bold); /* Plus gras */
+    text-transform: uppercase;
+    white-space: nowrap;
+    opacity: 0.98; /* Moins transparent, plus lisible */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Ombre pour faire ressortir le label */
+}
+
+/* Texte final d'appel à l'action : plus grand et audacieux */
+.proof-section .call-to-action-proof {
+    font-size: var(--font-size-xxl); /* Très grand pour inciter à l'action sur mobile/tablette */
+    font-weight: var(--font-weight-bold); /* Cohérent */
+    color: var(--color-heading-dark); /* Cohérent */
+    margin-top: calc(var(--spacing-unit) * 7); /* Espacement avant le dernier CTA */
+    margin-bottom: calc(var(--spacing-unit) * 4); /* Espacement après le texte CTA */
+    text-align: center;
+    max-width: 900px; /* Limite la largeur */
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
+}
+
+/* Bouton CTA final : Style cohérent */
+.proof-section .cta-button.main-cta {
+    margin-top: 0; /* Ajusté car la marge est déjà sur le paragraphe précédent */
+    margin-bottom: calc(var(--spacing-unit) * 5); /* Marge sous le bouton final */
+}
+
+/* --- MEDIA QUERIES SPÉCIFIQUES : Proof Section --- */
+
+/* Tablette et petits ordinateurs (max-width: 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+    .proof-section {
+        padding: calc(var(--spacing-unit) * 8) 0; /* Padding réduit sur tablette */
+    }
+    .proof-section .icon-section {
+        font-size: 4.5rem;
+    }
+    .proof-section h2 {
+        font-size: var(--font-size-h3); /* Plus petit sur tablette */
+    }
+    .proof-section .intro-proof-text {
+        font-size: var(--font-size-xl); /* Plus petit sur tablette */
+        margin-bottom: calc(var(--spacing-unit) * 4);
+    }
+    .proof-section .subsection-title {
+        font-size: var(--font-size-h4);
+        margin-top: calc(var(--spacing-unit) * 6);
+        margin-bottom: calc(var(--spacing-unit) * 3);
+    }
+    .enlarge-hint {
+        margin-top: calc(var(--spacing-unit) * -1.5);
+        margin-bottom: calc(var(--spacing-unit) * 2.5);
+    }
+    .enlarge-hint .animated-hand {
+        font-size: var(--font-size-large);
+    }
+    .enlarge-hint .hint-text {
+        font-size: var(--font-size-medium);
+    }
+    .screenshot-testimonials-grid {
+        gap: calc(var(--spacing-unit) * 4); /* Espacement réduit sur tablette */
+        margin-bottom: calc(var(--spacing-unit) * 7); /* Marge sous la grille */
+    }
+    .screenshot-item {
+        padding: calc(var(--spacing-unit) * 1); /* Padding réduit sur tablette */
+    }
+    .before-after-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Ajusté pour tablettes */
+        gap: calc(var(--spacing-unit) * 3);
+        margin-top: calc(var(--spacing-unit) * 4);
+    }
+    .b-a-pair {
+        padding: calc(var(--spacing-unit) * 1.2);
+        gap: calc(var(--spacing-unit) * 0.8);
+    }
+    .b-a-pair .image-wrapper .label {
+        font-size: var(--font-size-xsmall);
+        padding: calc(var(--spacing-unit) * 0.5) calc(var(--spacing-unit) * 1);
+    }
+    .proof-section .call-to-action-proof {
+        font-size: var(--font-size-xl);
+        margin-top: calc(var(--spacing-unit) * 5);
+        margin-bottom: calc(var(--spacing-unit) * 3);
+    }
+}
+
+/* Desktop (min-width: 992px) */
+@media (min-width: 992px) {
+    .proof-section h2 {
+        font-size: var(--font-size-h1); /* Taille imposante sur desktop */
+    }
+    .proof-section .intro-proof-text {
+        font-size: var(--font-size-xxxl); /* Grande taille d'intro sur desktop */
+    }
+    .proof-section .call-to-action-proof {
+        font-size: var(--font-size-xxxl); /* Très grand pour inciter à l'action sur desktop */
+    }
+}
+
+/* Mobile (max-width: 767px) */
+@media (max-width: 767px) {
+    .proof-section {
+        padding: var(--padding-section-mobile); /* Utilise la variable de padding mobile */
+    }
+    .proof-section .icon-section {
+        font-size: 3.5rem;
+    }
+    .proof-section h2 {
+        font-size: var(--font-size-h4);
+    }
+    .proof-section .intro-proof-text {
+        font-size: var(--font-size-medium);
+        margin-bottom: calc(var(--spacing-unit) * 3);
+    }
+    .proof-section .subsection-title {
+        font-size: var(--font-size-h5);
+        margin-top: calc(var(--spacing-unit) * 4);
+        margin-bottom: calc(var(--spacing-unit) * 2.5);
+    }
+    .enlarge-hint {
+        margin-top: calc(var(--spacing-unit) * -1);
+        margin-bottom: calc(var(--spacing-unit) * 2);
+    }
+    .enlarge-hint .animated-hand {
+        font-size: var(--font-size-medium);
+    }
+    .enlarge-hint .hint-text {
+        font-size: var(--font-size-small);
+    }
+    .screenshot-testimonials-grid {
+        grid-template-columns: 1fr; /* Une seule colonne sur mobile */
+        gap: calc(var(--spacing-unit) * 4); /* Espacement réduit sur mobile */
+        margin-bottom: calc(var(--spacing-unit) * 6); /* Marge sous la grille */
+    }
+    .screenshot-item {
+        padding: calc(var(--spacing-unit) * 1); /* Padding réduit sur mobile */
+    }
+    .before-after-grid {
+        grid-template-columns: 1fr; /* Une seule colonne sur mobile pour mieux empiler les paires */
+        gap: calc(var(--spacing-unit) * 3);
+        margin-top: calc(var(--spacing-unit) * 3.5);
+    }
+    .b-a-pair {
+        flex-direction: column; /* Force les images avant/après à s'empiler pour les petits écrans */
+        padding: calc(var(--spacing-unit) * 1.5);
+        gap: calc(var(--spacing-unit) * 1.5);
+    }
+    .b-a-pair .image-wrapper .label {
+        font-size: var(--font-size-xxsmall);
+        padding: calc(var(--spacing-unit) * 0.4) calc(var(--spacing-unit) * 0.8);
+    }
+    .proof-section .call-to-action-proof {
+        font-size: var(--font-size-large);
+        margin-top: calc(var(--spacing-unit) * 4);
+        margin-bottom: calc(var(--spacing-unit) * 3);
+    }
+    .proof-section .cta-button.main-cta {
+        margin-bottom: calc(var(--spacing-unit) * 3);
+    }
+}
+
+
+/* ========================================= */
+/* --- 9. STYLES MODALE D'AGRANDISSEMENT D'IMAGES --- */
+/* ========================================= */
+
+/* Le conteneur de la modale */
+.modal {
+    display: none; /* Caché par défaut */
+    position: fixed; /* Reste en place même en scrollant */
+    z-index: 2000; /* Superpose tout le reste (plus haut que le header) */
+    left: 0;
+    top: 0;
+    width: 100%; /* Toute la largeur */
+    height: 100%; /* Toute la hauteur */
+    overflow: hidden; /* Empêche tout défilement de la modale elle-même */
+    background-color: rgba(0,0,0,0.9); /* Fond noir avec transparence */
+    backdrop-filter: blur(5px); /* Effet de flou sur le contenu derrière */
+    -webkit-backdrop-filter: blur(5px); /* Pour compatibilité Safari */
+
+    /* NOUVEAU: Utilise Flexbox pour centrer l'image et la légende */
+    display: flex; /* Active Flexbox */
+    flex-direction: column; /* Organise les enfants en colonne (image puis légende) */
+    align-items: center; /* Centre horizontalement (pour les éléments flex-direction: column) */
+    justify-content: center; /* Centre verticalement */
+    padding: calc(var(--spacing-unit) * 2); /* Ajoute un petit padding général pour éviter le collage aux bords */
+}
+
+/* Contenu de l'image à l'intérieur de la modale */
+.modal-content {
+    width: auto; /* L'image prendra sa largeur naturelle ou sera limitée par max-width/max-height */
+    height: auto; /* L'image prendra sa hauteur naturelle ou sera limitée par max-width/max-height */
+    max-width: 90vw; /* L'image ne dépassera pas 90% de la largeur du viewport */
+    max-height: 85vh; /* L'image ne dépassera pas 85% de la hauteur du viewport */
+    object-fit: contain; /* Assure que l'image entière est visible sans être coupée, en conservant son ratio */
+    border-radius: var(--border-radius-medium);
+    box-shadow: var(--shadow-strong);
+    animation: zoomIn 0.3s ease-out; /* Animation d'apparition */
+    margin-bottom: calc(var(--spacing-unit) * 1.5); /* Espacement entre l'image et la légende */
+}
+
+/* Texte de la légende de l'image */
+#caption {
+    /* La légende n'a plus besoin d'être positionnée en absolu si elle fait partie du flux flex */
+    text-align: center;
+    color: var(--color-white);
+    padding: calc(var(--spacing-unit) * 1);
+    height: auto;
+    font-size: var(--font-size-medium);
+    text-shadow: 0 0 5px rgba(0,0,0,0.5);
+    max-width: 90vw; /* Limite la largeur de la légende comme l'image */
+    width: auto; /* Ajuste la largeur à son contenu si max-width n'est pas atteint */
+    
+    /* Si la légende doit être sous l'image et centrée, ces propriétés sont suffisantes */
+    /* Les anciennes propriétés absolute sont supprimées car flexbox gère le positionnement */
+}
+
+
+/* Bouton de fermeture (X) */
+.close-button {
+    position: absolute; /* Reste en absolu pour être en haut à droite */
+    top: calc(var(--spacing-unit) * 2.5);
+    right: calc(var(--spacing-unit) * 4);
+    color: var(--color-white);
+    font-size: 5rem;
+    font-weight: bold;
+    transition: 0.3s;
+    cursor: pointer;
+    z-index: 2001; /* Au-dessus de la modale */
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: var(--color-curcuma-orange-primary);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Boutons précédent/suivant pour la navigation */
+.prev, .next {
+    cursor: pointer;
+    position: absolute; /* Restent en absolu pour se positionner par rapport à la modale */
+    top: 50%;
+    width: auto;
+    padding: calc(var(--spacing-unit) * 2);
+    margin-top: calc(var(--spacing-unit) * -5);
+    color: var(--color-white);
+    font-weight: bold;
+    font-size: 3rem;
+    transition: 0.3s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    -webkit-user-select: none;
+    background-color: rgba(0,0,0,0.5);
+    border-radius: var(--border-radius-small);
+    z-index: 2001;
+}
+
+/* Positionnement des boutons */
+.prev {
+    left: calc(var(--spacing-unit) * 3);
+}
+
+.next {
+    right: calc(var(--spacing-unit) * 3);
+    border-radius: 3px 0 0 3px;
+}
+
+/* Effet au survol des boutons */
+.prev:hover, .next:hover {
+    background-color: rgba(0,0,0,0.8);
+    color: var(--color-curcuma-orange-primary);
+}
+
+/* Animation d'apparition de la modale */
+@keyframes zoomIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* MEDIA QUERIES pour la Modale */
+@media only screen and (max-width: 768px) {
+    .modal {
+        padding: calc(var(--spacing-unit) * 1.5); /* Réduit le padding général sur mobile */
+    }
+    .modal-content {
+        max-width: 95vw;
+        max-height: 80vh;
+        margin-bottom: calc(var(--spacing-unit) * 1); /* Espacement réduit sur mobile */
+    }
+    #caption {
+        font-size: var(--font-size-small);
+        max-width: 95vw;
+        width: auto; /* Maintient l'auto-ajustement */
+    }
+    .close-button {
+        font-size: 4rem;
+        top: calc(var(--spacing-unit) * 1.5);
+        right: calc(var(--spacing-unit) * 2);
+    }
+    .prev, .next {
+        font-size: 2.5rem;
+        padding: calc(var(--spacing-unit) * 1.5);
+        margin-top: calc(var(--spacing-unit) * -4);
+    }
+    .prev { left: calc(var(--spacing-unit) * 1.5); }
+    .next { right: calc(var(--spacing-unit) * 1.5); }
+}
+
+@media only screen and (max-width: 480px) {
+    .modal {
+        padding: calc(var(--spacing-unit) * 1); /* Réduit encore le padding sur très petit mobile */
+    }
+    .modal-content {
+        max-height: 75vh;
+    }
+    #caption {
+        font-size: var(--font-size-xsmall);
+    }
+    .close-button {
+        font-size: 3.5rem;
+        top: calc(var(--spacing-unit) * 1);
+        right: calc(var(--spacing-unit) * 1.5);
+    }
+    .prev, .next {
+        font-size: 2rem;
+        padding: calc(var(--spacing-unit) * 1);
+        margin-top: calc(var(--spacing-unit) * -3);
+    }
+    .prev { left: calc(var(--spacing-unit) * 1); }
+    .next { right: calc(var(--spacing-unit) * 1); }
+}
+
+
+/* ========================================= */
+/* --- 9. SECTION OFFRES EXCLUSIVES (Offers Section) - PREMIUM --- */
+/* ========================================= */
+.offers-section {
+    background-color: var(--color-background-soft);
+    padding: calc(var(--spacing-unit) * 10) 0;
+    text-align: center;
+    color: var(--color-text-dark);
+    position: relative;
+    overflow: hidden;
+}
+
+.offers-section .offers-section-main-icon {
+    font-size: 5.5rem;
+    color: var(--color-curcuma-main); /* Utilisé --color-curcuma-main */
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+    margin-bottom: calc(var(--spacing-unit) * 4);
+    display: block;
+}
+
+.offers-section h2 {
+    font-size: var(--font-size-xxxl); /* Grande taille pour mobile/tablette */
+    color: var(--color-heading); /* Utilisé --color-heading */
+    line-height: 1.3;
+    margin-bottom: calc(var(--spacing-unit) * 3);
+    font-weight: var(--font-weight-extra-bold);
+    font-family: var(--font-family-primary);
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.offers-section .offers-intro-text {
+    font-size: var(--font-size-xxl); /* Grande taille pour l'intro */
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto calc(var(--spacing-unit) * 5) auto;
+    color: var(--color-text-light);
+    line-height: 1.6;
+}
+
+/* ----------------------------------------------------- */
+/* --- Compte à rebours PREMIUM (Countdown Timer) - HORIZONTAL --- */
+/* ----------------------------------------------------- */
+.countdown-timer {
+    background: linear-gradient(135deg, var(--color-curcuma-main) 0%, var(--color-curcuma-dark) 100%);
+    border-radius: var(--border-radius-large);
+    box-shadow: var(--shadow-deep);
+    padding: calc(var(--spacing-unit) * 4); /* Padding uniforme */
+    margin-bottom: calc(var(--spacing-unit) * 7);
+    text-align: center;
+    color: var(--color-background-white);
+    max-width: 900px; /* Limite la largeur du timer */
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    overflow: hidden;
+    animation: pulseGlow 3s infinite ease-in-out;
+    display: flex; /* Utilise Flexbox pour l'agencement */
+    flex-direction: column; /* Par défaut en colonne pour la structure interne */
+    align-items: center; /* Centre le contenu */
+}
+
+@keyframes pulseGlow {
+    0% {
+        box-shadow: var(--shadow-deep);
+    }
+    50% {
+        box-shadow: 0 10px 30px rgba(255, 165, 0, 0.6);
+    }
+    100% {
+        box-shadow: var(--shadow-deep);
+    }
+}
+
+.countdown-message {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: calc(var(--spacing-unit) * 2.5);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.countdown-values {
+    display: flex; /* Utilise Flexbox pour les segments */
+    justify-content: center; /* Centre les segments horizontalement */
+    gap: calc(var(--spacing-unit) * 3); /* Espacement entre Jours, Heures, etc. */
+    margin-bottom: calc(var(--spacing-unit) * 2.5);
+    flex-wrap: wrap; /* Permet aux segments de passer à la ligne sur de très petits écrans */
+}
+
+.countdown-segment {
+    display: flex;
+    flex-direction: column; /* Chiffre au-dessus du label */
+    align-items: center; /* Centre chiffre et label */
+    padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2); /* Padding interne du segment */
+    background-color: rgba(255, 255, 255, 0.15); /* Légère surbrillance pour chaque segment */
+    border-radius: var(--border-radius-small);
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1); /* Ombre interne subtile */
+    min-width: 90px; /* Largeur minimale pour éviter la compression */
+}
+
+.countdown-digit {
+    font-size: 3.8rem; /* Chiffres très grands et impactants */
+    font-weight: var(--font-weight-black);
+    color: var(--color-background-white); /* Chiffres blancs, pas de background-clip ici pour la simplicité */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease-out; /* Animation au changement */
+    line-height: 1; /* Réduit l'espace vertical du chiffre */
+}
+
+.countdown-label {
+    font-size: var(--font-size-medium);
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: var(--font-weight-semi-bold);
+    text-transform: uppercase;
+    margin-top: calc(var(--spacing-unit) * 1); /* Espacement entre chiffre et label */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.countdown-note {
+    font-size: var(--font-size-large);
+    color: rgba(255, 255, 255, 0.9);
+    font-style: italic;
+    margin-top: calc(var(--spacing-unit) * 1.5);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+
+/* ========================================= */
+/* --- Grille des Offres (Product Offers Grid) --- */
+/* ========================================= */
+.product-offers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: calc(var(--spacing-unit) * 4);
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 calc(var(--spacing-unit) * 2);
+    margin-bottom: calc(var(--spacing-unit) * 6);
+}
+
+.offer-card {
+    background-color: var(--color-background-white);
+    border-radius: var(--border-radius-medium);
+    box-shadow: var(--shadow-medium);
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    padding: calc(var(--spacing-unit) * 2);
+}
+
+.offer-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-hover);
+}
+
+.product-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--border-radius-small);
+    margin-bottom: calc(var(--spacing-unit) * 2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 250px;
+}
+
+.product-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.offer-card h3 {
+    font-size: var(--font-size-h4);
+    color: var(--color-heading);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
+}
+
+.offer-card ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: calc(var(--spacing-unit) * 3);
+}
+
+.offer-card li {
+    font-size: var(--font-size-medium);
+    color: var(--color-text-light);
+    margin-bottom: calc(var(--spacing-unit) * 1);
+    display: flex;
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 0.8);
+}
+
+.offer-card li i {
+    color: var(--color-success-green);
+    font-size: var(--font-size-xl);
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
+}
+
+.price-block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: calc(var(--spacing-unit) * 3);
+    flex-wrap: wrap;
+    gap: calc(var(--spacing-unit) * 1);
+}
+
+.price-block .old-price {
+    font-size: var(--font-size-medium);
+    color: var(--color-text-subtle);
+    text-decoration: line-through;
+    margin-right: calc(var(--spacing-unit) * 1);
+}
+
+.price-block .price {
+    font-size: 2.5rem;
+    color: var(--color-curcuma-main);
+    font-weight: var(--font-weight-extra-bold);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.price-block .discount-badge {
+    background: linear-gradient(45deg, var(--color-curcuma-main) 0%, var(--color-curcuma-dark) 100%);
+    color: var(--color-background-white);
+    padding: calc(var(--spacing-unit) * 0.8) calc(var(--spacing-unit) * 1.5);
+    border-radius: var(--border-radius-small);
+    font-size: var(--font-size-large);
+    font-weight: var(--font-weight-black);
+    box-shadow: var(--shadow-medium);
+    transform: rotate(-3deg);
+    animation: badgePop 1s ease-out forwards;
+    transform-origin: bottom right;
+}
+
+@keyframes badgePop {
+    0% {
+        transform: scale(0) rotate(0deg);
+        opacity: 0;
+    }
+    70% {
+        transform: scale(1.1) rotate(-5deg);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1) rotate(-3deg);
+    }
+}
+
+
+.offer-card .cta-button.secondary-cta {
+    margin-top: auto;
+}
+
+.offers-section .offers-final-cta-text {
+    font-size: var(--font-size-large);
+    color: var(--color-heading);
+    margin-top: calc(var(--spacing-unit) * 6);
+    margin-bottom: calc(var(--spacing-unit) * 4);
+    text-align: center;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
+}
+
+/* --- MEDIA QUERIES SPÉCIFIQUES : Offers Section --- */
+
+@media (min-width: 992px) {
+    .offers-section h2 {
+        font-size: var(--font-size-h1);
+    }
+    .offers-section .offers-intro-text {
+        font-size: var(--font-size-xxl);
+    }
+    /* Compte à rebours sur desktop */
+    .countdown-timer {
+        flex-direction: column; /* Revenir à la colonne pour l'ensemble du timer */
+        padding: calc(var(--spacing-unit) * 5); /* Plus de padding sur grand écran */
+    }
+    .countdown-values {
+        flex-direction: row; /* Les chiffres restent en ligne */
+        gap: calc(var(--spacing-unit) * 4); /* Plus d'espace entre les segments */
+    }
+    .countdown-digit {
+        font-size: 5rem; /* Encore plus grand sur desktop */
+    }
+    .countdown-label {
+        font-size: var(--font-size-large);
+    }
+    .countdown-note {
+        font-size: var(--font-size-xl);
+    }
+    .price-block .price {
+        font-size: 3rem;
+    }
+}
+
+/* Tablette (768px - 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+    .offers-section {
+        padding: calc(var(--spacing-unit) * 8) 0;
+    }
+    .offers-section .offers-section-main-icon {
+        font-size: 4.5rem;
+    }
+    .offers-section h2 {
+        font-size: var(--font-size-h3);
+    }
+    .offers-section .offers-intro-text {
+        font-size: var(--font-size-xl);
+    }
+    /* Compte à rebours sur tablette */
+    .countdown-timer {
+        padding: calc(var(--spacing-unit) * 3);
+        margin-bottom: calc(var(--spacing-unit) * 5);
+        flex-direction: column;
+    }
+    .countdown-values {
+        flex-direction: row; /* Garde les chiffres en ligne */
+        gap: calc(var(--spacing-unit) * 2);
+    }
+    .countdown-digit {
+        font-size: 3rem;
+    }
+    .countdown-label {
+        font-size: var(--font-size-medium);
+    }
+    .countdown-note {
+        font-size: var(--font-size-medium);
+    }
+    .product-offers-grid {
+        gap: calc(var(--spacing-unit) * 3);
+        margin-bottom: calc(var(--spacing-unit) * 5);
+    }
+    .offer-card {
+        padding: calc(var(--spacing-unit) * 1.5);
+    }
+    .offer-card h3 {
+        font-size: var(--font-size-h5);
+    }
+    .offer-card li {
+        font-size: var(--font-size-small);
+    }
+    .offer-card li i {
+        font-size: var(--font-size-large);
+    }
+    .price-block .price {
+        font-size: 2.2rem;
+    }
+    .price-block .discount-badge {
+        font-size: var(--font-size-medium);
+        padding: calc(var(--spacing-unit) * 0.6) calc(var(--spacing-unit) * 1.2);
+    }
+    .offers-section .offers-final-cta-text {
+        font-size: var(--font-size-medium);
+    }
+}
+
+/* Mobile (max-width: 767px) */
+@media (max-width: 767px) {
+    .offers-section {
+        padding: var(--padding-section-mobile);
+    }
+    .offers-section .offers-section-main-icon {
+        font-size: 3.5rem;
+    }
+    .offers-section h2 {
+        font-size: var(--font-size-h4);
+    }
+    .offers-section .offers-intro-text {
+        font-size: var(--font-size-medium);
+    }
+    /* Compte à rebours sur mobile */
+    .countdown-timer {
+        padding: calc(var(--spacing-unit) * 2);
+        margin-bottom: calc(var(--spacing-unit) * 4);
+        border-radius: var(--border-radius-medium);
+        flex-direction: column; /* Garde l'ensemble du timer en colonne */
+    }
+    .countdown-values {
+        flex-direction: row; /* Les chiffres eux-mêmes restent en ligne pour ne pas déborder */
+        flex-wrap: wrap; /* Permet un retour à la ligne si l'écran est vraiment petit */
+        justify-content: center;
+        gap: calc(var(--spacing-unit) * 1); /* Espacement réduit sur mobile */
+    }
+    .countdown-segment {
+        padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+        min-width: unset; /* Retire la largeur minimale pour plus de flexibilité */
+    }
+    .countdown-message {
+        font-size: var(--font-size-small);
+        margin-bottom: calc(var(--spacing-unit) * 2);
+    }
+    .countdown-digit {
+        font-size: 2.5rem;
+    }
+    .countdown-label {
+        font-size: var(--font-size-xsmall);
+        margin-top: calc(var(--spacing-unit) * 0.5);
+    }
+    .countdown-note {
+        font-size: var(--font-size-small);
+    }
+    .product-offers-grid {
+        grid-template-columns: 1fr;
+        gap: calc(var(--spacing-unit) * 4);
+        margin-bottom: calc(var(--spacing-unit) * 5);
+    }
+    .offer-card {
+        padding: calc(var(--spacing-unit) * 1.5);
+    }
+    .offer-card h3 {
+        font-size: var(--font-size-h5);
+    }
+    .offer-card li {
+        font-size: var(--font-size-small);
+    }
+    .offer-card li i {
+        font-size: var(--font-size-medium);
+    }
+    .price-block {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: calc(var(--spacing-unit) * 1.5);
+    }
+    .price-block .price {
+        font-size: 2rem;
+    }
+    .price-block .discount-badge {
+        font-size: var(--font-size-small);
+        padding: calc(var(--spacing-unit) * 0.5) calc(var(--spacing-unit) * 1);
+        transform: rotate(0deg);
+    }
+    .offers-section .offers-final-cta-text {
+        font-size: var(--font-size-medium);
+        margin-top: calc(var(--spacing-unit) * 4);
+    }
+}
+
+/* Keyframes pour l'animation des chiffres (à garder une seule fois dans le CSS) */
+@keyframes digitChange {
+    0% { transform: translateY(0); opacity: 1; }
+    50% { transform: translateY(-5px); opacity: 0.8; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+
+/* ========================================= */
+/* --- 10. FAQ SECTION - Questions Fréquentes PREMIUM --- */
+/* ========================================= */
+.faq-section {
+    background-color: var(--color-background-soft); /* Fond légèrement teinté pour contraster */
+    padding: calc(var(--spacing-unit) * 10) 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    color: var(--color-text-dark);
+}
+
+/* Icône de la section : Grande, couleur vive (Curcuma), ombrée */
+.faq-section .icon-section {
+    font-size: 5.5rem;
+    color: var(--color-curcuma-main); /* Utilisé --color-curcuma-main pour l'icône principale */
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15)); /* Ombre plus prononcée */
+    margin-bottom: calc(var(--spacing-unit) * 4);
+    display: block; /* S'assurer qu'elle est bien centrée */
+}
+
+/* Titre H2 : Gros et percutant, avec vos variables */
+.faq-section h2 {
+    font-size: var(--font-size-xxxl); /* Utilise la variable de taille pour la réactivité */
+    color: var(--color-heading);
+    line-height: 1.3;
+    margin-bottom: calc(var(--spacing-unit) * 3);
+    font-weight: var(--font-weight-extra-bold); /* Utilise la variable de font-weight */
+    font-family: var(--font-family-primary); /* Utilise la variable de font-family */
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+}
+/* Introduction FAQ */
+.faq-section .intro-faq-text {
+    /* FORCAGE TEMPORAIRE DE LA TAILLE POUR DIAGNOSTIC */
+    font-size: 30px !important; /* Force la taille à 30px sur desktop */
+    text-align: center;
+    max-width: 850px;
+    margin: 0 auto calc(var(--spacing-unit) * 6) auto;
+    color: var(--color-text-base);
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+}
+
+/* --- MEDIA QUERIES pour la FAQ (pour assurer la responsivité) --- */
+/* Tablette (max-width: 991px) */
+@media (max-width: 991px) {
+    .faq-section .intro-faq-text {
+        font-size: 20px !important; /* Force la taille à 20px sur tablette */
+        margin-bottom: calc(var(--spacing-unit) * 4);
+    }
+}
+
+/* Mobile (max-width: 767px) */
+@media (max-width: 767px) {
+    .faq-section .intro-faq-text {
+        font-size: 16px !important; /* Force la taille à 16px sur mobile */
+        margin-bottom: calc(var(--spacing-unit) * 3);
+        padding: 0 calc(var(--spacing-unit) * 2);
+    }
+}
+
+
+/* --- MEDIA QUERIES pour la FAQ (pour assurer la responsivité comme dans la section problème) --- */
+/* Tablette (991px à 768px) */
+@media (max-width: 991px) {
+    .faq-section .intro-faq-text {
+        font-size: var(--font-size-large); /* Taille pour tablette, à ajuster si besoin d'être encore plus grand */
+        margin-bottom: calc(var(--spacing-unit) * 4); /* Espacement ajusté */
+    }
+}
+
+/* Mobile (767px et moins) */
+@media (max-width: 767px) {
+    .faq-section .intro-faq-text {
+        font-size: var(--font-size-medium); /* Taille pour mobile */
+        margin-bottom: calc(var(--spacing-unit) * 3);
+        padding: 0 calc(var(--spacing-unit) * 2); /* Padding horizontal pour mobile */
+    }
+}
+
+
+/* Conteneur des éléments FAQ */
+.faq-items-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+/* Chaque élément FAQ (la "carte" question/réponse) */
+.faq-item {
+    background-color: var(--color-background-white); /* Fond blanc pur */
+    border-radius: var(--border-radius-medium);
+    box-shadow: var(--shadow-medium); /* Ombre de profondeur moyenne */
+    margin-bottom: calc(var(--spacing-unit) * 3); /* Espacement entre les FAQ */
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    border: 1px solid var(--color-border-subtle); /* Bordure très discrète */
+}
+
+.faq-item:hover {
+    transform: translateY(-5px); /* Léger soulèvement accentué au survol */
+    box-shadow: var(--shadow-hover); /* Ombre plus prononcée au survol */
+}
+
+/* Tête de question FAQ */
+.faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 3);
+    font-size: var(--font-size-large);
+    font-weight: var(--font-weight-semi-bold); /* Semi-gras pour la lisibilité */
+    color: var(--color-heading);
+    cursor: pointer;
+    background-color: var(--color-background-white);
+    border-bottom: 1px solid var(--color-border-light);
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.faq-item.active .faq-question {
+    background-color: var(--color-curcuma-main); /* Fond principal Curcuma quand ouvert */
+    color: var(--color-background-white); /* Texte blanc quand ouvert */
+    border-bottom-color: transparent; /* Pas de bordure quand ouvert */
+    border-bottom-left-radius: 0; /* Coins inférieurs non arrondis quand ouvert */
+    border-bottom-right-radius: 0;
+}
+
+.faq-question:hover {
+    background-color: var(--color-background-light); /* Fond légèrement teinté au survol */
+}
+
+.faq-item.active .faq-question:hover {
+    background-color: var(--color-curcuma-dark); /* Orange foncé au survol si actif */
+    color: var(--color-background-white); /* Texte reste blanc au survol si actif */
+}
+
+.faq-question .question-text {
+    flex-grow: 1;
+    margin-right: calc(var(--spacing-unit) * 2);
+    color: inherit; /* Hérite de la couleur du parent .faq-question */
+}
+
+.faq-question .toggle-icon {
+    font-size: var(--font-size-xl); /* Icône plus grande */
+    color: var(--color-curcuma-main); /* Couleur Curcuma pour l'icône normale */
+    transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.faq-item.active .faq-question .toggle-icon {
+    transform: rotate(45deg); /* Transforme le "+" en "X" */
+    color: var(--color-background-white); /* Icône blanche quand ouverte */
+}
+
+/* Zone de réponse de la FAQ */
+.faq-answer {
+    padding: 0 calc(var(--spacing-unit) * 3);
+    font-size: var(--font-size-base);
+    color: var(--color-text-base);
+    line-height: 1.7; /* Légèrement plus d'espace entre les lignes */
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out; /* Transition plus longue et douce */
+}
+
+.faq-item.active .faq-answer {
+    max-height: 1000px; /* Valeur généreuse pour le contenu */
+    padding-top: calc(var(--spacing-unit) * 2);
+    padding-bottom: calc(var(--spacing-unit) * 3);
+}
+
+.faq-answer p {
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
+}
+
+.faq-answer p:last-child {
+    margin-bottom: 0;
+}
+
+.faq-answer strong {
+    color: var(--color-curcuma-main); /* Met en évidence les mots clés en couleur Curcuma */
+    font-weight: var(--font-weight-bold);
+}
+
+/* Texte final d'appel à l'action */
+.faq-section .final-faq-cta {
+    font-size: var(--font-size-xxl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-heading);
+    margin-top: calc(var(--spacing-unit) * 8);
+    text-align: center;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
+}
+
+/* Bouton CTA final */
+.faq-section .cta-button.main-cta {
+    margin-top: calc(var(--spacing-unit) * 5);
+}
+
+
+/* --- MEDIA QUERIES : FAQ Section (Ajustements aux variables existantes) --- */
+@media (min-width: 992px) {
+    .faq-section h2 {
+        font-size: var(--font-size-h1);
+    }
+    .faq-section .intro-faq-text {
+        font-size: var(--font-size-xl);
+    }
+    .faq-question {
+        font-size: var(--font-size-xl);
+    }
+    .faq-question .toggle-icon {
+        font-size: var(--font-size-xxl);
+    }
+    .faq-answer {
+        font-size: var(--font-size-large);
+    }
+    .faq-section .final-faq-cta {
+        font-size: var(--font-size-xxxl);
+    }
+}
+
+@media (max-width: 991px) { /* Tablette */
+    .faq-section {
+        padding: calc(var(--spacing-unit) * 8) 0;
+    }
+    .faq-section .icon-section {
+        font-size: 4.5rem;
+        margin-bottom: calc(var(--spacing-unit) * 3.5);
+    }
+    .faq-section h2 {
+        font-size: var(--font-size-h3);
+    }
+    .faq-section .intro-faq-text {
+        font-size: var(--font-size-medium);
+        margin-bottom: calc(var(--spacing-unit) * 4.5);
+    }
+    .faq-item {
+        margin-bottom: calc(var(--spacing-unit) * 3);
+    }
+    .faq-question {
+        padding: calc(var(--spacing-unit) * 2);
+        font-size: var(--font-size-large);
+    }
+    .faq-question .toggle-icon {
+        font-size: var(--font-size-medium);
+    }
+    .faq-answer {
+        font-size: var(--font-size-base);
+        padding: 0 calc(var(--spacing-unit) * 2);
+    }
+    .faq-item.active .faq-answer {
+        padding-top: calc(var(--spacing-unit) * 1.5);
+        padding-bottom: calc(var(--spacing-unit) * 2.5);
+    }
+    .faq-section .final-faq-cta {
+        font-size: var(--font-size-xl);
+        margin-top: calc(var(--spacing-unit) * 6);
+    }
+    .faq-section .cta-button.main-cta {
+        margin-top: calc(var(--spacing-unit) * 4);
+    }
+}
+
+@media (max-width: 767px) { /* Mobile */
+    .faq-section {
+        padding: var(--padding-section-mobile);
+    }
+    .faq-section .icon-section {
+        font-size: 3.5rem;
+        margin-bottom: calc(var(--spacing-unit) * 3);
+    }
+    .faq-section h2 {
+        font-size: var(--font-size-h4);
+    }
+    .faq-section .intro-faq-text {
+        font-size: var(--font-size-small);
+        margin-bottom: calc(var(--spacing-unit) * 3.5);
+    }
+    .faq-item {
+        margin-bottom: calc(var(--spacing-unit) * 2.5);
+    }
+    .faq-question {
+        padding: calc(var(--spacing-unit) * 1.5);
+        font-size: var(--font-size-medium);
+    }
+    .faq-question .toggle-icon {
+        font-size: var(--font-size-small);
+    }
+    .faq-answer {
+        font-size: var(--font-size-small);
+        padding: 0 calc(var(--spacing-unit) * 1.5);
+    }
+    .faq-item.active .faq-answer {
+        padding-top: calc(var(--spacing-unit) * 1);
+        padding-bottom: calc(var(--spacing-unit) * 2);
+    }
+    .faq-section .final-faq-cta {
+        font-size: var(--font-size-large);
+        margin-top: calc(var(--spacing-unit) * 5);
+    }
+    .faq-section .cta-button.main-cta {
+        margin-top: calc(var(--spacing-unit) * 3.5);
+    }
+}
+
+@media (max-width: 480px) { /* Très petits mobiles */
+    .faq-question {
+        font-size: var(--font-size-small);
+    }
+    .faq-answer {
+        font-size: var(--font-size-xsmall);
+    }
+}
+
+
+
+/* ========================================= */
+/* --- 11. GUARANTEE SECTION - Engagement Confiance PREMIUM (CORRIGÉ) --- */
+/* ========================================= */
+.guarantee-section {
+    background-color: var(--color-background-white); /* Fond blanc ou très clair */
+    padding: calc(var(--spacing-unit) * 12) 0; /* Alignement avec padding de problem-section (mobile) */
+    text-align: center;
+    color: var(--color-text-dark);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Icône principale de la section */
+.guarantee-main-icon {
+    font-size: 5.5rem;
+    color: var(--color-curcuma-main); /* J'utilise le curcuma pour rester dans ton branding */
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+    margin-bottom: calc(var(--spacing-unit) * 4);
+    display: block;
+}
+
+/* Titre H2 de la section */
+.guarantee-section h2 {
+    font-size: var(--font-size-h2); /* Alignement avec h2 mobile de problem-section */
+    color: var(--color-heading);
+    line-height: 1.3;
+    margin-bottom: calc(var(--spacing-unit) * 3);
+    font-weight: var(--font-weight-extra-bold);
+    font-family: var(--font-family-primary);
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.guarantee-intro-text {
+    /* FORCAGE TEMPORAIRE DE LA TAILLE POUR DIAGNOSTIC */
+    font-size: 30px !important; /* Force la taille à 30px sur desktop */
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto calc(var(--spacing-unit) * 5) auto;
+    color: var(--color-text-light);
+    line-height: 1.6;
+}
+
+/* --- MEDIA QUERIES pour la Section Garantie --- */
+/* Tablette (max-width: 991px) */
+@media (max-width: 991px) {
+    .guarantee-intro-text {
+        font-size: 20px !important; /* Force la taille à 20px sur tablette */
+        margin-bottom: calc(var(--spacing-unit) * 4);
+    }
+}
+
+/* Mobile (max-width: 767px) */
+@media (max-width: 767px) {
+    .guarantee-intro-text {
+        font-size: 16px !important; /* Force la taille à 16px sur mobile */
+        margin-bottom: calc(var(--spacing-unit) * 3);
+    }
+}
+
+
+/* Grille des fonctionnalités de garantie */
+.guarantee-features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* 3 colonnes flexibles */
+    gap: calc(var(--spacing-unit) * 4);
+    max-width: var(--container-max-width); /* Utilise la variable globale */
+    margin: 0 auto calc(var(--spacing-unit) * 7) auto;
+}
+
+/* Carte individuelle de fonctionnalité de garantie */
+.guarantee-feature-card {
+    background-color: var(--color-background-elevated); /* Utilise la nouvelle variable */
+    border-radius: var(--border-radius-large);
+    padding: calc(var(--spacing-unit) * 4);
+    box-shadow: var(--shadow-small-subtle); /* Utilise la nouvelle variable */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.guarantee-feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-medium-elevated); /* Utilise la nouvelle variable */
+    background-color: var(--color-background-hover); /* Utilise la nouvelle variable */
+}
+
+/* Cercle autour des icônes des cartes */
+.guarantee-feature-card .icon-circle {
+    background-color: var(--color-curcuma-accent); /* Utilise une couleur d'accent curcuma */
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: calc(var(--spacing-unit) * 3);
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05); /* Ombre interne */
+}
+
+.guarantee-feature-card .icon-circle i {
+    font-size: 3rem;
+    color: var(--color-background-white); /* Icône blanche sur fond d'accent */
+}
+
+/* Titre de chaque carte */
+.guarantee-feature-card h3 {
+    font-size: var(--font-size-xl); /* Alignement avec scenario-item h3 mobile */
+    font-weight: var(--font-weight-bold);
+    color: var(--color-heading);
+    margin-bottom: calc(var(--spacing-unit) * 2);
+    line-height: 1.4;
+}
+
+/* Texte de description de chaque carte */
+.guarantee-feature-card p {
+    font-size: var(--font-size-base); /* Alignement avec scenario-item p mobile */
+    color: var(--color-text-dark); /* Utilise text-dark comme dans problem-section */
+    line-height: 1.6;
+}
+
+/* Texte final d'appel à l'action avant le bouton */
+.guarantee-final-cta-text {
+    font-size: var(--font-size-xl); /* Similaire à call-to-action-problem mobile */
+    font-weight: var(--font-weight-bold);
+    color: var(--color-heading);
+    margin-top: calc(var(--spacing-unit) * 6);
+    text-align: center;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
+}
+
+/* Bouton CTA final */
+.guarantee-section .cta-button.main-cta {
+    margin-top: calc(var(--spacing-unit) * 5);
+}
+
+/* --- MEDIA QUERIES : Guarantee Section (AJUSTÉES) --- */
+@media (min-width: 992px) {
+    .guarantee-section {
+        padding: calc(var(--spacing-unit) * 15) 0; /* Alignement avec desktop de problem-section */
+    }
+    .guarantee-section h2 {
+        font-size: var(--font-size-h1); /* Alignement avec h1 desktop de problem-section */
+    }
+    .guarantee-intro-text {
+        font-size: var(--font-size-xl); /* Alignement avec intro-problem-text desktop */
+    }
+    .guarantee-feature-card h3 {
+        font-size: var(--font-size-xxl); /* Alignement avec scenario-item h3 desktop */
+    }
+    .guarantee-feature-card p {
+        font-size: var(--font-size-xxl); /* Alignement avec scenario-item p desktop */
+    }
+    .guarantee-final-cta-text {
+        font-size: var(--font-size-xxxl); /* Utilise la nouvelle variable xxxl pour un gros texte */
+    }
+}
+
+@media (max-width: 991px) { /* Tablette */
+    .guarantee-section {
+        padding: calc(var(--spacing-unit) * 10) 0; /* Alignement avec padding tablette de problem-section */
+    }
+    .guarantee-section h2 {
+        font-size: var(--font-size-h3); /* Alignement avec h3 tablette de problem-section */
+    }
+    .guarantee-intro-text {
+        font-size: var(--font-size-medium); /* Alignement avec intro-problem-text tablette */
+    }
+    .guarantee-feature-card h3 {
+        font-size: var(--font-size-large); /* Alignement avec scenario-item h3 tablette */
+    }
+    .guarantee-feature-card p {
+        font-size: var(--font-size-large); /* Alignement avec scenario-item p tablette */
+    }
+    .guarantee-final-cta-text {
+        font-size: var(--font-size-xl); /* Alignement avec call-to-action-problem-bold tablette */
+    }
+}
+
+@media (max-width: 767px) { /* Mobile */
+    .guarantee-section {
+        padding: var(--padding-section-mobile); /* Utilise la variable globale mobile */
+    }
+    .guarantee-section h2 {
+        font-size: var(--font-size-h4); /* Alignement avec h4 mobile de problem-section */
+    }
+    .guarantee-intro-text {
+        font-size: var(--font-size-small); /* Alignement avec intro-problem-text mobile */
+    }
+    .guarantee-feature-card h3 {
+        font-size: var(--font-size-medium); /* Alignement avec scenario-item h3 mobile */
+    }
+    .guarantee-feature-card p {
+        font-size: var(--font-size-base); /* Alignement avec scenario-item p mobile */
+    }
+    .guarantee-final-cta-text {
+        font-size: var(--font-size-large); /* Alignement avec call-to-action-problem-bold mobile */
+    }
+}
+
+
+/* ========================================= */
+/* --- 12. FINAL CTA SECTION - Appel à l'Action Final PREMIUM (CORRIGÉ) --- */
+/* ========================================= */
+.final-cta-section {
+    background: linear-gradient(135deg, var(--color-curcuma-main) 0%, var(--color-curcuma-dark) 100%); /* Dégradé de Curcuma */
+    padding: calc(var(--spacing-unit) * 12) 0; /* Padding généreux, aligné mobile problem-section */
+    text-align: center;
+    color: var(--color-background-white); /* Texte blanc sur fond foncé */
+    position: relative;
+    overflow: hidden;
+}
+
+/* Icône principale de la section */
+.final-cta-section .cta-main-icon {
+    font-size: 6rem; /* Très grande icône */
+    color: var(--color-background-white);
+    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+    margin-bottom: calc(var(--spacing-unit) * 4);
+    display: block;
+}
+
+/* Titre H2 de la section */
+.final-cta-section h2 {
+    font-size: var(--font-size-h2); /* Alignement avec h2 mobile de problem-section */
+    color: var(--color-background-white);
+    line-height: 1.3;
+    margin-bottom: calc(var(--spacing-unit) * 3);
+    font-weight: var(--font-weight-extra-bold);
+    font-family: var(--font-family-primary);
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Texte d'introduction du CTA */
+.final-cta-section .cta-intro-text {
+    font-size: var(--font-size-large); /* Alignement avec intro-problem-text mobile */
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto calc(var(--spacing-unit) * 5) auto;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.7;
+}
+
+/* Message de mise en avant de l'offre (si applicable) */
+.cta-highlight-message {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: var(--border-radius-large);
+    padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 4);
+    max-width: 600px;
+    margin: 0 auto calc(var(--spacing-unit) * 6) auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: calc(var(--spacing-unit) * 2);
+    box-shadow: var(--shadow-small);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.cta-highlight-message .cta-highlight-icon {
+    font-size: 2.5rem;
+    color: var(--color-background-white);
+}
+
+.cta-highlight-message p {
+    font-size: var(--font-size-xl); /* Alignement avec scenario-item h3 mobile */
+    font-weight: var(--font-weight-bold);
+    color: var(--color-background-white);
+    line-height: 1.3;
+    margin: 0;
+}
+
+.cta-highlight-message strong {
+    color: var(--color-gold); /* Utilise la nouvelle variable or */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Bouton CTA principal surdimensionné */
+.final-cta-section .cta-button.main-cta.oversized-cta {
+    font-size: var(--font-size-h4); /* Alignement avec h4 mobile de problem-section */
+    padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 6);
+    border-radius: var(--border-radius-pill);
+    background: var(--color-cta-gradient); /* Utilise la nouvelle variable */
+    color: var(--color-background-white);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    margin-bottom: calc(var(--spacing-unit) * 6);
+    display: inline-block;
+    text-decoration: none;
+    font-weight: var(--font-weight-black);
+    animation: pulseCta 2s infinite ease-in-out;
+}
+
+.final-cta-section .cta-button.main-cta.oversized-cta:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+    background: var(--color-cta-gradient-hover); /* Utilise la nouvelle variable */
+}
+
+/* Indicateurs de confiance (sécurité, paiement) */
+.trust-indicators-final {
+    margin-top: calc(var(--spacing-unit) * 4);
+    margin-bottom: calc(var(--spacing-unit) * 5);
+}
+
+.trust-indicators-final p {
+    font-size: var(--font-size-large); /* Alignement avec intro-problem-text mobile */
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+.trust-indicators-final .payment-icons i {
+    font-size: 3rem;
+    color: var(--color-background-white);
+    margin: 0 calc(var(--spacing-unit) * 1.5);
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.2));
+}
+
+/* Infos de contact finales */
+.contact-info-final {
+    margin-top: calc(var(--spacing-unit) * 5);
+    padding-top: calc(var(--spacing-unit) * 4);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.contact-info-final p {
+    font-size: var(--font-size-base); /* Alignement avec scenario-item p mobile */
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
+}
+
+/* --- MEDIA QUERIES : Final CTA Section (AJUSTÉES) --- */
+@media (min-width: 992px) {
+    .final-cta-section {
+        padding: calc(var(--spacing-unit) * 15) 0; /* Alignement avec desktop de problem-section */
+    }
+    .final-cta-section h2 {
+        font-size: var(--font-size-h1); /* Alignement avec h1 desktop de problem-section */
+    }
+    .cta-intro-text {
+        font-size: var(--font-size-xl); /* Alignement avec intro-problem-text desktop */
+    }
+    .cta-highlight-message p {
+        font-size: var(--font-size-xxl); /* Alignement avec scenario-item h3 desktop */
+    }
+    .final-cta-section .cta-button.main-cta.oversized-cta {
+        font-size: var(--font-size-h2); /* Très grande taille, un peu moins que h1 pour un bouton */
+    }
+    .trust-indicators-final p {
+        font-size: var(--font-size-xl);
+    }
+}
+
+@media (max-width: 991px) { /* Tablette */
+    .final-cta-section {
+        padding: calc(var(--spacing-unit) * 10) 0; /* Alignement avec padding tablette de problem-section */
+    }
+    .final-cta-section h2 {
+        font-size: var(--font-size-h3); /* Alignement avec h3 tablette de problem-section */
+    }
+    .cta-intro-text {
+        font-size: var(--font-size-medium); /* Alignement avec intro-problem-text tablette */
+    }
+    .cta-highlight-message p {
+        font-size: var(--font-size-large); /* Alignement avec scenario-item h3 tablette */
+    }
+    .final-cta-section .cta-button.main-cta.oversized-cta {
+        font-size: var(--font-size-h4);
+    }
+    .trust-indicators-final p {
+        font-size: var(--font-size-medium);
+    }
+}
+
+@media (max-width: 767px) { /* Mobile */
+    .final-cta-section {
+        padding: var(--padding-section-mobile); /* Utilise la variable globale mobile */
+    }
+    .final-cta-section h2 {
+        font-size: var(--font-size-h4); /* Alignement avec h4 mobile de problem-section */
+    }
+    .cta-intro-text {
+        font-size: var(--font-size-small); /* Alignement avec intro-problem-text mobile */
+    }
+    .cta-highlight-message p {
+        font-size: var(--font-size-small); /* Alignement avec scenario-item p mobile */
+    }
+    .final-cta-section .cta-button.main-cta.oversized-cta {
+        font-size: var(--font-size-large);
+    }
+    .trust-indicators-final p {
+        font-size: var(--font-size-xsmall); /* Nouvelle variable si nécessaire, ou ajuste à small */
+    }
+}
+
+
+/* ========================================= */
+/* --- FOOTER - Pied de Page (Optimisé Conversion) --- */
+/* ========================================= */
+.main-footer { /* Cible le footer principal */
+    background-color: #004678; /* Couleur de fond spécifiée */
+    padding: calc(var(--spacing-unit) * 7.5) calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 5);
+    font-family: var(--font-family-primary); /* Utilise ta police primaire */
+    color: #E0EBF5; /* Couleur de texte générale */
+    text-align: center; /* Centre le texte globalement */
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.main-footer .container { /* Cible le container */
+    max-width: 1200px; /* Largeur max spécifiée */
+    margin: auto;
+    position: relative;
+    z-index: 1;
+}
+
+.main-footer .footer-grid { /* Cible la grille du footer */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: calc(var(--spacing-unit) * 5);
+    margin-bottom: calc(var(--spacing-unit) * 2.5); /* Ajusté pour l'espacement avec .footer-disclaimers qui a sa propre marge */
+}
+
+.main-footer .footer-column.footer-brand, /* Cible la colonne marque */
+.main-footer .footer-column.footer-links, /* Cible la colonne liens */
+.main-footer .footer-column.footer-contact { /* Cible la colonne contact */
+    text-align: center;
+}
+
+.main-footer .footer-logo img {
+    max-width: 160px;
+    height: auto;
+    margin-bottom: calc(var(--spacing-unit) * 1.875);
+    filter: brightness(1.1) contrast(1.05);
+    transition: transform 0.3s ease-in-out;
+}
+
+.main-footer .footer-logo img:hover {
+    transform: scale(1.05);
+}
+
+.main-footer .footer-slogan { /* Cible le slogan avec la nouvelle classe */
+    font-size: 15px;
+    color: #A0B0C0;
+    line-height: 1.6;
+    margin-bottom: calc(var(--spacing-unit) * 2.5);
+}
+
+.main-footer .social-links { /* Cible les liens sociaux */
+    display: flex;
+    justify-content: center;
+    gap: calc(var(--spacing-unit) * 2.5);
+}
+
+.main-footer .social-links a {
+    display: inline-block;
+    font-size: 18px;
+    color: #CC0000;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.main-footer .social-links a:hover {
+    color: #FF6666;
+    transform: scale(1.3);
+}
+
+.main-footer .footer-column h3 { /* Cible les titres h3 de colonnes */
+    font-size: 17px;
+    margin-bottom: calc(var(--spacing-unit) * 1.875);
+    color: #FFFFFF;
+    font-weight: 700;
+}
+
+.main-footer .footer-column ul { /* Cible les listes de liens */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.main-footer .footer-column ul li {
+    margin-bottom: calc(var(--spacing-unit) * 1.25);
+}
+
+.main-footer .footer-column ul li a,
+.main-footer .footer-contact p a { /* Cible les liens et les liens dans les paragraphes de contact */
+    color: #E0EBF5;
+    text-decoration: none;
+    font-size: 15px;
+    transition: color 0.3s ease;
+}
+
+.main-footer .footer-column ul li a:hover,
+.main-footer .footer-contact p a:hover {
+    color: #FFFFFF;
+}
+
+.main-footer .footer-contact p a[href^="mailto:"] { /* Cible spécifiquement le lien email */
+    font-weight: 600;
+    color: #92FE9D;
+}
+
+/* Styles pour les paragraphes de contact qui ne sont pas des liens */
+.main-footer .footer-contact p {
+    color: #E0EBF5; /* Assure que le texte des paragraphes de contact est clair */
+    font-size: 15px;
+    margin-bottom: calc(var(--spacing-unit) * 1.25);
+}
+
+.main-footer .footer-contact p i {
+    margin-right: calc(var(--spacing-unit) * 0.5); /* Espacement icône-texte */
+    color: #E0EBF5; /* Couleur des icônes de contact */
+}
+
+
+/* Styles optimisés pour les disclaimers (plus subtils) */
+.main-footer .footer-disclaimers { /* Cible la div des disclaimers */
+    margin-top: calc(var(--spacing-unit) * 2.5);
+    margin-bottom: calc(var(--spacing-unit) * 2.5);
+    font-size: 12px; /* LÉGÈREMENT RÉDUIT : 13px -> 12px */
+    color: rgba(176, 196, 222, 0.7); /* COULEUR ADOUCIE : Plus subtile avec transparence */
+    line-height: 1.5;
+    text-align: center;
+}
+
+.main-footer .footer-disclaimers p {
+    margin-bottom: calc(var(--spacing-unit) * 1);
+}
+
+.main-footer .footer-disclaimers p:last-child {
+    margin-bottom: 0;
+}
+
+.main-footer .footer-disclaimers strong {
+    color: inherit; /* Hérite de la couleur du paragraphe */
+    font-weight: 600;
+}
+
+/* Styles pour le paragraphe de copyright (le premier p dans footer-bottom) */
+.main-footer .footer-bottom p:nth-of-type(1) { 
+    font-size: 13px;
+    color: #889BB0;
+    margin-top: calc(var(--spacing-unit) * 2.5);
+    text-align: center;
+}
+
+/* Styles pour la tagline (le deuxième p dans footer-bottom) */
+.main-footer .footer-bottom p:nth-of-type(2) {
+    font-size: 13px; /* Taille similaire au copyright */
+    color: #889BB0;
+    text-align: center;
+    margin-top: calc(var(--spacing-unit) * 1); /* Espacement après copyright */
+}
+
+/* --- MEDIA QUERIES --- */
+@media (max-width: 768px) {
+    .main-footer .footer-grid {
+        grid-template-columns: 1fr; /* Une colonne sur mobile */
+        gap: calc(var(--spacing-unit) * 4);
+    }
+    .main-footer .footer-column { /* Cible toutes les colonnes sur mobile */
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-footer { /* Cible le footer principal */
+        padding: calc(var(--spacing-unit) * 6) calc(var(--spacing-unit) * 1.5);
+    }
+}
