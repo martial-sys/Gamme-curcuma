@@ -700,9 +700,11 @@ src="https://www.facebook.com/tr?id=593994983739023&ev=PageView&noscript=1"
     <!-- ======================== -->
   <!-- CTA STICKY -->
   <!-- ======================== -->
-   <a href="#pricing" id="cta-sticky-button" class="cta-button main-cta animated sticky-hidden">
-    Oui, je veux mon Pack Complet !
+   <a href="#offers-section" id="cta-sticky-button" class="cta-button main-cta animated sticky-hidden">
+    <i class="fas fa-shopping-cart" style="margin-right: 8px;"></i> Ajouter au Panier
 </a>
+
+
 
 <!-- ======================== -->
   <!-- FOOTER -->
@@ -769,6 +771,65 @@ src="https://www.facebook.com/tr?id=593994983739023&ev=PageView&noscript=1"
     <!-- ======================== -->
   <!-- SCRIPTS JS -->
   <!-- ======================== -->
+  	<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const stickyButton = document.getElementById('cta-sticky-button');
+        
+        // Assurez-vous que ces IDs correspondent exactement à vos sections dans le HTML
+        const heroSection = document.getElementById('hero-section');
+        const problemSection = document.getElementById('problem-section');
+        const offersSection = document.getElementById('offers-section');
+
+        // Vérifie si tous les éléments nécessaires existent
+        if (!stickyButton || !heroSection || !problemSection || !offersSection) {
+            console.warn("Certaines sections ou le bouton sticky sont introuvables. Le script de visibilité ne fonctionnera pas correctement.");
+            return;
+        }
+
+        const showStickyButton = () => stickyButton.classList.remove('sticky-hidden');
+        const hideStickyButton = () => stickyButton.classList.add('sticky-hidden');
+
+        // Fonction pour gérer la visibilité du bouton au scroll
+        const handleScrollVisibility = () => {
+            const heroRect = heroSection.getBoundingClientRect();
+            const problemRect = problemSection.getBoundingClientRect();
+            const offersRect = offersSection.getBoundingClientRect();
+            
+            // Hauteur de la fenêtre pour déterminer quand un élément est "hors écran"
+            const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+
+            // Logique de visibilité :
+            // Le bouton apparaît si on a scrollé au-delà de la section Hero (le haut de la Hero est hors de vue)
+            // ET si on n'est PAS dans la section offers (le haut de offers est encore hors de vue ou le bas de offers est déjà passé)
+            if (heroRect.bottom < 0 && (offersRect.top > viewportHeight || offersRect.bottom < 0)) {
+                showStickyButton();
+            } else {
+                hideStickyButton();
+            }
+        };
+
+        // Écoute l'événement de scroll pour mettre à jour la visibilité
+        window.addEventListener('scroll', handleScrollVisibility);
+
+        // Exécute la fonction une première fois au chargement de la page
+        // pour gérer le cas où l'utilisateur arrive déjà scrollé
+        handleScrollVisibility();
+
+        // Ajoute un écouteur de clic pour le suivi GA4 si tu utilises déjà trackGA4Event
+        stickyButton.addEventListener('click', function() {
+            if (typeof trackGA4Event === 'function') {
+                trackGA4Event('add_to_cart_sticky_button_click', {
+                    event_category: 'engagement',
+                    action: 'click',
+                    button_location: 'sticky_bottom_right'
+                });
+            } else {
+                console.log("GA4 Event: add_to_cart_sticky_button_click");
+            }
+        });
+    });
+</script>
+
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
   <script>
     AOS.init({

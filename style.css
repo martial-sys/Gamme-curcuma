@@ -445,6 +445,23 @@ section h2::after {
     line-height: 1.7;
 }
 
+/* --- Bouton CTA Sticky (Ajustement pour l'icône) --- */
+#cta-sticky-button {
+    /* ... Ton CSS existant pour le bouton sticky ... */
+    
+    /* AJOUTE OU VÉRIFIE CES PROPRIÉTÉS POUR UN ALIGNEMENT PARFAIT DE L'ICÔNE ET DU TEXTE */
+    display: inline-flex; /* Assure que l'icône et le texte sont sur la même ligne */
+    align-items: center; /* Centre verticalement icône et texte */
+    justify-content: center; /* Centre horizontalement le contenu */
+    /* ... le reste de tes styles existants ... */
+}
+
+/* Styles spécifiques pour l'icône à l'intérieur du bouton sticky */
+#cta-sticky-button i.fas {
+    margin-right: calc(var(--spacing-unit) * 1); /* Ajoute un espacement entre l'icône et le texte */
+    font-size: 1.2em; /* Ajuste la taille de l'icône par rapport au texte du bouton */
+}
+
 /* ========================================= */
 /* --- MEDIA QUERIES (RESPONSIVE DESIGN) --- */
 /* (Ordre du plus grand au plus petit pour max-width) */
