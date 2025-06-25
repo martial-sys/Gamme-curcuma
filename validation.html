@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validez Votre Commande - Gamme Curcuma</title>
+    <meta name="description" content="Finalisez votre commande de la Gamme Curcuma. Livraison gratuite et paiement sécurisé à la livraison.">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Styles Globaux copiés pour la démo */
+        /* Les variables globales sont essentielles pour la cohérence */
+        :root {
+            /* Couleurs Primaires (revues pour la Gamme Curcuma) */
+            --color-curcuma-main: #FFA500; /* Jaune Curcuma Principal (Orange vif) */
+            --color-curcuma-dark: #E69500; /* Jaune Curcuma Foncé pour dégradés/contrastes */
+            
+            --color-botanical-green: #4CAF50; /* Vert Botanique pour l'aspect naturel/bien-être */
+            --color-botanical-green-dark: #388E3C; /* Vert Botanique Foncé pour dégradés/contrastes */
+
+            --color-heading: #2C3E50; /* Bleu nuit profond pour les titres (élégant) */
+            --color-text-dark: #333333; /* Texte principal sombre */
+            --color-text-light: #666666; /* Texte secondaire/paragraphe plus doux */
+            --color-text-subtle: #999999; /* Pour les petits textes ou disclaimers */
+
+            /* Couleurs de Statut et d'Accent */
+            --color-success-green: #28A745;
+            --color-success-green-dark: #1F8936;
+            --color-warning-yellow: #FFC107;
+            --color-error-red: #DC3545;
+            
+            /* Arrière-plans */
+            --color-background-white: #FFFFFF;
+            --color-background-soft: #FDF9F3; /* Tons crème/chauds */
+            --color-background-primary: #FCF8F5; /* Nouveau : Blanc cassé très légèrement chaud */
+            --color-background-light: #F8F4F0; /* Nouveau : Plus prononcé, toujours chaud */
+            --color-background-secondary: #EFEBE7; /* Nouveau : Gris encore plus soutenu si besoin */
+            --color-background-warning: #FEF3C7; /* Fond jaune pour avertissements */
+
+            --color-border-light: #DDDDDD;
+            --color-border-medium: #CCCCCC;
+            --color-border-dark: #AAAAAA;
+
+            /* Ombres */
+            --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.12);
+            --shadow-strong: 0 15px 45px rgba(0, 0, 0, 0.18);
+            --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+
+            /* Typographie */
+            --font-family-primary: 'Poppins', sans-serif;
+            --font-family-secondary: 'Roboto', sans-serif;
+            --base-font-size: 16px;
+
+            /* Espacements */
+            --spacing-unit: 8px;
+            --padding-section: 80px 0;
+            --padding-section-mobile: 40px 0;
+
+            /* Tailles de police variables pour la scalabilité */
+            --font-size-small: 0.875em; /* 14px */
+            --font-size-medium: 1em; /* 16px */
+            --font-size-large: 1.125em; /* 18px */
+            --font-size-xl: 1.5em; /* 24px */
+            --font-size-xxl: 2em; /* 32px */
+            --font-size-xxxl: 3em; /* 48px */
+            --font-size-h1: 3.5em; /* 56px */
+            --font-size-h2: 2.8em; /* 44.8px */
+            --font-size-h3: 2.2em; /* 35.2px */
+            --font-size-h4: 1.8em; /* 28.8px */
+
+            /* NOUVELLES COULEURS AJOUTÉES (pour cohérence) */
+            --color-light-cream: #FDF7EC; /* Une crème très claire */
+            --color-curcuma-accent: #FFBB33; /* Un jaune orangé plus clair pour les accents */
+            --color-botanical-green-light: #8BC34A; /* Un vert plus clair pour les accents */
+            --color-gold: #FFD700; /* Un or pour les accents brillants */
+
+            /* NOUVEAUX BACKGROUNDS SPÉCIFIQUES */
+            --color-background-elevated: #FFFFFF; /* Pour les cartes qui "s'élèvent" */
+            --color-background-hover: #FFFCEF; /* Léger changement de couleur au survol des cartes */
+
+            /* NOUVELLES OMBRES SPÉCIFIQUES */
+            --shadow-small-subtle: 0 1px 5px rgba(0, 0, 0, 0.05); /* Ombre très légère */
+            --shadow-medium-elevated: 0 10px 30px rgba(0, 0, 0, 0.15); /* Ombre prononcée pour l'élévation */
+            
+            /* MAX-WIDTH DU CONTENEUR POUR COHÉRENCE */
+            --container-max-width: 1100px; /* Largeur max pour le contenu central de toutes les sections */
+
+            /* GRADIENTS SPÉCIFIQUES POUR LES CTA */
+            --color-cta-gradient: linear-gradient(90deg, #FFBB33 0%, #FFA500 100%); /* Dégradé Bouton CTA */
+            --color-cta-gradient-hover: linear-gradient(90deg, #FFA500 0%, #E69500 100%); /* Dégradé Bouton CTA au survol */
+
+            /* AJOUT DE VARIABLES MANQUANTES POUR ÉVITER ERREURS */
+            --border-radius-small: 4px;
+            --border-radius-medium: 8px;
+            --border-radius-large: 12px;
+            --border-radius-pill: 999px; /* Pour les boutons pilule */
+            --font-weight-light: 300;
+            --font-weight-normal: 400;
+            --font-weight-medium: 500;
+            --font-weight-semi-bold: 600;
+            --font-weight-bold: 700;
+            --font-weight-extra-bold: 800;
+            --font-weight-black: 900;
+            --color-white: #FFFFFF;
+            --color-heading-dark: var(--color-heading);
+            --color-text-base: var(--color-text-dark);
+            --shadow-deep: 0 10px 30px rgba(0, 0, 0, 0.15);
+            --shadow-hover: 0 12px 35px rgba(0, 0, 0, 0.2);
+            --shadow-button-primary: 0 5px 15px rgba(255, 140, 0, 0.3); /* Ombre pour le CTA principal Curcuma */
+            --shadow-button-hover: 0 8px 20px rgba(255, 140, 0, 0.5); /* Ombre au survol */
+            --padding-container-horizontal: calc(var(--spacing-unit) * 2); /* Ajout pour le padding des containers */
+        }
+
+        /* Reset CSS de base (optimisé pour la modernité et la performance) */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: var(--base-font-size);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+
+        body {
+            font-family: var(--font-family-primary);
+            line-height: 1.6;
+            color: var(--color-text-dark);
+            background-color: var(--color-background-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.3s ease, opacity 0.3s ease;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* Socle global pour TOUS les CTA génériques */
+        .cta-button.main-cta {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: var(--font-size-medium);
+            font-weight: 800;
+            color: #FFF;
+            background: var(--color-curcuma-main); /* Couleur Curcuma principale */
+            box-shadow: var(--shadow-medium);
+            transition: all 0.3s ease-in-out;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            text-shadow: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-button.main-cta:hover {
+            background: var(--color-curcuma-dark); /* Couleur Curcuma foncée au survol */
+            box-shadow: var(--shadow-strong);
+            transform: translateY(-3px);
+            animation: none;
+        }
+
+        .cta-button.main-cta:active {
+            transform: scale(0.95);
+            box-shadow: var(--shadow-light);
+        }
+
+        .cta-button.main-cta::before,
+        .cta-button.main-cta::after {
+            content: none !important;
+        }
+
+        .cta-button.main-cta.animated {
+            animation: subtlePulseGlow 3.5s ease-in-out infinite;
+        }
+
+        /* Animation Breathing Glow */
+        @keyframes breathingGlow {
+            0%, 100% {
+                box-shadow: 0 0 0 rgba(255, 165, 0, 0.4);
+                filter: brightness(100%);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 0 35px rgba(255, 165, 0, 1), 0 0 70px rgba(255, 165, 0, 0.7);
+                filter: brightness(140%);
+                transform: scale(1.03);
+            }
+        }
+
+        /* Animation Subtle Pulse Glow */
+        @keyframes subtlePulseGlow {
+            0%, 100% {
+                box-shadow: 0 0 0 rgba(255, 165, 0, 0.4);
+                filter: brightness(100%);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(255, 165, 0, 0.8);
+                filter: brightness(115%);
+                transform: scale(1.005);
+            }
+        }
+        
+        /* Styles génériques pour sections */
+        section {
+            padding: var(--padding-section);
+            position: relative;
+            overflow: hidden;
+        }
+        @media (max-width: 768px) {
+            section {
+                padding: var(--padding-section-mobile);
+            }
+        }
+
+        .section-title {
+            font-size: var(--font-size-h2);
+            color: var(--color-heading);
+            text-align: center;
+            margin-bottom: calc(var(--spacing-unit) * 3.125);
+            padding-bottom: calc(var(--spacing-unit) * 2.5);
+            position: relative;
+            line-height: 1.3;
+            font-weight: 700;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-curcuma-main), var(--color-curcuma-dark));
+            margin: calc(var(--spacing-unit) * 1.25) auto 0 auto;
+            border-radius: 2px;
+        }
+
+        .container {
+            max-width: var(--container-max-width);
+            margin: 0 auto;
+            padding: 0 var(--padding-container-horizontal);
+        }
+
+        .text-center {
+            text-align: center;
+        }
+        .highlight-text-secondary {
+            color: var(--color-curcuma-accent); /* Utilise la couleur d'accent curcuma */
+            text-decoration: underline wavy var(--color-curcuma-accent);
+            text-underline-offset: 8px;
+        }
+        /* Fin des styles globaux copiés */
+
+
+        /* ========================================= */
+        /* NOUVEAUX STYLES : PAGE DE VALIDATION DE COMMANDE */
+        /* ========================================= */
+        .validation-page {
+            background-color: var(--color-background-light); /* Fond léger et chaleureux */
+            padding-top: calc(var(--spacing-unit) * 8);
+            padding-bottom: calc(var(--spacing-unit) * 8);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        /* Ajustement de la taille du titre spécifique à la page de validation (AUGMENTÉ) */
+        .validation-page .section-title {
+            font-size: 2.5em; /* Environ 40px */
+            line-height: 1.15; /* Resserre les lignes */
+        }
+        /* Ajustement de l'icône dans le titre */
+        .validation-page .section-title i {
+            font-size: 1.1em !important; /* L'icône reste légèrement plus grande que le texte */
+            vertical-align: middle; /* Aligne l'icône verticalement avec le texte */
+        }
+
+        .validation-content-wrapper {
+            background-color: var(--color-background-white);
+            border-radius: var(--border-radius-large);
+            box-shadow: var(--shadow-medium);
+            padding: calc(var(--spacing-unit) * 6);
+            max-width: 900px; /* Largeur max pour le contenu de la page */
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: calc(var(--spacing-unit) * 6);
+            margin-bottom: calc(var(--spacing-unit) * 4); /* Espace avant le footer si présent */
+        }
+
+        .order-summary {
+            display: flex;
+            align-items: center;
+            gap: calc(var(--spacing-unit) * 4);
+            padding-bottom: calc(var(--spacing-unit) * 3);
+            border-bottom: 1px dashed var(--color-border-light);
+            flex-wrap: wrap; /* Pour la réactivité */
+            justify-content: center; /* Centre sur mobile */
+            text-align: center;
+        }
+        @media (min-width: 768px) {
+            .order-summary {
+                justify-content: flex-start;
+                text-align: left;
+            }
+        }
+
+        .product-image-summary {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            border-radius: var(--border-radius-medium);
+            box-shadow: var(--shadow-small-subtle);
+        }.order-details {
+            flex-grow: 1;
+        }
+
+        .order-details h3 {
+            font-size: var(--font-size-xl);
+            color: var(--color-heading);
+            margin-bottom: calc(var(--spacing-unit) * 1);
+            font-weight: var(--font-weight-bold);
+        }
+
+        .order-details p {
+            font-size: var(--font-size-medium);
+            color: var(--color-text-dark);
+            margin-bottom: calc(var(--spacing-unit) * 0.5);
+        }
+
+        .order-details .total-price {
+            font-size: var(--font-size-xxl);
+            color: var(--color-curcuma-main);
+            font-weight: var(--font-weight-extra-bold);
+            margin-top: calc(var(--spacing-unit) * 2);
+            display: block;
+        }
+
+        /* Formulaire de Commande */
+        .order-form h2 {
+            font-size: var(--font-size-h4);
+            color: var(--color-heading);
+            margin-bottom: calc(var(--spacing-unit) * 4);
+            text-align: center;
+            font-weight: var(--font-weight-bold);
+        }
+
+        .form-group {
+            margin-bottom: calc(var(--spacing-unit) * 3);
+        }
+
+        .form-group label {
+            display: block;
+            font-size: var(--font-size-medium);
+            color: var(--color-text-dark);
+            margin-bottom: calc(var(--spacing-unit) * 1);
+            font-weight: var(--font-weight-medium);
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="tel"],
+        .form-group input[type="email"] {
+            width: 100%;
+            padding: calc(var(--spacing-unit) * 1.5);
+            border: 1px solid var(--color-border-light);
+            border-radius: var(--border-radius-medium);
+            font-size: var(--font-size-medium);
+            color: var(--color-text-dark);
+            background-color: var(--color-background-white);
+            box-shadow: var(--shadow-small-subtle);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group input[type="tel"]:focus,
+        .form-group input[type="email"]:focus {
+            border-color: var(--color-curcuma-main);
+            box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.2);
+            outline: none;
+        }
+        
+        .form-group .form-help-text {
+            font-size: var(--font-size-small);
+            color: var(--color-text-light);
+            margin-top: calc(var(--spacing-unit) * 0.5);
+            display: block;
+            font-style: italic;
+        }
+
+        /* Styles pour le disclaimer d'annulation */
+        .order-disclaimer {
+            background-color: var(--color-background-warning); /* Fond jaune clair */
+            color: var(--color-error-red); /* Texte rouge fort */
+            border: 1px solid var(--color-error-red); /* Bordure rouge */
+            border-radius: var(--border-radius-medium);
+            padding: calc(var(--spacing-unit) * 2);
+            margin-bottom: calc(var(--spacing-unit) * 4); /* Espace avant les actions du formulaire */
+            font-size: var(--font-size-small);
+            text-align: center;
+            font-weight: var(--font-weight-medium);
+        }
+        .order-disclaimer strong {
+            color: var(--color-heading); /* 'Important' en couleur de titre pour le contraste */
+            font-weight: var(--font-weight-bold);
+            margin-right: calc(var(--spacing-unit) * 0.5);
+        }
+
+
+        .form-actions {
+            margin-top: calc(var(--spacing-unit) * 5);
+            text-align: center;
+        }
+
+        .submit-order-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 450px;
+            padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 5);
+            background: linear-gradient(90deg, var(--color-curcuma-main), var(--color-curcuma-dark));
+            color: var(--color-white);
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-bold);
+            border-radius: var(--border-radius-pill);
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--shadow-button-primary);
+            transition: all 0.3s ease-in-out;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            animation: pulseCTA 2s infinite ease-in-out; /* Réutilise l'animation du Hero */
+        }
+
+        .submit-order-button:hover {
+            background: linear-gradient(90deg, var(--color-curcuma-dark), var(--color-curcuma-main));
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: var(--shadow-button-hover);
+        }
+        .submit-order-button:active {
+            transform: scale(0.98);
+            box-shadow: var(--shadow-light);
+        }
+
+        .secure-payment-info {
+            font-size: var(--font-size-medium);
+            color: var(--color-text-light);
+            margin-top: calc(var(--spacing-unit) * 3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: calc(var(--spacing-unit) * 1);
+        }
+
+        .secure-payment-info i {
+            color: var(--color-success-green);
+        }
+
+        /* Section de Réassurance (Reprise des indicateurs de confiance du Hero) */
+        .validation-reassurance {
+            margin-top: calc(var(--spacing-unit) * 6);
+            padding-top: calc(var(--spacing-unit) * 4);
+            border-top: 1px dashed var(--color-border-light);
+        }
+        .validation-reassurance .trust-indicators {
+            margin-top: 0; /* Annule la marge top par défaut */
+        }
+        .validation-reassurance .trust-item {
+             color: var(--color-text-light); /* Plus discret ici */
+        }
+        .validation-reassurance .trust-icon {
+            color: var(--color-botanical-green); /* Couleur plus directe */
+        }
+
+        /* --- Media Queries pour la Page de Validation --- */
+        @media (max-width: 768px) {
+            .validation-page {
+                padding: calc(var(--spacing-unit) * 4) 0;
+            }
+            /* Ajustement du titre sur tablette (AUGMENTÉ) */
+            .validation-page .section-title {
+                font-size: 2em; /* Environ 32px */
+            }
+            .validation-page .section-title i {
+                font-size: 1.1em !important;
+            }
+            .validation-content-wrapper {
+                padding: calc(var(--spacing-unit) * 4);
+                gap: calc(var(--spacing-unit) * 4);
+            }
+            .order-summary {
+                flex-direction: column;
+                gap: calc(var(--spacing-unit) * 2);
+            }
+            .product-image-summary {
+                width: 100px;
+                height: 100px;
+            }
+            .order-details h3 {
+                font-size: var(--font-size-large);
+            }
+            .order-details p {
+                font-size: var(--font-size-small);
+            }
+            .order-details .total-price {
+                font-size: var(--font-size-xl);
+            }
+            .order-form h2 {
+                font-size: var(--font-size-h5);
+            }
+            .form-group input {
+                padding: calc(var(--spacing-unit) * 1.2);
+                font-size: var(--font-size-small);
+            }
+            .submit-order-button {
+                font-size: var(--font-size-large);
+                padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
+            }
+            .secure-payment-info {
+                font-size: var(--font-size-small);
+                flex-direction: column;
+                gap: calc(var(--spacing-unit) * 0.5);
+            }
+            .validation-reassurance {
+                margin-top: calc(var(--spacing-unit) * 4);
+                padding-top: calc(var(--spacing-unit) * 3);
+            }
+             .validation-reassurance .trust-indicators {
+                flex-direction: column; /* Empilement vertical sur très petits écrans */
+                gap: calc(var(--spacing-unit) * 2);
+                align-items: center;
+            }
+            .trust-item {
+                font-size: var(--font-size-small);
+            }
+            .trust-icon {
+                font-size: calc(var(--spacing-unit) * 2.5);
+            }
+        }
+
+        @media (max-width: 480px) {
+            /* Ajustement du titre sur très petit mobile (AUGMENTÉ) */
+            .validation-page .section-title {
+                font-size: 1.5em; /* Environ 24px */
+            }
+            .validation-page .section-title i {
+                font-size: 1em !important;
+            }
+             .order-disclaimer {
+                font-size: 0.8em; /* Plus petit sur très petit écran */
+            }
+        }
+
+        /* NOUVELLES DÉFINITIONS D'ANIMATIONS (Légèrement adoucies) */
+@keyframes pulseCTA {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 5px 15px rgba(255, 140, 0, 0.3);
+    }
+    50% {
+        transform: scale(1.03); /* Ajusté : L'effet de zoom est légèrement réduit */
+        box-shadow: 0 10px 25px rgba(255, 140, 0, 0.6); /* Ajusté : L'ombre est légèrement moins prononcée */
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 5px 15px rgba(255, 140, 0, 0.3);
+    }
+}
+
+    </style>
+</head>
+<body>
+
+    <section class="validation-page">
+        <div class="container validation-content-wrapper">
+            <h1 class="section-title text-center">
+                <i class="fas fa-check-circle" style="color: var(--color-success-green); margin-right: var(--spacing-unit); font-size: 1.2em;"></i>
+                <strong>Validez Votre Commande <span class="highlight-text-secondary">en Quelques Secondes !</span></strong>
+            </h1>
+
+            <div class="order-summary">
+                <img id="product-summary-image" src="https://d1yei2z3i6k35z.cloudfront.net/11365804/6855857bb6a85_1002149361.png" alt="Image du Produit Commandé" class="product-image-summary">
+                <div class="order-details">
+                    <h3>Votre Produit : <span id="product-summary-name">La Gamme Turmeric Complète</span></h3>
+                    <p>Quantité : 1</p>
+                    <p>Livraison : Gratuite</p>
+                    <span id="product-summary-price" class="total-price">21.664 FCFA</span>
+                </div>
+            </div>
+
+            <form id="order-form" class="order-form" action="#" method="POST">
+                <h2>Vos Informations de Livraison</h2>
+
+                <div class="form-group">
+                    <label for="last-name">Nom :</label>
+                    <input type="text" id="last-name" name="last_name" placeholder="Votre Nom" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="first-name">Prénom :</label>
+                    <input type="text" id="first-name" name="first_name" placeholder="Votre Prénom" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Numéro de Téléphone :</label>
+                    <input type="tel" id="phone" name="phone" placeholder="Ex: 00228 9X XX XX XX" required>
+                    <small class="form-help-text">Un numéro WhatsApp est préférable pour une confirmation rapide.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email (optionnel) :</label>
+                    <input type="email" id="email" name="email" placeholder="Votre adresse email">
+                    <small class="form-help-text">Pour recevoir votre confirmation de commande.</small>
+                </div>
+
+                <div class="order-disclaimer">
+                    <strong>Important :</strong> Votre commande est un engagement ferme. Veuillez ne valider que si vous êtes certain(e) de pouvoir la réceptionner. Les annulations de dernière minute entraînent des frais de transport et de gestion. Merci pour votre compréhension.
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="submit-order-button">
+                        Je Valide Ma Commande Maintenant !
+                    </button>
+                    <p class="secure-payment-info">
+                        <i class="fas fa-lock"></i> Paiement Sécurisé à la Livraison
+                    </p>
+                </div>
+            </form>
+
+            <div class="validation-reassurance">
+                 <div class="trust-indicators">
+                    <div class="trust-item">
+                        <i class="fas fa-leaf trust-icon"></i>
+                        <span class="trust-text">100% Naturel</span>
+                    </div>
+                    <div class="trust-item">
+                        <i class="fas fa-heart trust-icon"></i>
+                        <span class="trust-text">98% Satisfaites</span>
+                    </div>
+                    <div class="trust-item">
+                        <i class="fas fa-shield-alt trust-icon"></i>
+                        <span class="trust-text">Garantie Efficacité</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- 1. Logique de Récupération et d'Affichage des Détails du Produit ---
+
+        // Données des produits (pour fallback si les paramètres URL ne sont pas complets)
+        const productDataMap = {
+            'gamme-complete': {
+                name: 'La Gamme Turmeric Complète',
+                price: '21.664 FCFA',
+                image: 'https://d1yei2z3i6k35z.cloudfront.net/11365804/6855857bb6a85_1002149361.png'
+            },
+            'creme': {
+                name: 'Crème Tumeric™',
+                price: '8.999 FCFA',
+                image: 'https://d1yei2z3i6k35z.cloudfront.net/11365804/685971ad42b58_1002157904.png'
+            },
+            'serum': {
+                name: 'Sérum au Curcuma',
+                price: '7.888 FCFA',
+                image: 'https://d1yei2z3i6k35z.cloudfront.net/11365804/685971c845a81_1002157905.png'
+            },
+            'savon': {
+                name: 'Savon au Curcuma',
+                price: '6.777 FCFA',
+                image: 'https://d1yei2z3i6k35z.cloudfront.net/11365804/685971e8a33f7_1002157992.png'
+            }
+        };
+
+        // Récupérer les paramètres d'URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const productIdParam = urlParams.get('product'); // ex: 'gamme-complete'
+        const productNameParam = urlParams.get('name'); // ex: 'La Gamme Turmeric Complète'
+        const productPriceParam = urlParams.get('price'); // ex: '21.664 FCFA'
+        const productImageParam = urlParams.get('image'); // ex: URL de l'image
+
+        // Récupérer les éléments HTML où afficher les infos du produit
+        // CORRECTION: Utilisation des IDs corrects de votre HTML
+        const productSummaryName = document.getElementById('product-summary-name');
+        const productSummaryPrice = document.getElementById('product-summary-price');
+        const productSummaryImage = document.getElementById('product-summary-image');
+
+        // Variables pour stocker les détails finaux du produit à afficher et à envoyer
+        let currentProductName = 'Gamme Curcuma Complète'; // Valeur par défaut
+        let currentProductPrice = '21 664 FCFA'; // Valeur par défaut
+        let currentProductImage = 'https://via.placeholder.com/150'; // Image par défaut (placeholder)
+
+        // Priorité 1 : Utiliser les paramètres d'URL (s'ils sont présents et complets)
+        if (productNameParam && productPriceParam && productImageParam) {
+            currentProductName = decodeURIComponent(productNameParam);
+            currentProductPrice = decodeURIComponent(productPriceParam);
+            currentProductImage = decodeURIComponent(productImageParam);
+        }
+        // Priorité 2 : Si un ID de produit est dans l'URL, utiliser les données de `productDataMap`
+        else if (productIdParam && productDataMap[productIdParam]) {
+            const data = productDataMap[productIdParam];
+            currentProductName = data.name;
+            currentProductPrice = data.price;
+            currentProductImage = data.image;
+        }
+
+        // Mettre à jour l'affichage des détails du produit sur la page
+        if (productSummaryName) productSummaryName.textContent = currentProductName;
+        if (productSummaryPrice) productSummaryPrice.textContent = currentProductPrice;
+        if (productSummaryImage) {
+            productSummaryImage.src = currentProductImage;
+            productSummaryImage.alt = `Image de ${currentProductName || 'votre produit'}`;
+        }
+
+        // --- 2. Logique de Gestion du Formulaire de Commande ---
+
+        // Récupérer les éléments du formulaire (CORRECTION de l'ID)
+        const orderForm = document.getElementById('order-form'); 
+        
+        // Récupération des champs de formulaire avec leurs IDs corrects
+        const lastNameInput = document.getElementById('last-name');
+        const firstNameInput = document.getElementById('first-name');
+        const phoneInput = document.getElementById('phone');
+        const emailInput = document.getElementById('email');
+        // Les champs 'location' et 'details' ont été retirés car ils n'existent pas dans votre HTML actuel.
+        // Si vous les ajoutez plus tard, il faudra les rajouter ici aussi.
+
+        if (orderForm) {
+            orderForm.addEventListener('submit', function(event) {
+                event.preventDefault(); // Empêche le rechargement par défaut de la page
+
+                // Collecte des données du formulaire
+                const formData = {
+                    productName: currentProductName, // Nom du produit (déterminé ci-dessus)
+                    productPrice: currentProductPrice, // Prix du produit (déterminé ci-dessus)
+                    lastName: lastNameInput.value,
+                    firstName: firstNameInput.value,
+                    phone: phoneInput.value,
+                    email: emailInput.value
+                };
+
+                console.log('Données de la commande prêtes à être envoyées :', formData);
+
+                // =========================================================================
+                // PARTIE CRUCIALE : ENVOI DES DONNÉES ET REDIRECTION
+                // =========================================================================
+
+                // --- OPTION 1 : Intégration pour l'envoi réel des données (via API, Webhook, System.io, etc.) ---
+                // C'est ici que tu devras intégrer ton code pour envoyer 'formData' à ton système.
+                // Par exemple, si tu utilises un service comme Zapier/Make pour connecter à une Google Sheet,
+                // ou si tu envoies directement à une API de System.io ou autre CRM.
+                
+                /*
+                // Exemple de requête 'fetch' vers un endpoint (à adapter avec ton URL réelle) :
+                fetch('URL_DE_TON_ENDPOINT_DE_RECEPTION_DE_COMMANDE', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Ajoute ici des headers d'authentification si ton API en demande
+                    },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => {
+                    if (!response.ok) { // Vérifie si la réponse HTTP est un succès (2xx)
+                        throw new Error(`Erreur HTTP! Statut: ${response.status}`);
+                    }
+                    return response.json(); // Ou response.text() si ton API ne renvoie pas de JSON
+                })
+                .then(data => {
+                    console.log('Réponse du serveur :', data);
+                    // Si l'envoi est un succès, on redirige vers la page de remerciement
+                    window.location.href = 'merci.html';
+                })
+                .catch(error => {
+                    console.error('Erreur lors de l\'envoi de la commande :', error);
+                    alert('Désolé, une erreur est survenue lors de la validation de votre commande. Veuillez vérifier votre connexion et réessayer ou nous contacter directement.');
+                    // Tu peux décider de rediriger quand même vers la page de remerciement même en cas d'erreur
+                    // si tu préfères que le client ne reste pas bloqué ici. Mais ce n'est pas idéal.
+                    window.location.href = `merci.html?productName=${encodeURIComponent(currentProductName)}`;
+                    
+                });
+                */
+
+                // --- OPTION 2 : Redirection Immédiate (POUR LE TEST / DÉMO) ---
+                // Pour l'instant, pour que nous puissions voir la page de remerciement fonctionner :
+                // Cette ligne effectuera la redirection immédiatement après le console.log.
+                // Lorsque tu auras ton système d'envoi de données fonctionnel (Option 1),
+                // tu devras déplacer cette ligne `window.location.href = `merci.html?productName=${encodeURIComponent(currentProductName)}`;
+                
+                // DANS le bloc `.then()` de ta requête `fetch` (juste après avoir reçu une confirmation de succès de ton API).
+                
+                window.location.href = `merci.html?productName=${encodeURIComponent(currentProductName)}`;
+; // <<< C'EST CETTE LIGNE QUI REDIRIGE !
+
+                // =========================================================================
+                // FIN DE LA PARTIE ENVOI DES DONNÉES
+                // =========================================================================
+            });
+        }
+    });
+</script>
+
+</body>
+</html>
