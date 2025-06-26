@@ -560,11 +560,13 @@
             <h1>Merci pour votre commande !</h1>
             
       <p>Votre commande de <strong id="dynamicProductName">votre produit</strong> a bien été prise en compte.</p>
+<p><strong>Numéro de commande :</strong> <span id="order-id-display"></span></p>
+
      
            
             <p class="main-confirmation-text">Nous sommes ravis de vous compter parmi nos précieux clients. Votre commande a été reçue avec succès et notre équipe la prépare dès maintenant avec le plus grand soin.</p>
             
-            <p class="order-id-display"><strong>Votre numéro de commande est: </strong> <strong id="orderIdDisplay">#</strong></p>
+
 
             <div class="next-steps">
                 <h2>Que se passe-t-il maintenant ?</h2>
@@ -675,6 +677,29 @@
         if (productName && dynamicProductNameElement) {
             dynamicProductNameElement.textContent = decodeURIComponent(productName);
         }
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const productName = urlParams.get('productName') || 'Produit inconnu';
+        const productPrice = urlParams.get('productPrice') || '0';
+        const orderId = urlParams.get('orderId') || 'Non disponible'; // <-- IMPORTANT : Récupère le orderId
+
+        const productDetailsElement = document.getElementById('product-details'); // Pas forcément nécessaire si vous avez des ID séparés
+        if (productDetailsElement) {
+            productDetailsElement.innerHTML = `
+                <p><strong>Produit:</strong> ${productName}</p>
+                <p><strong>Prix:</strong> ${productPrice} FCFA</p>
+            `;
+        }
+
+        // --- PARTIE CRUCIALE POUR LE NUMÉRO DE COMMANDE ---
+        const orderIdDisplayElement = document.getElementById('order-id-display');
+        if (orderIdDisplayElement) {
+            orderIdDisplayElement.textContent = orderId; // Affiche le numéro de commande
+        }
+        // --- FIN PARTIE CRUCIALE ---
     });
 </script>
 

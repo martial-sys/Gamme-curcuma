@@ -606,7 +606,7 @@
             </h1>
 
             <div class="order-summary">
-                <img id="product-summary-image" src="https://d1yei2z3i6k35z.cloudfront.net/11365804/6855857bb6a85_1002149361.png" alt="Image du Produit Commandé" class="product-image-summary">
+                <img id="product-summary-image" src="" alt="" class="product-image-summary">
                 <div class="order-details">
                     <h3>Votre Produit : <span id="product-summary-name">La Gamme Turmeric Complète</span></h3>
                     <p>Quantité : 1</p>
@@ -675,143 +675,148 @@
     </section>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // --- 1. Logique de Récupération et d'Affichage des Détails du Produit ---
+    // --- Fonction pour obtenir un identifiant unique d'événement (utile pour Meta) ---
+    function generateUUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
 
-        // Données des produits (pour fallback si les paramètres URL ne sont pas complets)
-        const productDataMap = {
-            'gamme-complete': {
-                name: 'La Gamme Turmeric Complète',
-                price: '21.664 FCFA',
-                image: 'https://d1yei2z3i6k35z.cloudfront.net/11365804/6855857bb6a85_1002149361.png'
-            },
-            'creme': {
-                name: 'Crème Tumeric™',
-                price: '8.999 FCFA',
-                image: 'https://d1yei2z3i6k35z.cloudfront.net/11365804/685971ad42b58_1002157904.png'
-            },
-            'serum': {
-                name: 'Sérum au Curcuma',
-                price: '7.888 FCFA',
-                image: 'https://d1yei2z3i6k35z.cloudfront.net/11365804/685971c845a81_1002157905.png'
-            },
-            'savon': {
-                name: 'Savon au Curcuma',
-                price: '6.777 FCFA',
-                image: 'https://d1yei2z3i6k35z.cloudfront.net/11365804/685971e8a33f7_1002157992.png'
-            }
-        };
+    // --- Générer un numéro de commande court avec préfixe "CM" ---
+    function generateOrderId() {
+        const now = new Date();
+        const year = now.getFullYear().toString().slice(-2); // Ex: 25
+        const month = (now.getMonth() + 1).toString().padStart(2, '0'); // Ex: 06
+        const day = now.getDate().toString().padStart(2, '0'); // Ex: 26
+        const random = Math.floor(Math.random() * 9000) + 1000; // 4 chiffres aléatoires (1000-9999)
 
-        // Récupérer les paramètres d'URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const productIdParam = urlParams.get('product'); // ex: 'gamme-complete'
-        const productNameParam = urlParams.get('name'); // ex: 'La Gamme Turmeric Complète'
-        const productPriceParam = urlParams.get('price'); // ex: '21.664 FCFA'
-        const productImageParam = urlParams.get('image'); // ex: URL de l'image
+        // Format: CM-AAMMJJ-XXXX (Ex: CM-250626-1234)
+        return `CM-${year}${month}${day}-${random}`;
+    }
 
-        // Récupérer les éléments HTML où afficher les infos du produit
-        const productSummaryNameElement = document.getElementById('product-summary-name');
-        const productSummaryPriceElement = document.getElementById('product-summary-price');
-        const productSummaryImage = document.getElementById('product-summary-image');
+    // --- Fonctions pour récupérer les cookies Facebook (fbc et fbp) ---
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return null;
+    }
 
-        // Variables pour stocker les détails finaux du produit à afficher et à envoyer
-        let currentProductName = 'Gamme Curcuma Complète'; // Valeur par défaut
-        let currentProductPrice = '21 664 FCFA'; // Valeur par défaut
-        let currentProductImage = 'https://d1yei2z3i6k35z.cloudfront.net/11365804/6855857bb6a85_1002149361.png'; // Image par défaut
+    // --- Fonction pour récupérer l'adresse IP de l'utilisateur côté client (peut varier en précision) ---
+    async function getIpAddress() {
+        try {
+            const response = await fetch('https://api.ipify.org?format=json');
+            const data = await response.json();
+            return data.ip;
+        } catch (error) {
+            console.warn('Impossible de récupérer l\'adresse IP côté client :', error);
+            return null;
+        }
+    }
 
-        // Priorité 1 : Utiliser les paramètres d'URL (s'ils sont présents et complets)
-        if (productNameParam && productPriceParam && productImageParam) {
-            currentProductName = decodeURIComponent(productNameParam);
-            currentProductPrice = decodeURIComponent(productPriceParam);
-            currentProductImage = decodeURIComponent(productImageParam);
-        }
-        // Priorité 2 : Si un ID de produit est dans l'URL, utiliser les données de `productDataMap`
-        else if (productIdParam && productDataMap[productIdParam]) {
-            const data = productDataMap[productIdParam];
-            currentProductName = data.name;
-            currentProductPrice = data.price;
-            currentProductImage = data.image;
-        }
+    // --- Logique de Gestion du Formulaire de Commande ---
+    document.addEventListener('DOMContentLoaded', async function() {
+        // --- 1. Logique de Récupération des Détails du Produit depuis l'URL ---
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        let currentProductName = urlParams.get('name') || 'Produit inconnu'; 
+        let currentProductPrice = urlParams.get('price') || '0';
+        let currentProductImage = urlParams.get('image') || 'https://d1yei2z3i6k35z.cloudfront.net/11365804/6855857bb6a85_1002149361.png'; // Ajout de l'image
 
-        // Mettre à jour l'affichage des détails du produit sur la page
-        if (productSummaryNameElement) productSummaryNameElement.textContent = currentProductName;
-        if (productSummaryPriceElement) productSummaryPriceElement.textContent = currentProductPrice;
-        if (productSummaryImage) {
-            productSummaryImage.src = currentProductImage;
-            productSummaryImage.alt = `Image de ${currentProductName || 'votre produit'}`;
-        }
+        // Nettoyage du prix si nécessaire
+        currentProductPrice = currentProductPrice.replace(/ FCFA/g, '').replace(/ /g, '').replace(',', '.');
+        
+        // --- CORRECTION ICI : Affichage des détails du produit sur la page en ciblant les bons IDs ---
+        const productSummaryNameElement = document.getElementById('product-summary-name');
+        const productSummaryPriceElement = document.getElementById('product-summary-price');
+        const productSummaryImageElement = document.getElementById('product-summary-image');
 
-        // --- 2. Logique de Gestion du Formulaire de Commande ---
+        if (productSummaryNameElement) {
+            productSummaryNameElement.textContent = currentProductName;
+        }
+        if (productSummaryPriceElement) {
+            productSummaryPriceElement.textContent = currentProductPrice + ' FCFA'; // Réajuster le format si besoin
+        }
+        if (productSummaryImageElement) {
+            productSummaryImageElement.src = currentProductImage; // Mettre à jour l'image
+        }
 
-        const orderForm = document.getElementById('order-form'); 
-        const lastNameInput = document.getElementById('last-name');
-        const firstNameInput = document.getElementById('first-name');
-        const phoneInput = document.getElementById('phone');
-        const emailInput = document.getElementById('email');
+        const orderForm = document.getElementById('order-form'); 
+        const lastNameInput = document.getElementById('last-name');
+        const firstNameInput = document.getElementById('first-name');
+        const phoneInput = document.getElementById('phone');
+        const emailInput = document.getElementById('email');
 
-        // --- URL du script de votre formulaire System.io (VÉRIFIEZ CETTE URL ABSOLUMENT !) ---
-        // C'est l'URL fournie par System.io pour l'intégration de votre formulaire distant.
-        const systemIoFormUrl = 'https://capverscanada.systeme.io/public/remote/page/30794663eb1bd221204d1e1a4432b606b5d215c1.js';
+        // --- URL de votre Webhook Make.com ---
+        const makeWebhookUrl = 'https://hook.eu2.make.com/ksrou4af894ordzvuuayu12fordgsvdf'; // <--- VOTRE URL MAKE.COM ICI !
 
+        if (orderForm) {
+            orderForm.addEventListener('submit', async function(event) {
+                event.preventDefault(); // Empêche le rechargement par défaut de la page
 
-        if (orderForm) {
-            orderForm.addEventListener('submit', async function(event) {
-                event.preventDefault(); // Empêche le rechargement par défaut de la page
+                // Générer le numéro de commande unique ICI avec le nouveau format
+                const orderId = generateOrderId();
 
-                // Création de l'objet FormData pour l'envoi à System.io
-                const systemIoFormData = new FormData();
-                
-                // Champs standards et personnalisés de System.io (CLÉS UNIQUES CONFIRMÉES !)
-                // NOTE : Utilisation de 'nom' pour le nom de famille comme confirmé
-                systemIoFormData.append('first_name', firstNameInput.value);      // Prénom (clé standard System.io)
-                systemIoFormData.append('nom', lastNameInput.value);              // Nom de famille (clé confirmée)
-                systemIoFormData.append('phone_number', phoneInput.value);        // Numéro de téléphone (clé standard System.io)
-                systemIoFormData.append('email', emailInput.value);               // Email (clé standard System.io)
-                
-                // Champs personnalisés de System.io (CLÉS UNIQUES CONFIRMÉES !)
-                systemIoFormData.append('nom_produit_commande', currentProductName); // Nom Produit Commande
-                
-                // Le prix doit être envoyé sous forme numérique ou texte simple pour System.io
-                // Enlève les espaces et "FCFA" pour avoir une valeur numérique propre
-                const cleanProductPrice = currentProductPrice.replace(/[^0-9,.]/g, '').replace(',', '.');
-                systemIoFormData.append('prix_produit_commande', cleanProductPrice); // Prix Produit Commande
+                // Récupération des informations supplémentaires
+                const ipAddress = await getIpAddress(); 
+                const userAgent = navigator.userAgent; 
+                const fbc = getCookie('_fbc'); 
+                const fbp = getCookie('_fbp'); 
 
-                console.log('Données de la commande prêtes à être envoyées à System.io :', {
-                    first_name: firstNameInput.value,
-                    nom: lastNameInput.value, // Vérifiez bien que c'est 'nom' et non 'last_name' dans System.io
-                    phone_number: phoneInput.value,
-                    email: emailInput.value,
-                    nom_produit_commande: currentProductName,
-                    prix_produit_commande: cleanProductPrice
-                });
+                // Préparer les données à envoyer à Make.com
+                const dataToSend = {
+                    // Informations du formulaire
+                    order_id: orderId, 
+                    first_name: firstNameInput.value,
+                    nom: lastNameInput.value, 
+                    phone_number: phoneInput.value,
+                    email: emailInput.value,
+                    nom_produit_commande: currentProductName, 
+                    prix_produit_commande: currentProductPrice,
+                    
+                    // Informations pour Meta (API Conversions)
+                    event_id: generateUUID(), 
+                    client_user_agent: userAgent,
+                    client_ip_address: ipAddress, 
+                    fbc_cookie: fbc, 
+                    fbp_cookie: fbp, 
+                    external_id: emailInput.value, 
+                    event_source_url: window.location.href 
+                };
 
-                try {
-                    await fetch(systemIoFormUrl, {
-                        method: 'POST',
-                        body: systemIoFormData,
-                        headers: {
-                            'Accept': '*/*', 
-                            'X-Requested-With': 'XMLHttpRequest' 
-                        },
-                        mode: 'no-cors' // Essentiel pour contourner les restrictions CORS avec System.io
-                    });
-                    // En mode 'no-cors', la réponse est opaque. On considère que la requête est partie si pas d'erreur réseau.
-                    // Il n'y a pas de moyen direct de savoir si System.io a accepté les données ici.
-                    console.log('Requête System.io lancée. Réponse opaque attendue, donc succès supposé si aucune erreur réseau.');
+                console.log('Données à envoyer à Make.com :', dataToSend);
 
-                } catch (error) {
-                    // Cette partie s'exécute uniquement si une erreur réseau survient (ex: URL System.io inaccessible)
-                    console.error('Erreur réseau lors de l\'envoi de la commande à System.io :', error);
-                } finally {
-                    // Redirection toujours après la tentative d'envoi, qu'elle ait réussi ou échoué.
-                    // On repasse les paramètres à la page de remerciement si elle en a besoin
-                    window.location.href = `merci.html?productName=${encodeURIComponent(currentProductName)}&productPrice=${encodeURIComponent(currentProductPrice)}`;
-                }
-            });
-        } else {
-            console.error('ERREUR GRAVE: Le formulaire avec l\'ID "order-form" n\'a pas été trouvé. Le script de soumission ne peut pas s\'attacher.');
-        }
-    });
+                try {
+                    // Envoi des données au Webhook Make.com
+                    const response = await fetch(makeWebhookUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json', 
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(dataToSend) 
+                    });
+                    
+                    const result = await response.json();
+                    console.log('Réponse de Make.com :', result);
+
+                    if (!response.ok) { 
+                        console.error('Erreur lors de l\'envoi à Make.com :', result);
+                    }
+
+                } catch (error) {
+                    console.error('Erreur réseau lors de l\'envoi à Make.com :', error);
+                } finally {
+                    // Redirection toujours après la tentative d'envoi
+                    // Passer le numéro de commande à la page merci.html
+                    window.location.href = `merci.html?productName=${encodeURIComponent(currentProductName)}&productPrice=${encodeURIComponent(currentProductPrice)}&orderId=${encodeURIComponent(orderId)}`;
+                }
+            });
+        } else {
+            console.error('ERREUR GRAVE: Le formulaire avec l\'ID "order-form" n\'a pas été trouvé. Le script de soumission ne peut pas s\'attacher.');
+        }
+    });
 </script>
 
 </body>
