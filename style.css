@@ -1178,6 +1178,9 @@ section h2::after {
 /* ========================================= */
 /* --- SECTION PROBLÈME (Version Finale Améliorée) --- */
 /* ========================================= */
+/* ========================================= */
+/* --- SECTION PROBLÈME (Version Finale Améliorée avec Icônes ENCORE Plus Grandes) --- */
+/* ========================================= */
 
 .problem-section {
     position: relative;
@@ -1251,10 +1254,10 @@ section h2::after {
 
 .section-title { /* Utilisé pour h2 ici */
     font-size: var(--font-size-h2); /* Taille pour mobile */
-    color: var(--color-heading-dark);
+    color: var(--color-heading); /* Couleur de titre élégante, ajustée pour la nouvelle variable */
     line-height: 1.2;
     margin-bottom: calc(var(--spacing-unit) * 3);
-    font-weight: var(--font-weight-extra-bold);
+    font-weight: 800; /* Assure un gras fort comme 'var(--font-weight-extra-bold)' */
     max-width: 900px;
     margin-left: auto;
     margin-right: auto;
@@ -1268,7 +1271,7 @@ section h2::after {
 
 .intro-problem-text {
     font-size: var(--font-size-large); /* Taille de base pour mobile */
-    color: var(--color-text-base);
+    color: var(--color-text-light); /* Utilise la variable existante pour le texte */
     max-width: 800px;
     margin: 0 auto calc(var(--spacing-unit) * 6) auto;
     line-height: 1.7;
@@ -1286,11 +1289,11 @@ section h2::after {
 .scenario-item {
     background-color: var(--color-background-elevated); /* Fond légèrement différent pour les cartes */
     padding: calc(var(--spacing-unit) * 4);
-    border-radius: var(--border-radius-large); /* Bords plus arrondis pour douceur */
+    border-radius: 8px; /* Bords plus arrondis pour douceur, comme spécifié dans vos globales ou CTA */
     border: 1px solid var(--color-border-light); /* Bordure subtile */
     box-shadow: var(--shadow-small-subtle); /* Ombre douce */
     text-align: center;
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background-color 0.3s ease;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background-color 0.3s ease, border-color 0.3s ease;
     backdrop-filter: blur(3px); /* Léger glassmorphism sur les cartes */
     -webkit-backdrop-filter: blur(3px);
 }
@@ -1302,31 +1305,48 @@ section h2::after {
     border-color: var(--color-curcuma-accent); /* Bordure accentuée */
 }
 
-.scenario-item .scenario-icon {
-    font-size: calc(var(--spacing-unit) * 5); /* Icônes plus grandes */
-    color: var(--color-botanical-green-dark); /* Un vert plus foncé pour ces icônes de problème */
-    margin-bottom: calc(var(--spacing-unit) * 3);
+/* --- NOUVEAU STYLE POUR LE CONTENEUR D'IMAGE D'ICÔNE (AGRANDI ENCORE) --- */
+.scenario-image-container {
+    width: calc(var(--spacing-unit) * 26); /* Augmenté significativement (environ 208px) */
+    height: calc(var(--spacing-unit) * 26);
+    margin: 0 auto calc(var(--spacing-unit) * 3) auto; /* Centré avec marge basse */
+    display: flex; /* Pour centrer l'image */
+    align-items: center; /* Centre verticalement */
+    justify-content: center; /* Centre horizontalement */
+    border-radius: 8px; /* Bords légèrement arrondis pour le carré */
+    background-color: var(--color-background-soft); /* Fond subtil pour le carré */
+    box-shadow: var(--shadow-small-subtle); /* Ombre légère pour le carré */
 }
+
+.scenario-image-container img {
+    max-width: 90%; /* L'image prend 90% de la largeur du conteneur (était 85%) */
+    height: auto; /* Maintient le ratio */
+    display: block; /* Supprime l'espace sous l'image */
+    object-fit: contain; /* S'assure que l'image tient dans le conteneur */
+}
+
+/* --- FIN DU NOUVEAU STYLE --- */
+
 
 .scenario-item h3 {
     font-size: var(--font-size-xl); /* Augmenté pour une meilleure lisibilité par défaut */
-    color: var(--color-heading-dark);
+    color: var(--color-heading); /* Utilise la variable existante pour les titres */
     margin-bottom: calc(var(--spacing-unit) * 1.5);
     line-height: 1.4;
-    font-weight: var(--font-weight-bold);
+    font-weight: 700; /* Assure un gras comme 'var(--font-weight-bold)' */
 }
 
 .scenario-item p {
     /* Ajustement final pour un meilleur confort de lecture sur toutes les tailles */
     font-size: var(--font-size-xl); /* Augmenté à nouveau pour la clarté */
-    color: var(--color-text-base);
+    color: var(--color-text-light); /* Utilise la variable existante pour le texte */
     line-height: 1.6;
 }
 
 /* Appels à l'action finaux (transition vers la solution) */
 .call-to-action-problem {
     font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-medium);
+    font-weight: 500; /* Assure un gras moyen comme 'var(--font-weight-medium)' */
     color: var(--color-text-dark);
     margin-top: calc(var(--spacing-unit) * 7);
     line-height: 1.6;
@@ -1337,7 +1357,7 @@ section h2::after {
 
 .call-to-action-problem-bold {
     font-size: var(--font-size-xxl); /* Plus grand et plus impactant */
-    font-weight: var(--font-weight-extra-bold);
+    font-weight: 800; /* Assure un gras fort comme 'var(--font-weight-extra-bold)' */
     color: var(--color-curcuma-main); /* Couleur principale Curcuma */
     margin-top: calc(var(--spacing-unit) * 3);
     line-height: 1.3;
@@ -1380,9 +1400,12 @@ section h2::after {
     .intro-problem-text {
         font-size: var(--font-size-xl);
     }
-    .scenario-item .scenario-icon {
-        font-size: calc(var(--spacing-unit) * 6);
+    /* --- AJUSTEMENT POUR LE CONTENEUR D'IMAGE EN DESKTOP --- */
+    .scenario-image-container {
+        width: calc(var(--spacing-unit) * 26); /* Taille plus grande pour desktop (environ 208px) */
+        height: calc(var(--spacing-unit) * 26);
     }
+    /* --- FIN AJUSTEMENT --- */
     .scenario-item h3 {
         font-size: var(--font-size-xxl);
     }
@@ -1416,9 +1439,12 @@ section h2::after {
     .scenario-item {
         padding: calc(var(--spacing-unit) * 3);
     }
-    .scenario-item .scenario-icon {
-        font-size: calc(var(--spacing-unit) * 4.5);
+    /* --- AJUSTEMENT POUR LE CONTENEUR D'IMAGE EN TABLETTE --- */
+    .scenario-image-container {
+        width: calc(var(--spacing-unit) * 21); /* Taille ajustée pour tablette (environ 168px) */
+        height: calc(var(--spacing-unit) * 21);
     }
+    /* --- FIN AJUSTEMENT --- */
     .scenario-item h3 {
         font-size: var(--font-size-large);
     }
@@ -1446,9 +1472,12 @@ section h2::after {
     .intro-problem-text {
         font-size: var(--font-size-small);
     }
-    .scenario-item .scenario-icon {
-        font-size: calc(var(--spacing-unit) * 4);
+    /* --- AJUSTEMENT POUR LE CONTENEUR D'IMAGE EN MOBILE --- */
+    .scenario-image-container {
+        width: calc(var(--spacing-unit) * 18); /* Taille ajustée pour mobile (environ 144px) */
+        height: calc(var(--spacing-unit) * 18);
     }
+    /* --- FIN AJUSTEMENT --- */
     .scenario-item h3 {
         font-size: var(--font-size-medium);
     }
@@ -1462,9 +1491,15 @@ section h2::after {
         font-size: var(--font-size-large);
     }
 }
+
+
 /* ========================================= */
 /* --- 6. SOLUTION SECTION - La Gamme Curcuma (OPTIMISÉE CONVERSION - PROMINENCE TITRE) --- */
 /* ========================================= */
+/* ========================================= */
+/* --- SECTION SOLUTION (Version Finale avec Conteneurs d'Images Carrés) --- */
+/* ========================================= */
+
 .solution-section {
     background: linear-gradient(180deg, var(--color-light-cream), var(--color-background-soft));
     padding: calc(var(--spacing-unit) * 12) 0;
@@ -1483,8 +1518,7 @@ section h2::after {
 }
 
 .solution-section h2 {
-    /* AJUSTEMENT PROMINENCE : Titre principal plus grand pour la section Solution */
-    font-size: var(--font-size-xxxl); /* Précédemment --font-size-h2 */
+    font-size: var(--font-size-xxxl);
     color: var(--color-heading-dark);
     line-height: 1.2;
     margin-bottom: calc(var(--spacing-unit) * 3);
@@ -1497,8 +1531,7 @@ section h2::after {
 }
 
 .solution-section .intro-solution-text {
-    /* AJUSTEMENT PROMINENCE : Texte d'introduction plus grand et plus impactant */
-    font-size: var(--font-size-xxl); /* Précédemment --font-size-large */
+    font-size: var(--font-size-xxl);
     text-align: center;
     max-width: 850px;
     margin: 0 auto calc(var(--spacing-unit) * 6) auto;
@@ -1537,11 +1570,32 @@ section h2::after {
     border-color: var(--color-curcuma-accent);
 }
 
-.benefit-item .benefit-icon {
-    font-size: calc(var(--spacing-unit) * 5);
-    color: var(--color-curcuma-main);
-    margin-bottom: calc(var(--spacing-unit) * 3);
+/* --- NOUVEAU STYLE POUR LE CONTENEUR D'IMAGE DE SOLUTION --- */
+.solution-image-container {
+    width: calc(var(--spacing-unit) * 26); /* Taille similaire à la section Problème (environ 208px) */
+    height: calc(var(--spacing-unit) * 26);
+    margin: 0 auto calc(var(--spacing-unit) * 3) auto; /* Centré avec marge basse */
+    display: flex; /* Pour centrer l'image */
+    align-items: center; /* Centre verticalement */
+    justify-content: center; /* Centre horizontalement */
+    border-radius: 8px; /* Bords légèrement arrondis pour le carré */
+    background-color: var(--color-background-soft); /* Fond subtil pour le carré */
+    box-shadow: var(--shadow-small-subtle); /* Ombre légère pour le carré */
 }
+
+.solution-image-container img {
+    max-width: 90%; /* L'image prend 90% de la largeur du conteneur */
+    height: auto; /* Maintient le ratio */
+    display: block; /* Supprime l'espace sous l'image */
+    object-fit: contain; /* S'assure que l'image tient dans le conteneur */
+}
+
+/* Suppression de l'ancien style des icônes de bénéfice si non utilisé ailleurs */
+.benefit-item .benefit-icon {
+    display: none; /* Cache les anciennes icônes Font Awesome */
+}
+/* --- FIN DU NOUVEAU STYLE --- */
+
 
 .benefit-item h3 {
     font-size: var(--font-size-xl);
@@ -1641,7 +1695,7 @@ section h2::after {
     margin-top: calc(var(--spacing-unit) * 5);
 }
 
-/* --- MEDIA QUERIES : SECTION SOLUTION (AJUSTEMENTS PROMINENCE) --- */
+/* --- MEDIA QUERIES : SECTION SOLUTION (AJUSTEMENTS AVEC NOUVEAUX CONTENEURS D'IMAGES) --- */
 @media (min-width: 992px) {
     .solution-section {
         padding: calc(var(--spacing-unit) * 15) 0;
@@ -1650,19 +1704,19 @@ section h2::after {
         font-size: calc(var(--spacing-unit) * 7);
     }
     .solution-section h2 {
-        /* AJUSTEMENT PROMINENCE */
-        font-size: var(--font-size-h1); /* Maintenant à la taille la plus grande pour les titres */
+        font-size: var(--font-size-h1);
     }
     .solution-section .intro-solution-text {
-        /* AJUSTEMENT PROMINENCE */
-        font-size: var(--font-size-xxxl); /* Plus grand sur desktop */
+        font-size: var(--font-size-xxxl);
     }
     .solution-benefits-grid {
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: calc(var(--spacing-unit) * 6);
     }
-    .benefit-item .benefit-icon {
-        font-size: calc(var(--spacing-unit) * 6);
+    /* Ajustement pour le conteneur d'image en desktop */
+    .solution-image-container {
+        width: calc(var(--spacing-unit) * 26); /* Taille plus grande pour desktop (environ 208px) */
+        height: calc(var(--spacing-unit) * 26);
     }
     .benefit-item h3 {
         font-size: var(--font-size-xxl);
@@ -1716,12 +1770,15 @@ section h2::after {
         margin-bottom: calc(var(--spacing-unit) * 3);
     }
     .solution-section h2 {
-        /* AJUSTEMENT PROMINENCE */
-        font-size: var(--font-size-h3); /* Plus grand sur tablette */
+        font-size: var(--font-size-h3);
     }
     .solution-section .intro-solution-text {
-        /* AJUSTEMENT PROMINENCE */
-        font-size: var(--font-size-xl); /* Plus grand sur tablette */
+        font-size: var(--font-size-xl);
+    }
+    /* Ajustement pour le conteneur d'image en tablette */
+    .solution-image-container {
+        width: calc(var(--spacing-unit) * 21); /* Taille ajustée pour tablette (environ 168px) */
+        height: calc(var(--spacing-unit) * 21);
     }
     .benefit-item h3 {
         font-size: var(--font-size-large);
@@ -1754,12 +1811,15 @@ section h2::after {
         font-size: calc(var(--spacing-unit) * 4);
     }
     .solution-section h2 {
-        /* AJUSTEMENT PROMINENCE */
-        font-size: var(--font-size-xxl); /* Plus grand sur mobile */
+        font-size: var(--font-size-xxl);
     }
     .solution-section .intro-solution-text {
-        /* AJUSTEMENT PROMINENCE */
-        font-size: var(--font-size-large); /* Plus grand sur mobile */
+        font-size: var(--font-size-large);
+    }
+    /* Ajustement pour le conteneur d'image en mobile */
+    .solution-image-container {
+        width: calc(var(--spacing-unit) * 18); /* Taille ajustée pour mobile (environ 144px) */
+        height: calc(var(--spacing-unit) * 18);
     }
     .benefit-item h3 {
         font-size: var(--font-size-medium);
@@ -1780,8 +1840,6 @@ section h2::after {
         font-size: var(--font-size-medium);
     }
 }
-
-
 
 
 /* ========================================= */
