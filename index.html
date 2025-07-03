@@ -785,15 +785,14 @@ src="https://www.facebook.com/tr?id=593994983739023&ev=PageView&noscript=1"
     </div>
 </footer>
 
-<script>
-    document.getElementById('current-year').textContent = new Date().getFullYear();
-</script>
 
 
   
     <!-- ======================== -->
   <!-- SCRIPTS JS -->
   <!-- ======================== -->
+  	  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  
   	<script>
     document.addEventListener('DOMContentLoaded', function() {
         const stickyButton = document.getElementById('cta-sticky-button');
@@ -853,125 +852,167 @@ src="https://www.facebook.com/tr?id=593994983739023&ev=PageView&noscript=1"
     });
 </script>
 
-  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-  <script>
+<script>
+  // =========================================================
+  // FONCTION D'AIDE : Suivi des événements GA4 (Incluse car utilisée dans le bloc)
+  // =========================================================
+  function trackGA4Event(eventName, eventParams = {}) {
+    if (typeof gtag === 'function') {
+      gtag('event', eventName, eventParams);
+      // console.log(`Événement GA4 déclenché : ${eventName}`, eventParams); // Pour le débogage
+    } else {
+      // console.warn('gtag est indéfini. L\'événement GA4 n\'a pas pu être envoyé.', eventName, eventParams);
+    }
+  }
+
+  // =========================================================
+  // Tous les scripts à l'intérieur d'un seul écouteur DOMContentLoaded
+  // =========================================================
+  document.addEventListener('DOMContentLoaded', function() {
+
+    // --- Initialisation AOS (Animations On Scroll) ---
     AOS.init({
-      duration: 800, // Durée de l'animation en ms
-      once: true,    // Les animations ne se déclenchent qu'une seule fois
+      duration: 500, // Durée de l'animation en ms
+      once: false,    // Les animations ne se déclenchent qu'une seule fois
     });
-  </script>  
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const faqItems = document.querySelectorAll('.faq-item');
 
-        faqItems.forEach(item => {
-            const question = item.querySelector('.faq-question');
-            const answer = item.querySelector('.faq-answer');
-            const icon = item.querySelector('.toggle-icon');
+    // --- Assure que la modale est cachée immédiatement au chargement de la page ---
+    const initialModal = document.getElementById('imageModal');
+    if (initialModal) {
+      initialModal.style.display = 'none';
+    }
 
-            question.addEventListener('click', () => {
-                const isActive = item.classList.contains('active');
 
-                // Ferme toutes les autres FAQ ouvertes (comportement accordéon)
-                faqItems.forEach(otherItem => {
-                    if (otherItem !== item && otherItem.classList.contains('active')) {
-                        otherItem.classList.remove('active');
-                        // Lorsque la classe 'active' est retirée, le CSS .faq-answer { max-height: 0; } prendra le relais.
-                        // On réinitialise les paddings explicitement pour une fermeture propre.
-                        otherItem.querySelector('.faq-answer').style.paddingTop = '0';
-                        otherItem.querySelector('.faq-answer').style.paddingBottom = '0';
-                        otherItem.querySelector('.toggle-icon').classList.remove('fa-minus');
-                        otherItem.querySelector('.toggle-icon').classList.add('fa-plus');
-                    }
-                });
+    // =====================================================
+    // 1. Accordéon FAQ
+    // =====================================================
+    const faqItems = document.querySelectorAll('.faq-item');
 
-                // Ouvre ou ferme l'élément FAQ cliqué
-                if (isActive) {
-                    item.classList.remove('active');
-                    // Lorsque la classe 'active' est retirée, le CSS .faq-answer { max-height: 0; } prendra le relais.
-                    answer.style.paddingTop = '0';
-                    answer.style.paddingBottom = '0';
-                    icon.classList.remove('fa-minus');
-                    icon.classList.add('fa-plus');
-                } else {
-                    item.classList.add('active');
-                    // Lorsque la classe 'active' est ajoutée, le CSS .faq-item.active .faq-answer { max-height: 1000px; } prendra le relais pour ouvrir.
-                    // On définit les paddings pour l'état ouvert.
-                    answer.style.paddingTop = 'calc(var(--spacing-unit) * 2)';
-                    answer.style.paddingBottom = 'calc(var(--spacing-unit) * 3)';
-                    icon.classList.remove('fa-plus');
-                    icon.classList.add('fa-minus');
-                }
-            });
-        });
-    });
-    
-    // Assurez-vous que ce script est exécuté APRES que l'élément offerCountdown soit chargé dans le DOM
-document.addEventListener('DOMContentLoaded', function() {
-    const countdownElement = document.getElementById('offerCountdown');
-    if (!countdownElement) return; // S'assurer que l'élément existe
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        const answer = item.querySelector('.faq-answer');
+        const icon = item.querySelector('.toggle-icon');
 
-    const targetDate = new Date('June 28, 2025 23:59:59').getTime(); // Date et heure de fin de l'offre (exemple)
-
-    const updateCountdown = setInterval(function() {
-        const now = new Date().getTime();
-        const distance = targetDate - now;
-
-        if (distance < 0) {
-            clearInterval(updateCountdown);
-            countdownElement.innerHTML = "<p class='countdown-message'>OFFRE TERMINÉE !</p>";
+        // Vérification de l'existence des éléments
+        if (!question || !answer || !icon) {
+            console.warn("Certains éléments de FAQ sont introuvables dans un '.faq-item'. Cet élément sera ignoré.");
             return;
         }
 
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        question.addEventListener('click', () => {
+            const isActive = item.classList.contains('active');
 
-        document.getElementById('days').innerText = String(days).padStart(2, '0');
-        document.getElementById('hours').innerText = String(hours).padStart(2, '0');
-        document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
-        document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+            // Ferme toutes les autres FAQ ouvertes (comportement accordéon)
+            faqItems.forEach(otherItem => {
+                if (otherItem !== item && otherItem.classList.contains('active')) {
+                    otherItem.classList.remove('active');
+                    const otherAnswer = otherItem.querySelector('.faq-answer');
+                    const otherIcon = otherItem.querySelector('.toggle-icon');
+                    if (otherAnswer) {
+                        otherAnswer.style.paddingTop = '0';
+                        otherAnswer.style.paddingBottom = '0';
+                    }
+                    if (otherIcon) {
+                        otherIcon.classList.remove('fa-minus');
+                        otherIcon.classList.add('fa-plus');
+                    }
+                }
+            });
 
-    }, 1000);
-});
+            // Ouvre ou ferme l'élément FAQ cliqué
+            if (isActive) {
+                item.classList.remove('active');
+                answer.style.paddingTop = '0';
+                answer.style.paddingBottom = '0';
+                icon.classList.remove('fa-minus');
+                icon.classList.add('fa-plus');
+            } else {
+                item.classList.add('active');
+                answer.style.paddingTop = 'calc(var(--spacing-unit) * 2)';
+                answer.style.paddingBottom = 'calc(var(--spacing-unit) * 3)';
+                icon.classList.remove('fa-plus');
+                icon.classList.add('fa-minus');
+            }
+        });
+    });
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Éléments de la modale
+    // =====================================================
+    // 2. Compte à Rebours de l'Offre
+    // =====================================================
+    const countdownElement = document.getElementById('offerCountdown');
+    if (countdownElement) { // S'assurer que l'élément existe
+        const targetDate = new Date('June 28, 2025 23:59:59').getTime(); // Date et heure de fin de l'offre (exemple)
+
+        const updateCountdown = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                clearInterval(updateCountdown);
+                countdownElement.innerHTML = "<p class='countdown-message'>OFFRE TERMINÉE !</p>";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Références aux éléments individuels pour l'affichage du compte à rebours
+            const daysElement = document.getElementById('days');
+            const hoursElement = document.getElementById('hours');
+            const minutesElement = document.getElementById('minutes');
+            const secondsElement = document.getElementById('seconds');
+
+            // Assurez-vous que les éléments existent avant de tenter de modifier leur contenu
+            if (daysElement) daysElement.innerText = String(days).padStart(2, '0');
+            if (hoursElement) hoursElement.innerText = String(hours).padStart(2, '0');
+            if (minutesElement) minutesElement.innerText = String(minutes).padStart(2, '0');
+            if (secondsElement) secondsElement.innerText = String(seconds).padStart(2, '0');
+
+        }, 1000);
+    }
+
+    // =====================================================
+    // 3. Gestion de la Modale d'Images (Témoignages uniquement ici)
+    // =====================================================
     const modal = document.getElementById('imageModal');
     const modalImg = document.getElementById('img01');
     const captionText = document.getElementById('caption');
-    const closeButton = document.querySelector('.close-button');
-    const prevButton = document.querySelector('.prev');
-    const nextButton = document.querySelector('.next');
+    const closeButton = document.querySelector('.modal .close-button'); // Plus spécifique
+    const prevButton = document.querySelector('.modal .prev'); // Plus spécifique
+    const nextButton = document.querySelector('.modal .next'); // Plus spécifique
+    const enlargeHint = document.querySelector('.enlarge-hint');
 
-    let currentTestimonialIndex = 0; // Garde la trace de l'image actuellement affichée
-    let testimonialImagesData = []; // Stockera les URLs et alts des images de témoignage
-    let originalScrollPosition = 0; // Pour stocker la position de défilement avant l'ouverture de la modale
-
-    // 1. Assurez-vous que la modale est cachée au chargement (Solution pour le problème #1)
-    // C'est une sécurité pour éviter tout "flash" ou affichage inattendu
-    modal.style.display = 'none';
+    let currentTestimonialIndex = 0;
+    let testimonialImagesData = [];
+    let originalScrollPosition = 0;
 
     // Collecte les données de toutes les images de témoignages au chargement
-    document.querySelectorAll('.screenshot-item img').forEach((img, index) => {
+    const screenshotItems = document.querySelectorAll('.screenshot-item img');
+    screenshotItems.forEach((img, index) => {
         testimonialImagesData.push({
             url: img.src,
             alt: img.alt,
             index: index
         });
-        // Ajoute un écouteur de clic à chaque image pour ouvrir la modale
         img.closest('.screenshot-item').addEventListener('click', function() {
             originalScrollPosition = window.scrollY; // Sauvegarde la position de défilement
 
-            modal.style.display = "flex"; // Affiche la modale (utilisez "flex" comme dans votre CSS)
-            modalImg.src = img.src; // Met l'image cliquée dans la modale
-            captionText.innerHTML = img.alt; // Affiche la légende de l'image
-            currentTestimonialIndex = testimonialImagesData.findIndex(item => item.url === img.src); // Met à jour l'index
+            if (modal && modalImg && captionText) {
+                modal.style.display = "flex"; // Affiche la modale (utilisez "flex" comme dans votre CSS)
+                modalImg.src = img.src; // Met l'image cliquée dans la modale
+                captionText.innerHTML = img.alt; // Affiche la légende de l'image
+                currentTestimonialIndex = testimonialImagesData.findIndex(item => item.url === img.src); // Met à jour l'index
+            }
 
-            // Gère l'historique du navigateur (Solution pour le problème #2)
-            // Ajoute un état à l'historique pour que le bouton "Retour" puisse fermer la modale
-            history.pushState({ modalOpen: true }, '', '#imageModalOpen');
+            // Cache l'indicateur après le premier clic
+            if (enlargeHint) {
+                enlargeHint.style.opacity = '0';
+                setTimeout(() => {
+                    enlargeHint.style.display = 'none';
+                }, 500); // Correspond à la durée de transition CSS
+            }
 
             // Optionnel : Envoi d'un événement Google Analytics 4 (GA4)
             // trackGA4Event('testimonial_screenshot_opened', {
@@ -984,15 +1025,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Fonction pour naviguer entre les images (utilisée par les boutons prev/next)
     window.plusSlides = function(n) {
-        currentTestimonialIndex += n;
-        if (currentTestimonialIndex >= testimonialImagesData.length) {
-            currentTestimonialIndex = 0;
+        if (testimonialImagesData.length === 0) return;
+        currentTestimonialIndex = (currentTestimonialIndex + n + testimonialImagesData.length) % testimonialImagesData.length;
+        if (modalImg && captionText) {
+            modalImg.src = testimonialImagesData[currentTestimonialIndex].url;
+            captionText.innerHTML = testimonialImagesData[currentTestimonialIndex].alt;
         }
-        if (currentTestimonialIndex < 0) {
-            currentTestimonialIndex = testimonialImagesData.length - 1;
-        }
-        modalImg.src = testimonialImagesData[currentTestimonialIndex].url;
-        captionText.innerHTML = testimonialImagesData[currentTestimonialIndex].alt;
         // Optionnel : Envoi d'un événement GA4
         // trackGA4Event('testimonial_screenshot_navigation', {
         //     event_category: 'engagement',
@@ -1003,13 +1041,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Fonction pour fermer la modale
     function closeModal() {
-        modal.style.display = "none";
-        // Si l'URL actuelle contient le hash de la modale, on retire cet état de l'historique
-        if (window.location.hash === '#imageModalOpen') {
-            history.back(); // Revient à l'état précédent (celui avant l'ouverture de la modale)
+        if (modal) {
+            modal.style.display = "none";
         }
-        // Restaure la position de défilement (si nécessaire)
-        window.scrollTo(0, originalScrollPosition);
+        window.scrollTo(0, originalScrollPosition); // Restaure la position de défilement
         // Optionnel : Envoi d'un événement GA4
         // trackGA4Event('testimonial_screenshot_closed', {
         //     event_category: 'engagement',
@@ -1018,153 +1053,91 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Ferme la modale quand on clique sur le bouton de fermeture
-    closeButton.addEventListener('click', function(e) {
-        e.stopPropagation(); // Empêche le clic de se propager au fond de la modale
-        closeModal();
-    });
+    if (closeButton) {
+        closeButton.addEventListener('click', function(e) {
+            e.stopPropagation(); // Empêche le clic de se propager au fond de la modale
+            closeModal();
+        });
+    }
 
     // Ferme la modale quand on clique en dehors de l'image (sur le fond noir)
-    modal.addEventListener('click', function(e) {
-        if (e.target === modal) { // S'assure que le clic est bien sur le fond de la modale et non l'image
-            closeModal();
-            // Optionnel : Envoi d'un événement GA4
-            // trackGA4Event('testimonial_screenshot_closed', {
-            //     event_category: 'engagement',
-            //     action: 'close_background_click'
-            // });
-        }
-    });
-
-    // Ferme la modale quand on appuie sur la touche Échap
-    document.addEventListener('keydown', function(e) {
-        if (e.key === "Escape" && modal.style.display === "flex") {
-            closeModal();
-            // Optionnel : Envoi d'un événement GA4
-            // trackGA4Event('testimonial_screenshot_closed', {
-            //     event_category: 'engagement',
-            //     action: 'close_escape_key'
-            // });
-        }
-    });
-
-    // Gère le bouton "Retour" du navigateur (Solution pour le problème #2)
-    window.addEventListener('popstate', function(event) {
-        // Si l'état de l'historique indique que la modale était ouverte, on la ferme
-        if (event.state && event.state.modalOpen) {
-            // Ne fait rien ici car closeModal() aura déjà appelé history.back()
-            // Ou si vous n'appelez pas history.back() dans closeModal(), alors:
-            modal.style.display = 'flex'; // La modale était ouverte, donc on la rouvre si on navigue forward
-        } else {
-            // Si l'état de l'historique ne correspond pas à la modale, on la ferme
-            if (modal.style.display === 'flex') {
-                modal.style.display = 'none';
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) { // S'assure que le clic est bien sur le fond de la modale et non l'image
+                closeModal();
+                // Optionnel : Envoi d'un événement GA4
+                // trackGA4Event('testimonial_screenshot_closed', {
+                //     event_category: 'engagement',
+                //     action: 'close_background_click'
+                // });
             }
-        }
-        // Si la modale est ouverte et le hash n'est plus là (suite à un retour arrière), on la ferme
-        if (modal.style.display === 'flex' && window.location.hash !== '#imageModalOpen') {
-            modal.style.display = 'none';
-            // Restaure la position de défilement quand on ferme via popstate
-            window.scrollTo(0, originalScrollPosition);
-        }
-    });
-
-    // Gestion au chargement de la page si un hash #imageModalOpen est présent dans l'URL
-    // Cela permet à la modale de s'ouvrir si l'utilisateur a partagé l'URL avec le hash
-    if (window.location.hash === '#imageModalOpen') {
-        // Logique pour ouvrir une image spécifique si le hash est présent et l'image est identifiable.
-        // Pour l'instant, nous nous contentons de cacher la modale si elle ne devrait pas être là.
-        modal.style.display = 'none';
+        });
     }
-});
 
-// Si vous avez déjà une fonction trackGA4Event, assurez-vous qu'elle est globalement accessible ou incluse.
-// function trackGA4Event(eventName, eventParams) {
-//     if (typeof gtag === 'function') {
-//         gtag('event', eventName, eventParams);
-//     } else {
-//         console.log('GA4 Event:', eventName, eventParams);
-//     }
-// }
-
-    // ... (ton code JS existant)
-
-    let originalScrollPosition = 0;
-
-    // NOUVEAU: Élément de l'indicateur visuel
-    const enlargeHint = document.querySelector('.enlarge-hint');
-
-    // ... (ton code JS existant)
-
-    document.querySelectorAll('.screenshot-item img').forEach((img, index) => {
-        testimonialImagesData.push({
-            url: img.src,
-            alt: img.alt,
-            index: index
-        });
-        // Ajoute un écouteur de clic à chaque image pour ouvrir la modale
-        img.closest('.screenshot-item').addEventListener('click', function() {
-            originalScrollPosition = window.scrollY;
-
-            modal.style.display = "flex";
-            modalImg.src = img.src;
-            captionText.innerHTML = img.alt;
-            currentTestimonialIndex = testimonialImagesData.findIndex(item => item.url === img.src);
-
-            history.pushState({ modalOpen: true }, '', '#imageModalOpen');
-
-            // NOUVEAU: Cache l'indicateur après le premier clic
-            if (enlargeHint) {
-                enlargeHint.style.opacity = '0'; // Déclenche la transition de disparition
-                setTimeout(() => {
-                    enlargeHint.style.display = 'none'; // Cache l'élément après la transition
-                }, 500); // Correspond à la durée de transition CSS
+    // Ferme la modale quand on appuie sur la touche Échap et navigation par flèches
+    document.addEventListener('keydown', function(e) {
+        if (modal && (modal.style.display === "flex")) {
+            if (e.key === "Escape") {
+                closeModal();
+                // Optionnel : Envoi d'un événement GA4
+                // trackGA4Event('testimonial_screenshot_closed', {
+                //     event_category: 'engagement',
+                //     action: 'close_escape_key'
+                // });
+            } else if (e.key === 'ArrowLeft') {
+                if (prevButton) window.plusSlides(-1);
+            } else if (e.key === 'ArrowRight') {
+                if (nextButton) window.plusSlides(1);
             }
-
-            // Optionnel : Envoi d'un événement Google Analytics 4 (GA4)
-            // trackGA4Event('testimonial_screenshot_opened', { ... });
-        });
+        }
     });
 
-    // ... (le reste de ton code JS existant, y compris closeModal() et popstate)
-    
+  }); // Fin de DOMContentLoaded
 </script>
-
   
   <script>
   // =========================================================
-  // GA4 TRACKING SCRIPTS
+  // FONCTION D'AIDE : Suivi des événements GA4
   // =========================================================
-
-  // Helper function to send GA4 events
   function trackGA4Event(eventName, eventParams = {}) {
     if (typeof gtag === 'function') {
       gtag('event', eventName, eventParams);
-      // console.log(`GA4 Event Fired: ${eventName}`, eventParams); // Pour le débogage
+      // console.log(`Événement GA4 déclenché : ${eventName}`, eventParams); // Pour le débogage
     } else {
       // console.warn('gtag est indéfini. L\'événement GA4 n\'a pas pu être envoyé.', eventName, eventParams);
     }
   }
 
-  // --- Initialisation de AOS (une seule fois) ---
+  // =========================================================
+  // Initialisation de AOS (Animations On Scroll)
+  // =========================================================
   AOS.init({
-    duration: 800, // Durée de l'animation en ms
-    once: true,    // Les animations ne se déclenchent qu'une seule fois
-  });
+  duration: 800, // Gardez votre durée actuelle, ou ajustez-la si vous le souhaitez
+  once: false,   // Changez cette valeur à 'false'
+});
 
 
+  // =========================================================
+  // Tous les scripts principaux à l'intérieur d'un seul écouteur DOMContentLoaded
+  // =========================================================
   document.addEventListener('DOMContentLoaded', () => {
 
-    // --- Cache des éléments clés du DOM pour la performance ---
+    // --- Cache des éléments clés du DOM pour la performance (si besoin) ---
     const stickyCta = document.getElementById('cta-sticky-button');
     const heroSection = document.getElementById('hero-section');
     const pricingSection = document.getElementById('pricing');
     const packCompleteSection = document.getElementById('pack-complet');
 
+    // Assure que la modale est cachée immédiatement au chargement de la page
+    const initialModal = document.getElementById('imageModal');
+    if (initialModal) {
+      initialModal.style.display = 'none';
+    }
+
     // -----------------------------------------------------
     // 1. CTA Click Tracking
-    // ... (Ce code reste inchangé) ...
+    // -----------------------------------------------------
     const ctaButtons = document.querySelectorAll('.cta-button');
-
     ctaButtons.forEach(button => {
       button.addEventListener('click', function(event) {
         const buttonText = this.textContent.trim();
@@ -1208,7 +1181,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // -----------------------------------------------------
     // 2. Section Visibility Tracking (Intersection Observer)
-    // ... (Ce code reste inchangé) ...
+    // -----------------------------------------------------
     const sections = document.querySelectorAll('section[id]');
     const observedSections = new Set();
 
@@ -1228,44 +1201,109 @@ document.addEventListener('DOMContentLoaded', function() {
       sectionObserver.observe(section);
     });
 
+
     // -----------------------------------------------------
-    // 4. Image Gallery Click Tracking (et logique de modale)
-    // ... (Ce code reste inchangé) ...
+    // 3. Modale d'Images Unifiée (Galerie et Témoignages)
+    // -----------------------------------------------------
     const modal = document.getElementById('imageModal');
     const modalImg = document.getElementById('img01');
     const captionText = document.getElementById('caption');
     const closeButton = document.querySelector('.modal .close-button');
     const prevButton = document.querySelector('.modal .prev-button');
     const nextButton = document.querySelector('.modal .next-button');
-    const previewItems = document.querySelectorAll('.guide-preview-section .preview-item');
-    let currentImageIndex = 0;
-    let imagesData = [];
 
-    previewItems.forEach((item, index) => {
-        const fullImageUrl = item.getAttribute('data-image-full');
-        const imageAlt = item.querySelector('img').alt || `Image #${index + 1}`;
-        imagesData.push({ url: fullImageUrl, alt: imageAlt });
+    let allModalImagesData = []; // Stockera toutes les images pour la modale
+    let currentImageIndex = 0; // Index de l'image actuellement ouverte dans la modale
 
-        item.addEventListener('click', function() {
-            modal.style.display = 'block';
-            modalImg.src = fullImageUrl;
-            captionText.innerHTML = imageAlt;
-            currentImageIndex = index;
+    // Fonction pour ouvrir la modale avec une image spécifique
+    function openImageModal(index) {
+        if (!modal || !modalImg || !captionText || !allModalImagesData[index]) return;
 
-            trackGA4Event('image_gallery_click', {
-              event_category: 'engagement',
-              event_label: `Image Clicked: ${imageAlt}`,
-              image_url: fullImageUrl
-            });
-        });
-    });
-
-    if (closeButton) {
-      closeButton.addEventListener('click', function() {
-          modal.style.display = 'none';
-      });
+        modal.style.display = 'block';
+        modalImg.src = allModalImagesData[index].url;
+        captionText.innerHTML = allModalImagesData[index].alt;
+        currentImageIndex = index;
     }
 
+    // Collecte des images de la "Galerie" (guide-preview-section)
+    const previewItems = document.querySelectorAll('.guide-preview-section .preview-item');
+    previewItems.forEach(item => {
+        const fullImageUrl = item.getAttribute('data-image-full');
+        const imageAlt = item.querySelector('img') ? item.querySelector('img').alt : `Image #${allModalImagesData.length + 1}`;
+        if (fullImageUrl) {
+            allModalImagesData.push({ url: fullImageUrl, alt: imageAlt, type: 'gallery' });
+            // Attache l'écouteur de clic pour ouvrir la modale
+            item.addEventListener('click', function() {
+                const indexToOpen = allModalImagesData.findIndex(img => img.url === fullImageUrl && img.type === 'gallery');
+                if (indexToOpen !== -1) {
+                    openImageModal(indexToOpen);
+                    trackGA4Event('image_gallery_click', {
+                        event_category: 'engagement',
+                        event_label: `Image Clicked: ${imageAlt}`,
+                        image_url: fullImageUrl
+                    });
+                }
+            });
+        }
+    });
+
+    // Collecte des images des "Témoignages" (screenshot-testimonials-grid)
+    const screenshotItems = document.querySelectorAll('.screenshot-testimonials-grid .screenshot-item');
+    screenshotItems.forEach(item => {
+        const imgElement = item.querySelector('img');
+        if (imgElement && imgElement.src) {
+            allModalImagesData.push({ url: imgElement.src, alt: imgElement.alt, type: 'testimonial' });
+            // Attache l'écouteur de clic pour ouvrir la modale
+            item.addEventListener('click', function() {
+                const indexToOpen = allModalImagesData.findIndex(img => img.url === imgElement.src && img.type === 'testimonial');
+                if (indexToOpen !== -1) {
+                    openImageModal(indexToOpen);
+                    trackGA4Event('testimonial_screenshot_view', {
+                        event_category: 'engagement',
+                        event_label: `Testimonial Opened: ${imgElement.alt}`,
+                        image_url: imgElement.src
+                    });
+                }
+            });
+        }
+    });
+
+    // Fonction pour naviguer dans la modale
+    function navigateModal(direction) {
+        if (allModalImagesData.length === 0 || !modalImg || !captionText) return;
+        currentImageIndex = (currentImageIndex + direction + allModalImagesData.length) % allModalImagesData.length;
+        modalImg.src = allModalImagesData[currentImageIndex].url;
+        captionText.innerHTML = allModalImagesData[currentImageIndex].alt;
+
+        // Événement GA4 pour la navigation
+        trackGA4Event('image_gallery_navigation', {
+            event_category: 'engagement',
+            action: direction > 0 ? 'next' : 'previous',
+            current_image_alt: allModalImagesData[currentImageIndex].alt,
+            image_type: allModalImagesData[currentImageIndex].type // Ajout du type d'image
+        });
+    }
+
+    // Écouteurs pour les boutons de navigation de la modale
+    if (prevButton) {
+        prevButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            navigateModal(-1);
+        });
+    }
+    if (nextButton) {
+        nextButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            navigateModal(1);
+        });
+    }
+
+    // Écouteurs pour la fermeture de la modale
+    if (closeButton) {
+      closeButton.addEventListener('click', function() {
+          if (modal) modal.style.display = 'none';
+      });
+    }
     if (modal) {
       modal.addEventListener('click', function(e) {
           if (e.target === modal) {
@@ -1273,49 +1311,20 @@ document.addEventListener('DOMContentLoaded', function() {
           }
       });
     }
-
-    if (prevButton) {
-      prevButton.addEventListener('click', function(e) {
-          e.stopPropagation();
-          currentImageIndex = (currentImageIndex - 1 + imagesData.length) % imagesData.length;
-          modalImg.src = imagesData[currentImageIndex].url;
-          captionText.innerHTML = imagesData[currentImageIndex].alt;
-          trackGA4Event('image_gallery_navigation', {
-              event_category: 'engagement',
-              action: 'previous',
-              current_image_alt: imagesData[currentImageIndex].alt
-          });
-      });
-    }
-
-    if (nextButton) {
-      nextButton.addEventListener('click', function(e) {
-          e.stopPropagation();
-          currentImageIndex = (currentImageIndex + 1) % imagesData.length;
-          modalImg.src = imagesData[currentImageIndex].url;
-          captionText.innerHTML = imagesData[currentImageIndex].alt;
-          trackGA4Event('image_gallery_navigation', {
-              event_category: 'engagement',
-              action: 'next',
-              current_image_alt: imagesData[currentImageIndex].alt
-          });
-      });
-    }
-
     document.addEventListener('keydown', function(e) {
         if (modal && modal.style.display === 'block') {
             if (e.key === 'ArrowLeft') {
-                prevButton.click();
+                if (prevButton) navigateModal(-1);
             } else if (e.key === 'ArrowRight') {
-                nextButton.click();
+                if (nextButton) navigateModal(1);
             } else if (e.key === 'Escape') {
-                closeButton.click();
+                if (closeButton) closeButton.click();
             }
         }
     });
 
     // -----------------------------------------------------
-    // 5. Sticky CTA Visibility Tracking (Adapté à votre objectif)
+    // 4. Sticky CTA Visibility Tracking
     // -----------------------------------------------------
     // Initialiser le sticky CTA comme caché
     if (stickyCta) {
@@ -1335,9 +1344,6 @@ document.addEventListener('DOMContentLoaded', function() {
                             location: 'pricing_section_in_view'
                         });
                     }
-                } else if (!entry.isIntersecting && entry.boundingClientRect.top > 0) { // Pricing est sorti par le bas (on a scrollé vers le haut après elle)
-                    // Le bouton doit réapparaître si on est sorti de pricing par le bas ET que pack-complet est passé (non visible par le bas)
-                    // Cette condition est gérée par le listener de scroll global ci-dessous pour plus de robustesse.
                 }
             }
             // Logique pour la section Pack Complet (déclencheur d'apparition)
@@ -1414,9 +1420,11 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('scroll', manageStickyCtaVisibility);
     // Un petit délai pour s'assurer que le DOM est complètement rendu et que les dimensions sont exactes au chargement
     setTimeout(manageStickyCtaVisibility, 100);
+    
+
     // -----------------------------------------------------
-    // 6. Problem Scenario Icons/Titles Interactions
-    // ... (Ce code reste inchangé) ...
+    // 5. Problem Scenario Icons/Titles Interactions
+    // -----------------------------------------------------
     const problemScenarios = document.querySelectorAll('.problem-scenarios-grid .scenario-item');
     problemScenarios.forEach(item => {
       item.addEventListener('click', function() {
@@ -1430,8 +1438,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // -----------------------------------------------------
-    // 7. Solution Features Icons/Titles Interactions
-    // ... (Ce code reste inchangé) ...
+    // 6. Solution Features Icons/Titles Interactions
+    // -----------------------------------------------------
     const solutionItems = document.querySelectorAll('.solution-grid .solution-item');
     solutionItems.forEach(item => {
       item.addEventListener('click', function() {
@@ -1445,8 +1453,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // -----------------------------------------------------
-    // 8. Pack Complete Themes Icons/Titles Interactions
-    // ... (Ce code reste inchangé) ...
+    // 7. Pack Complete Themes Icons/Titles Interactions
+    // -----------------------------------------------------
     const packThemes = document.querySelectorAll('.themes-grid .theme-item');
     packThemes.forEach(item => {
       item.addEventListener('click', function() {
@@ -1460,8 +1468,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // -----------------------------------------------------
-    // 9. Bonus Icons/Titles Interactions
-    // ... (Ce code reste inchangé) ...
+    // 8. Bonus Icons/Titles Interactions
+    // -----------------------------------------------------
     const bonusItems = document.querySelectorAll('.bonus-grid .bonus-item');
     bonusItems.forEach(item => {
       item.addEventListener('click', function() {
@@ -1475,8 +1483,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // -----------------------------------------------------
-    // 10. Offer Countdown (info-line limited) Visibility
-    // ... (Ce code reste inchangé) ...
+    // 9. Offer Countdown (info-line limited) Visibility
+    // -----------------------------------------------------
     const offerCountdown = document.querySelector('.info-line.limited');
     if (offerCountdown) {
       const offerObserver = new IntersectionObserver((entries) => {
@@ -1495,8 +1503,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // -----------------------------------------------------
-    // 11. Karim's Story Read Progress
-    // ... (Ce code reste inchangé) ...
+    // 10. Karim's Story Read Progress
+    // -----------------------------------------------------
     const karimStoryBlock = document.querySelector('.aisha-story-block');
     if (karimStoryBlock) {
       const storyObserverThresholds = [0.25, 0.50, 0.75, 0.90];
@@ -1526,8 +1534,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // -----------------------------------------------------
-    // 12. Footer Link Clicks
-    // ... (Ce code reste inchangé) ...
+    // 11. Footer Link Clicks
+    // -----------------------------------------------------
     const footerLinks = document.querySelectorAll('footer a');
     footerLinks.forEach(link => {
       link.addEventListener('click', function() {
@@ -1559,8 +1567,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // -----------------------------------------------------
-    // 13. Disclaimer Visibility
-    // ... (Ce code reste inchangé) ...
+    // 12. Disclaimer Visibility
+    // -----------------------------------------------------
     const disclaimers = document.querySelectorAll('.footer-disclaimers p');
     disclaimers.forEach(disclaimer => {
         const disclaimerText = disclaimer.textContent.trim();
@@ -1588,8 +1596,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // -----------------------------------------------------
-    // 14. Smooth scrolling pour les liens ancres (ex: #pricing)
-    // ... (Ce code reste inchangé) ...
+    // 13. Smooth scrolling pour les liens ancres (ex: #pricing)
+    // -----------------------------------------------------
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
@@ -1611,110 +1619,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-
     // -----------------------------------------------------
-    // 15. Initialisation de l'année dans le pied de page
-    // ... (Ce code reste inchangé) ...
+    // 14. Initialisation de l'année dans le pied de page
+    // -----------------------------------------------------
     const yearElement = document.getElementById('current-year');
     if (yearElement) {
         yearElement.textContent = new Date().getFullYear();
     }
   }); // Fin de DOMContentLoaded
-  
-      // -----------------------------------------------------
-    // NOUVEAU : 16. Testimonial Screenshot Lightbox
-    // (Utilise la même modale que la galerie d'images)
-    // -----------------------------------------------------
-    const screenshotItems = document.querySelectorAll('.screenshot-testimonials-grid .screenshot-item');
-    const modal = document.getElementById('imageModal');
-    const modalImg = document.getElementById('img01');
-    const captionText = document.getElementById('caption');
-    const closeButton = document.querySelector('.modal .close-button');
-    const prevButton = document.querySelector('.modal .prev-button');
-    const nextButton = document.querySelector('.modal .next-button');
+</script>
 
-    // Récupérer toutes les URLs et les alts des images de témoignages
-    const testimonialImagesData = [];
-    screenshotItems.forEach(item => {
-        const imgElement = item.querySelector('img');
-        if (imgElement) {
-            testimonialImagesData.push({
-                url: imgElement.src,
-                alt: imgElement.alt
-            });
-        }
-    });
-
-    let currentTestimonialIndex = 0; // Index de l'image actuellement ouverte
-
-    screenshotItems.forEach((item, index) => {
-        item.addEventListener('click', function() {
-            modal.style.display = 'block';
-            modalImg.src = testimonialImagesData[index].url;
-            captionText.innerHTML = testimonialImagesData[index].alt;
-            currentTestimonialIndex = index; // Met à jour l'index courant
-
-            // Envoi de l'événement GA4
-            trackGA4Event('testimonial_screenshot_view', {
-                event_category: 'engagement',
-                event_label: `Testimonial Opened: ${testimonialImagesData[index].alt}`,
-                image_url: testimonialImagesData[index].url
-            });
-        });
-    });
-
-    // Gestion de la navigation dans la modale (précédent/suivant pour les témoignages)
-    if (prevButton) {
-        prevButton.addEventListener('click', function(e) {
-            e.stopPropagation(); // Empêche la fermeture de la modale si cliqué sur le bouton lui-même
-            currentTestimonialIndex = (currentTestimonialIndex - 1 + testimonialImagesData.length) % testimonialImagesData.length;
-            modalImg.src = testimonialImagesData[currentTestimonialIndex].url;
-            captionText.innerHTML = testimonialImagesData[currentTestimonialIndex].alt;
-            trackGA4Event('testimonial_screenshot_navigation', {
-                event_category: 'engagement',
-                action: 'previous',
-                current_image_alt: testimonialImagesData[currentTestimonialIndex].alt
-            });
-        });
-    }
-
-    if (nextButton) {
-        nextButton.addEventListener('click', function(e) {
-            e.stopPropagation(); // Empêche la fermeture de la modale
-            currentTestimonialIndex = (currentTestimonialIndex + 1) % testimonialImagesData.length;
-            modalImg.src = testimonialImagesData[currentTestimonialIndex].url;
-            captionText.innerHTML = testimonialImagesData[currentTestimonialIndex].alt;
-            trackGA4Event('testimonial_screenshot_navigation', {
-                event_category: 'engagement',
-                action: 'next',
-                current_image_alt: testimonialImagesData[currentTestimonialIndex].alt
-            });
-        });
-    }
-
-    // Gestion de la fermeture de la modale (si vous l'avez déjà pour la galerie, elle est peut-être déjà présente)
-    if (closeButton) {
-        closeButton.addEventListener('click', function() {
-            modal.style.display = 'none';
-        });
-    }
-
-    // Fermeture de la modale en cliquant en dehors de l'image (si vous l'avez déjà)
-    if (modal) {
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
-    }
-
-    // Fermeture de la modale avec la touche Échap (si vous l'avez déjà)
-    document.addEventListener('keydown', function(e) {
-        if (modal && modal.style.display === 'block' && e.key === 'Escape') {
-            if (closeButton) closeButton.click();
-        }
-    });
-  </script>
+            
   <div id="imageModal" class="modal">
     <span class="close-button">&times;</span>
     <img class="modal-content" id="img01" alt="Image agrandie">
